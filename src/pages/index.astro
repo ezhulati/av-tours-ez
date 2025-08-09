@@ -66,37 +66,37 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     <div class="relative z-10 text-center text-white px-6 sm:px-8 md:px-4 max-w-7xl mx-auto pb-16 md:pb-0">
       <!-- Hero Typography Stack - Mobile-First Design -->
       <div class="space-y-4 sm:space-y-6 md:space-y-8">
-        <!-- Main Headline - Mobile Optimized Scaling -->
-        <h1 class="font-serif font-bold leading-[0.9] tracking-tight animate-fade-in">
-          <span class="block text-[clamp(2.5rem,9vw,7rem)] text-white drop-shadow-2xl">
+        <!-- Main Headline - Bold & Impactful on All Screens -->
+        <h1 class="font-serif font-bold leading-[0.85] tracking-tight animate-fade-in">
+          <span class="block text-[clamp(3.5rem,12vw,7rem)] sm:text-[clamp(4rem,10vw,7rem)] text-white drop-shadow-2xl">
             Elevate Your
           </span>
-          <span class="block text-[clamp(3rem,11vw,8rem)] text-accent drop-shadow-2xl mt-1 md:mt-0">
+          <span class="block text-[clamp(4rem,14vw,8rem)] sm:text-[clamp(4.5rem,12vw,8rem)] text-accent drop-shadow-2xl mt-2 sm:mt-1 md:mt-0">
             Experience
           </span>
         </h1>
         
-        <!-- Subheadline - Mobile Responsive -->
-        <p class="text-[clamp(0.875rem,2.2vw,1.75rem)] font-light leading-tight max-w-4xl mx-auto text-gray-100 px-2">
+        <!-- Subheadline - Bigger & Clearer -->
+        <p class="text-[clamp(1.125rem,3.5vw,1.875rem)] sm:text-[clamp(1.25rem,3vw,1.875rem)] font-normal leading-snug max-w-4xl mx-auto text-white/95 px-2">
           <span class="hidden sm:inline">No tourist traps. Just raw terrain and local guides.</span>
           <span class="sm:hidden">Raw terrain. Local guides.</span>
         </p>
         
-        <!-- Supporting Text - Subtle but Clear -->
-        <p class="text-[clamp(0.875rem,2vw,1.125rem)] opacity-80 max-w-2xl mx-auto">
-          <span class="font-medium">{totalTourCount}</span> authentic adventures across the untamed Balkans
+        <!-- Supporting Text - More Prominent -->
+        <p class="text-[clamp(1rem,2.5vw,1.25rem)] sm:text-[clamp(1rem,2.2vw,1.25rem)] opacity-90 max-w-2xl mx-auto text-white/80">
+          <span class="font-semibold text-white">{totalTourCount}</span> authentic adventures across the untamed Balkans
         </p>
       </div>
       
-      <!-- Modern CTA Design - Mobile Optimized -->
+      <!-- Modern CTA Design - Bigger Buttons -->
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mt-8 sm:mt-10 md:mt-12 px-4 sm:px-0">
-        <a href="/tours" class="group relative inline-flex items-center justify-center bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-full font-medium text-[clamp(0.938rem,2vw,1.125rem)] transition-all transform hover:scale-105 shadow-2xl shadow-accent/20 hover:shadow-accent/30 min-h-[52px]">
+        <a href="/tours" class="group relative inline-flex items-center justify-center bg-accent hover:bg-accent-600 text-white px-8 py-4 sm:py-5 rounded-full font-semibold text-[clamp(1.063rem,2.5vw,1.25rem)] transition-all transform hover:scale-105 shadow-2xl shadow-accent/20 hover:shadow-accent/30 min-h-[56px] sm:min-h-[60px]">
           <span>Explore All Tours</span>
-          <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
           </svg>
         </a>
-        <a href="#featured" class="relative inline-flex items-center justify-center bg-white/5 backdrop-blur-lg hover:bg-white/10 text-white px-8 py-4 rounded-full font-medium text-[clamp(0.938rem,2vw,1.125rem)] transition-all border border-white/20 hover:border-white/30 min-h-[52px]">
+        <a href="#featured" class="relative inline-flex items-center justify-center bg-white/5 backdrop-blur-lg hover:bg-white/10 text-white px-8 py-4 sm:py-5 rounded-full font-semibold text-[clamp(1.063rem,2.5vw,1.25rem)] transition-all border border-white/20 hover:border-white/30 min-h-[56px] sm:min-h-[60px]">
           <span>View Featured</span>
         </a>
       </div>
@@ -361,6 +361,27 @@ const breadcrumbSchema = generateBreadcrumbSchema([
 
   <!-- Hero Slideshow Styles -->
   <style>
+    /* Hero text animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in {
+      animation: fadeInUp 1s ease-out;
+    }
+    
+    .animate-fade-in span:nth-child(2) {
+      animation-delay: 0.2s;
+      animation-fill-mode: both;
+    }
+    
     .hero-slideshow {
       position: absolute;
       top: 0;
