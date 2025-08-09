@@ -1,0 +1,198 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getFeaturedTours } from '@/lib/queries'
+import { generateOrganizationSchema } from '@/lib/seo'
+
+const featuredTours = await getFeaturedTours(6)
+const organizationSchema = generateOrganizationSchema()
+---
+
+<BaseLayout 
+  title="AlbaniaVisit Tours - Discover Albania's Best Adventures"
+  jsonLd={organizationSchema}
+>
+  <!-- Hero Section -->
+  <section class="relative h-[60vh] min-h-[400px] flex items-center justify-center bg-gradient-to-b from-blue-900 to-blue-700">
+    <div class="absolute inset-0 bg-black/30"></div>
+    <div class="relative z-10 text-center text-white px-4">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">
+        Discover Albania & The Balkans
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+        Expert-curated tours, local guides, and unforgettable adventures
+      </p>
+      <div class="flex gap-4 justify-center">
+        <a href="/tours" class="bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+          Explore All Tours
+        </a>
+        <a href="#featured" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition">
+          Featured Tours
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Tours -->
+  <section id="featured" class="container mx-auto px-4 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4">Featured Tours</h2>
+      <p class="text-xl text-gray-600">Handpicked adventures for every traveler</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {featuredTours.map((tour) => (
+        <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+          <div class="aspect-[4/3] relative">
+            <img 
+              src={tour.primaryImageUrl} 
+              alt={tour.title}
+              loading="lazy"
+              class="w-full h-full object-cover"
+            />
+            {tour.featured && (
+              <span class="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                Featured
+              </span>
+            )}
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">
+              <a href={`/tours/${tour.slug}`} class="hover:text-blue-600">
+                {tour.title}
+              </a>
+            </h3>
+            <p class="text-gray-600 mb-4 line-clamp-2">
+              {tour.shortDescription}
+            </p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex gap-2">
+                {tour.durationDisplay && (
+                  <span class="text-sm bg-gray-100 px-2 py-1 rounded">
+                    {tour.durationDisplay}
+                  </span>
+                )}
+                {tour.difficulty && (
+                  <span class="text-sm bg-gray-100 px-2 py-1 rounded capitalize">
+                    {tour.difficulty}
+                  </span>
+                )}
+              </div>
+              {tour.priceMin && (
+                <span class="font-bold text-lg">
+                  From €{tour.priceMin}
+                </span>
+              )}
+            </div>
+            <a 
+              href={`/out/${tour.slug}`}
+              rel="sponsored nofollow noopener"
+              class="block w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              Book Now
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+    
+    <div class="text-center mt-12">
+      <a href="/tours" class="inline-block bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition">
+        View All Tours
+      </a>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="bg-gray-50 py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">Explore by Category</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <a href="/category/adventure" class="group">
+          <div class="bg-white rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h3 class="font-semibold group-hover:text-blue-600">Adventure</h3>
+          </div>
+        </a>
+        <a href="/category/cultural" class="group">
+          <div class="bg-white rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h3 class="font-semibold group-hover:text-blue-600">Cultural</h3>
+          </div>
+        </a>
+        <a href="/category/beach" class="group">
+          <div class="bg-white rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h3 class="font-semibold group-hover:text-blue-600">Beach & Coast</h3>
+          </div>
+        </a>
+        <a href="/category/hiking" class="group">
+          <div class="bg-white rounded-lg p-6 text-center hover:shadow-lg transition">
+            <h3 class="font-semibold group-hover:text-blue-600">Hiking</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Destinations -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">Popular Destinations</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <a href="/country/albania" class="group">
+          <div class="relative h-64 rounded-lg overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+            <img 
+              src="/images/albania.jpg" 
+              alt="Albania"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+            />
+            <div class="absolute bottom-4 left-4 z-20 text-white">
+              <h3 class="text-2xl font-bold">Albania</h3>
+              <p class="text-sm">The hidden gem of Europe</p>
+            </div>
+          </div>
+        </a>
+        <a href="/country/kosovo" class="group">
+          <div class="relative h-64 rounded-lg overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+            <img 
+              src="/images/kosovo.jpg" 
+              alt="Kosovo"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+            />
+            <div class="absolute bottom-4 left-4 z-20 text-white">
+              <h3 class="text-2xl font-bold">Kosovo</h3>
+              <p class="text-sm">Young nation, ancient history</p>
+            </div>
+          </div>
+        </a>
+        <a href="/country/macedonia" class="group">
+          <div class="relative h-64 rounded-lg overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+            <img 
+              src="/images/macedonia.jpg" 
+              alt="North Macedonia"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+            />
+            <div class="absolute bottom-4 left-4 z-20 text-white">
+              <h3 class="text-2xl font-bold">North Macedonia</h3>
+              <p class="text-sm">Land of lakes and mountains</p>
+            </div>
+          </div>
+        </a>
+        <a href="/country/montenegro" class="group">
+          <div class="relative h-64 rounded-lg overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+            <img 
+              src="/images/montenegro.jpg" 
+              alt="Montenegro"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+            />
+            <div class="absolute bottom-4 left-4 z-20 text-white">
+              <h3 class="text-2xl font-bold">Montenegro</h3>
+              <p class="text-sm">Wild beauty of the Adriatic</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

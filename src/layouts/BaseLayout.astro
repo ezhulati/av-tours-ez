@@ -1,0 +1,139 @@
+---
+import '@/styles/global.css'
+
+export interface Props {
+  title: string
+  description?: string
+  canonical?: string
+  ogImage?: string
+  ogType?: string
+  noindex?: boolean
+  jsonLd?: any
+}
+
+const { 
+  title, 
+  description = 'Discover the best tours in Albania with AlbaniaVisit Tours. Expert-curated adventures, local guides, and unforgettable experiences.',
+  canonical,
+  ogImage = '/og-default.jpg',
+  ogType = 'website',
+  noindex = false,
+  jsonLd
+} = Astro.props
+
+const siteUrl = 'https://tours.albaniavisit.com'
+const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).toString()
+const GA4_ID = import.meta.env.GA4_ID
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonicalURL}>
+  
+  <!-- OpenGraph -->
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:type" content={ogType}>
+  <meta property="og:url" content={canonicalURL}>
+  <meta property="og:site_name" content="AlbaniaVisit Tours">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={ogImage}>
+  
+  {noindex && <meta name="robots" content="noindex, nofollow">}
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://mioqyazjthmrmgsbsvfg.supabase.co">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  
+  <!-- GA4 -->
+  {GA4_ID && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
+      <script define:vars={{ GA4_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', GA4_ID);
+      </script>
+    </>
+  )}
+  
+  <!-- JSON-LD -->
+  {jsonLd && (
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  )}
+</head>
+<body>
+  <header class="border-b">
+    <nav class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="text-2xl font-bold">AlbaniaVisit Tours</a>
+        <div class="flex gap-6">
+          <a href="/tours" class="hover:underline">All Tours</a>
+          <a href="/country/albania" class="hover:underline">Albania</a>
+          <a href="/country/kosovo" class="hover:underline">Kosovo</a>
+          <a href="/category/adventure" class="hover:underline">Adventure</a>
+          <a href="/category/cultural" class="hover:underline">Cultural</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <main>
+    <slot />
+  </main>
+  
+  <footer class="bg-gray-100 mt-16">
+    <div class="container mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="font-bold mb-4">About</h3>
+          <p class="text-sm text-gray-600">
+            AlbaniaVisit Tours connects travelers with the best tour operators in Albania and the Balkans.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-bold mb-4">Quick Links</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/tours" class="text-gray-600 hover:text-gray-900">All Tours</a></li>
+            <li><a href="/sitemap-index.xml" class="text-gray-600 hover:text-gray-900">Sitemap</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold mb-4">Destinations</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/country/albania" class="text-gray-600 hover:text-gray-900">Albania</a></li>
+            <li><a href="/country/kosovo" class="text-gray-600 hover:text-gray-900">Kosovo</a></li>
+            <li><a href="/country/macedonia" class="text-gray-600 hover:text-gray-900">North Macedonia</a></li>
+            <li><a href="/country/montenegro" class="text-gray-600 hover:text-gray-900">Montenegro</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold mb-4">Legal</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/privacy" class="text-gray-600 hover:text-gray-900">Privacy Policy</a></li>
+            <li><a href="/terms" class="text-gray-600 hover:text-gray-900">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t mt-8 pt-8 text-center text-sm text-gray-600">
+        <p>&copy; 2024 AlbaniaVisit Tours. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

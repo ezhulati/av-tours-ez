@@ -1,0 +1,118 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getTourCardPage } from '@/lib/queries'
+import { generateBreadcrumbSchema } from '@/lib/seo'
+
+// Get initial tours (SSG)
+const initialData = await getTourCardPage({}, { page: 1, limit: 12 })
+
+const breadcrumbs = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' },
+  { name: 'All Tours', url: 'https://tours.albaniavisit.com/tours' }
+])
+---
+
+<BaseLayout 
+  title="All Tours - AlbaniaVisit Tours"
+  description="Browse all available tours in Albania and the Balkans. Find your perfect adventure with expert local guides."
+  jsonLd={breadcrumbs}
+>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumbs -->
+    <nav class="mb-6">
+      <ol class="flex items-center space-x-2 text-sm">
+        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900">All Tours</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-4xl font-bold mb-8">All Tours</h1>
+
+    <!-- Filter Bar (React Island) -->
+    <div id="filter-bar" class="mb-8"></div>
+
+    <!-- Tours Grid -->
+    <div id="tours-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+      {initialData.items.map((tour) => (
+        <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+          <div class="aspect-[4/3] relative">
+            <img 
+              src={tour.primaryImageUrl} 
+              alt={tour.title}
+              loading="lazy"
+              class="w-full h-full object-cover"
+            />
+            {tour.featured && (
+              <span class="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                Featured
+              </span>
+            )}
+          </div>
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">
+              <a href={`/tours/${tour.slug}`} class="hover:text-blue-600">
+                {tour.title}
+              </a>
+            </h2>
+            <p class="text-gray-600 mb-4 line-clamp-2">
+              {tour.shortDescription}
+            </p>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex gap-2">
+                {tour.durationDisplay && (
+                  <span class="text-sm bg-gray-100 px-2 py-1 rounded">
+                    {tour.durationDisplay}
+                  </span>
+                )}
+                {tour.difficulty && (
+                  <span class="text-sm bg-gray-100 px-2 py-1 rounded capitalize">
+                    {tour.difficulty}
+                  </span>
+                )}
+              </div>
+              {tour.priceMin && (
+                <span class="font-bold text-lg">
+                  From €{tour.priceMin}
+                </span>
+              )}
+            </div>
+            <div class="flex gap-2 mb-4">
+              {tour.countries.slice(0, 2).map(country => (
+                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                  {country}
+                </span>
+              ))}
+            </div>
+            <a 
+              href={`/out/${tour.slug}`}
+              rel="sponsored nofollow noopener"
+              class="block w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              Book Now
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Pagination -->
+    {initialData.pagination.totalPages > 1 && (
+      <div class="flex justify-center gap-2">
+        {Array.from({ length: Math.min(5, initialData.pagination.totalPages) }, (_, i) => i + 1).map(page => (
+          <button 
+            data-page={page}
+            class={`px-4 py-2 rounded ${page === 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Mount React Islands -->
+  <script>
+    // Filter bar and dynamic tour loading will be handled by React islands
+  </script>
+</BaseLayout>
