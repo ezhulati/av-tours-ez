@@ -68,20 +68,10 @@ export default function TourCard({ tour, loading = false }: TourCardProps) {
           )}
         </div>
         <a 
-          href={`/out/${tour.slug}`}
-          rel="sponsored nofollow noopener"
+          href={`/tours/${tour.slug}`}
           className="block w-full bg-accent text-white text-center py-2 rounded-lg hover:bg-accent-600 transition"
-          onClick={() => {
-            if (typeof gtag !== 'undefined') {
-              ;(window as any).gtag('event', 'affiliate_click', {
-                tour_slug: tour.slug,
-                event_category: 'engagement',
-                event_label: tour.slug
-              })
-            }
-          }}
         >
-          Check Availability
+          View Details
         </a>
       </div>
     </article>
