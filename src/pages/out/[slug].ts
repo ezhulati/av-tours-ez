@@ -2,6 +2,9 @@ import type { APIRoute } from 'astro'
 import { getTourDetail } from '@/lib/queries'
 import { buildAffiliateUrl, trackBookingClick } from '@/lib/affiliateTracking'
 
+// This route must be server-rendered for dynamic redirects
+export const prerender = false
+
 export const GET: APIRoute = async ({ params, request, redirect }) => {
   const { slug } = params
   

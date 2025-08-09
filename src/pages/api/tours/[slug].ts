@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro'
 import { getTourDetail } from '@/lib/queries'
 
+export const prerender = false
+
 export const GET: APIRoute = async ({ params }) => {
   try {
     const { slug } = params

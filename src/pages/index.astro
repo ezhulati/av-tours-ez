@@ -1,23 +1,58 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getFeaturedTours, getTotalTourCount } from '@/lib/queries'
-import { generateOrganizationSchema } from '@/lib/seo'
+import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSchema } from '@/lib/seo'
 import BookingButton from '@/components/tours/BookingButton'
 
 const featuredTours = await getFeaturedTours(6)
 const totalTourCount = await getTotalTourCount()
 const organizationSchema = generateOrganizationSchema()
+const websiteSchema = generateWebSiteSchema()
+const breadcrumbSchema = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' }
+])
 ---
 
 <BaseLayout 
   title="AlbaniaVisit - Discover the Unexpected | Authentic Balkan Adventures"
-  jsonLd={organizationSchema}
+  description="72+ authentic mountain tours across Albania, Kosovo, Montenegro & Macedonia. No tourist traps, just raw terrain and expert local guides."
+  ogImage="/Assets/Albania/Accursed_Mountains.jpeg"
+  jsonLd={[organizationSchema, websiteSchema, breadcrumbSchema]}
 >
   <!-- Hero Section with Brand Design -->
-  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <!-- Background with subtle overlay -->
+  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <!-- Slideshow Background -->
     <div class="absolute inset-0">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+      <div class="hero-slideshow">
+        <div class="slide active">
+          <img src="/Assets/Albania/Accursed_Mountains.jpeg" alt="Accursed Mountains" class="slide-image" />
+        </div>
+        <div class="slide">
+          <img src="/Assets/Albania/Albanian_Alps.jpg" alt="Albanian Alps" class="slide-image" />
+        </div>
+        <div class="slide">
+          <img src="/Assets/Albania/Valbona_to_Theth_Trail.jpg" alt="Valbona to Theth Trail" class="slide-image" />
+        </div>
+        <div class="slide">
+          <img src="/Assets/Albania/Northern_Albania_Shala_River.jpeg" alt="Shala River" class="slide-image" />
+        </div>
+        <div class="slide">
+          <img src="/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg" alt="Albanian Riviera" class="slide-image" />
+        </div>
+        <div class="slide">
+          <img src="/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg" alt="Gjeravica Peak Kosovo" class="slide-image" />
+        </div>
+        <div class="slide">
+          <img src="/Assets/Montenegro/Kotor Montenegro_123711552.jpeg" alt="Bay of Kotor" class="slide-image" />
+        </div>
+        <div class="slide">
+          <img src="/Assets/Albania/Albania_Lake_Koman.jpeg" alt="Lake Koman" class="slide-image" />
+        </div>
+      </div>
+      <!-- Optimized overlay with perfect contrast balance -->
+      <div class="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-gray-800/50 to-gray-900/55"></div>
+      <!-- Additional gradient for better text readability -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20"></div>
     </div>
     
     <!-- Animated mountain icon -->
@@ -178,8 +213,8 @@ const organizationSchema = generateOrganizationSchema()
         <a href="/category/hiking" class="group">
           <div class="bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all transform hover:-translate-y-1 border-2 border-transparent hover:border-accent">
             <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-900 transition-colors">
-              <svg class="w-8 h-8 text-gray-700 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+              <svg class="w-8 h-8 text-gray-700 group-hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14 6l-4.22 5.63 1.25 1.67L14 9.33 19 16h-8.46l-4.01-5.37L1 18h22L14 6zM5 16l1.52-2.03L8.04 16H5z"/>
               </svg>
             </div>
             <h3 class="font-semibold text-gray-900 group-hover:text-accent">Hiking</h3>
@@ -199,7 +234,9 @@ const organizationSchema = generateOrganizationSchema()
           <div class="bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all transform hover:-translate-y-1 border-2 border-transparent hover:border-accent">
             <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-900 transition-colors">
               <svg class="w-8 h-8 text-gray-700 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.5 18c3.5-3 7-3 10.5 0s7 3 10.5 0M2.5 12c3.5-3 7-3 10.5 0s7 3 10.5 0"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 12.5c1.5-1.5 3-2 4.5-1.5 1.5.5 3-1 4.5-1.5s3 1 4.5 1.5 3 0 4.5-1.5"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.5 16.5c1.5-1.5 3-2 4.5-1.5 1.5.5 3-1 4.5-1.5s3 1 4.5 1.5 3 0 4.5-1.5"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M1 20.5c1.5-1.5 3-2 4.5-1.5 1.5.5 3-1 4.5-1.5s3 1 4.5 1.5 3 0 4.5-1.5 3 1 4.5 1.5"/>
               </svg>
             </div>
             <h3 class="font-semibold text-gray-900 group-hover:text-accent">Beach & Coast</h3>
@@ -318,4 +355,130 @@ const organizationSchema = generateOrganizationSchema()
       </a>
     </div>
   </section>
+
+  <!-- Hero Slideshow Styles -->
+  <style>
+    .hero-slideshow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1);
+      animation: kenBurns 15s ease-in-out infinite;
+    }
+
+    @keyframes kenBurns {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+      25% {
+        transform: scale(1.08) translate(-2%, -1%);
+      }
+      50% {
+        transform: scale(1.12) translate(-1%, -2%);
+      }
+      75% {
+        transform: scale(1.06) translate(1%, -1%);
+      }
+      100% {
+        transform: scale(1) translate(0, 0);
+      }
+    }
+
+    /* Stagger animations for each slide */
+    .slide:nth-child(2) .slide-image {
+      animation-delay: -2s;
+      animation-direction: reverse;
+    }
+    .slide:nth-child(3) .slide-image {
+      animation-delay: -4s;
+    }
+    .slide:nth-child(4) .slide-image {
+      animation-delay: -6s;
+      animation-direction: reverse;
+    }
+    .slide:nth-child(5) .slide-image {
+      animation-delay: -8s;
+    }
+    .slide:nth-child(6) .slide-image {
+      animation-delay: -10s;
+      animation-direction: reverse;
+    }
+    .slide:nth-child(7) .slide-image {
+      animation-delay: -12s;
+    }
+    .slide:nth-child(8) .slide-image {
+      animation-delay: -14s;
+      animation-direction: reverse;
+    }
+
+    /* Pause animation on hover */
+    .hero-slideshow:hover .slide-image {
+      animation-play-state: paused;
+    }
+  </style>
+
+  <!-- Hero Slideshow JavaScript -->
+  <script>
+    let currentSlide = 0;
+    let isHovered = false;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    
+    function nextSlide() {
+      if (isHovered) return; // Don't advance if user is hovering
+      
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % totalSlides;
+      slides[currentSlide].classList.add('active');
+    }
+
+    // Auto-advance every 6 seconds
+    setInterval(nextSlide, 6000);
+
+    // Pause on hover
+    const heroSection = document.querySelector('.hero-slideshow');
+    if (heroSection) {
+      heroSection.addEventListener('mouseenter', () => {
+        isHovered = true;
+      });
+      
+      heroSection.addEventListener('mouseleave', () => {
+        isHovered = false;
+      });
+    }
+
+    // Preload images for smooth transitions
+    slides.forEach((slide, index) => {
+      if (index > 0) { // Don't preload the first image as it's already visible
+        const img = slide.querySelector('img');
+        if (img) {
+          const preloadImg = new Image();
+          preloadImg.src = img.src;
+        }
+      }
+    });
+  </script>
 </BaseLayout>

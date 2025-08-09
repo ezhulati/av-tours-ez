@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getTourCardPage } from '@/lib/queries'
-import { generateBreadcrumbSchema } from '@/lib/seo'
+import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/seo'
+import HeroSlideshow from '@/components/HeroSlideshow.astro'
+import PhotoGallery from '@/components/PhotoGallery'
 
 export const prerender = false
 
@@ -56,13 +58,128 @@ const breadcrumbs = generateBreadcrumbSchema([
   { name: 'Categories', url: 'https://tours.albaniavisit.com/tours' },
   { name: category.name, url: `https://tours.albaniavisit.com/category/${slug}` }
 ])
+
+const categorySchema = generateCollectionPageSchema(
+  category.name,
+  category.description,
+  tours.items,
+  `https://tours.albaniavisit.com/category/${slug}`
+)
+
+// Smart slideshow: Use UNIQUE images from actual tours in this category
+const uniqueSlideshowMap = new Map()
+tours.items.forEach(tour => {
+  if (tour.primaryImageUrl && !uniqueSlideshowMap.has(tour.primaryImageUrl)) {
+    uniqueSlideshowMap.set(tour.primaryImageUrl, {
+      url: tour.primaryImageUrl,
+      alt: `${tour.title} - ${tour.countries.join(', ')}`
+    })
+  }
+})
+const smartCategoryImages = Array.from(uniqueSlideshowMap.values()).slice(0, 6)
+
+// Fallback category-specific images
+const categoryFallbacks = {
+  'hiking': [
+    { url: '/Assets/Albania/Albania_Hiking.jpeg', alt: 'Mountain Hiking in Albania' },
+    { url: '/Assets/Albania/Valbona_to_Theth_Trail.jpg', alt: 'Valbona to Theth Trail' },
+    { url: '/Assets/Albania/Albanian_Alps.jpg', alt: 'Albanian Alps Hiking' },
+    { url: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg', alt: 'Gjeravica Peak Kosovo' },
+    { url: '/Assets/Montenegro/Lovcen Mountains National park Montenegro_165889777.jpeg', alt: 'Lovćen Mountains Montenegro' },
+    { url: '/Assets/Albania/Accursed_Mountains.jpeg', alt: 'Accursed Mountains' }
+  ],
+  'adventure': [
+    { url: '/Assets/Albania/Valbona_to_Theth_Trail.jpg', alt: 'Adventure Trail' },
+    { url: '/Assets/Albania/Albanian_Alps.jpg', alt: 'Alpine Adventures' },
+    { url: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg', alt: 'Peak Adventures Kosovo' },
+    { url: '/Assets/Montenegro/Montenegro_216089172.jpeg', alt: 'Montenegro Adventures' },
+    { url: '/Assets/Albania/Northern_Albania_Shala_River.jpeg', alt: 'River Adventures' },
+    { url: '/Assets/Albania/Accursed_Mountains.jpeg', alt: 'Mountain Adventures' }
+  ],
+  'cultural': [
+    { url: '/Assets/Albania/Old_Mes_Bridge.jpeg', alt: 'Historic Mes Bridge' },
+    { url: '/Assets/Albania/Ali_Pasha_Fortress_Porto_Palermo.jpeg', alt: 'Ali Pasha Fortress' },
+    { url: '/Assets/North Macedonia/Roman_Aquaduct_in_Macedonia_484708122.jpeg', alt: 'Roman Aqueduct Macedonia' },
+    { url: '/Assets/Montenegro/Moracha Monastery Montenegro_382804243.jpeg', alt: 'Morača Monastery' },
+    { url: '/Assets/North Macedonia/Skopje Macedonia_230959493.jpeg', alt: 'Skopje Cultural Sites' },
+    { url: '/Assets/Albania/Albanian_Flag_Porto_Palermo.jpeg', alt: 'Porto Palermo Castle' }
+  ],
+  'beach': [
+    { url: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg', alt: 'Albanian Riviera' },
+    { url: '/Assets/Albania/albanian-riviera-5.jpg', alt: 'Albanian Coast' },
+    { url: '/Assets/Albania/albanian-riviera-2.jpeg', alt: 'Coastal Paradise' },
+    { url: '/Assets/Albania/Lukove_beach.jpeg', alt: 'Lukove Beach' },
+    { url: '/Assets/Albania/Albania_Coast.jpeg', alt: 'Albanian Coastline' },
+    { url: '/Assets/Montenegro/Kotor Montenegro_123711552.jpeg', alt: 'Bay of Kotor' }
+  ],
+  'nature': [
+    { url: '/Assets/Albania/Lake_Prespa_Albania.jpeg', alt: 'Lake Prespa' },
+    { url: '/Assets/Albania/Northern_Albania_Shala_River.jpeg', alt: 'Shala River' },
+    { url: '/Assets/Albania/Albania_Lake_Koman.jpeg', alt: 'Lake Koman' },
+    { url: '/Assets/Kosovo/Kucisko_Lake_Kosovo_135448859.jpeg', alt: 'Kuçishte Lake Kosovo' },
+    { url: '/Assets/Kosovo/Lac Leqinat Pejë Kosovo_220878090.jpeg', alt: 'Leqinat Lakes' },
+    { url: '/Assets/Albania/Valbona_Valley_Guesthouse.jpg', alt: 'Valbona Valley Nature' }
+  ]
+}
+
+// Use smart images first, then fallback to category-specific images (no duplicates)
+const fallbackForCategory = categoryFallbacks[slug] || categoryFallbacks['adventure']
+const seenUrls = new Set(smartCategoryImages.map(img => img.url))
+const slideImages = [
+  ...smartCategoryImages,
+  ...fallbackForCategory.filter(img => !seenUrls.has(img.url))
+].slice(0, 6)
+
+// Create unique gallery images from all tours in category
+const uniqueCategoryImages = new Map()
+tours.items.forEach(tour => {
+  if (tour.primaryImageUrl && !uniqueCategoryImages.has(tour.primaryImageUrl)) {
+    uniqueCategoryImages.set(tour.primaryImageUrl, {
+      url: tour.primaryImageUrl,
+      alt: `${tour.title} - ${tour.countries.join(', ')}`
+    })
+  }
+})
+const galleryImages = Array.from(uniqueCategoryImages.values())
+
+const categoryImages = {
+  'hiking': '/Assets/Albania/Albania_Hiking.jpeg',
+  'adventure': '/Assets/Albania/Valbona_to_Theth_Trail.jpg',
+  'cultural': '/Assets/Albania/Old_Mes_Bridge.jpeg',
+  'beach': '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg',
+  'multi-country': '/Assets/Albania/Accursed_Mountains.jpeg',
+  'nature': '/Assets/Albania/Lake_Prespa_Albania.jpeg'
+}
+
+
+const ogImage = categoryImages[slug] || '/Assets/Albania/Albanian_Alps.jpg'
 ---
 
 <BaseLayout 
   title={`${category.name} - AlbaniaVisit Tours`}
   description={`Discover the best ${category.name.toLowerCase()} in Albania and the Balkans. Expert guides, unforgettable experiences.`}
-  jsonLd={breadcrumbs}
+  ogImage={ogImage}
+  jsonLd={[breadcrumbs, categorySchema]}
 >
+  <!-- Hero Section -->
+  <section class="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+    <HeroSlideshow images={slideImages} overlayIntensity="medium" />
+    
+    <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-2xl">{category.name}</h1>
+      <p class="text-xl md:text-2xl text-gray-100 max-w-3xl mx-auto drop-shadow-lg">
+        {category.description}
+      </p>
+      
+      {tours.items.length > 0 && (
+        <div class="mt-8">
+          <div class="text-3xl font-bold text-accent drop-shadow-lg">{tours.items.length}</div>
+          <div class="text-sm text-gray-300">Available Tours</div>
+        </div>
+      )}
+    </div>
+  </section>
+
   <div class="container mx-auto px-4 py-8">
     <!-- Breadcrumbs -->
     <nav class="mb-6">
@@ -74,14 +191,6 @@ const breadcrumbs = generateBreadcrumbSchema([
         <li class="text-gray-900">{category.name}</li>
       </ol>
     </nav>
-
-    <!-- Category Header -->
-    <div class="mb-12 text-center">
-      <h1 class="text-4xl font-bold mb-4">{category.name}</h1>
-      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-        {category.description}
-      </p>
-    </div>
 
     <!-- Tours Grid -->
     {tours.items.length > 0 ? (
@@ -185,5 +294,15 @@ const breadcrumbs = generateBreadcrumbSchema([
         })}
       </div>
     </div>
+
+    <!-- Compact Gallery - Only if we have images -->
+    {galleryImages.length > 0 && (
+      <PhotoGallery 
+        client:load
+        photos={galleryImages}
+        title={`More ${category.name}`}
+        className="py-8"
+      />
+    )}
   </div>
 </BaseLayout>

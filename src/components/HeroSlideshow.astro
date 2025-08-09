@@ -1,0 +1,201 @@
+---
+export interface Props {
+  images: Array<{
+    url: string;
+    alt: string;
+  }>;
+  overlayIntensity?: 'light' | 'medium' | 'dark';
+  slideDuration?: number;
+  kenBurnsDuration?: number;
+  showCaptions?: boolean;
+}
+
+const { 
+  images, 
+  overlayIntensity = 'medium',
+  slideDuration = 6000,
+  kenBurnsDuration = 15000,
+  showCaptions = false
+} = Astro.props;
+
+// Generate unique ID for this slideshow instance
+const slideshowId = `slideshow-${Math.random().toString(36).substr(2, 9)}`;
+
+const overlayClasses = {
+  light: 'from-gray-900/50 via-gray-800/40 to-gray-900/45',
+  medium: 'from-gray-900/60 via-gray-800/50 to-gray-900/55',
+  dark: 'from-gray-900/70 via-gray-800/60 to-gray-900/65'
+};
+---
+
+<!-- Slideshow Background -->
+<div class="absolute inset-0">
+  <div class={`hero-slideshow ${slideshowId}`}>
+    {images.map((image, index) => (
+      <div class={`slide ${index === 0 ? 'active' : ''}`}>
+        <img src={image.url} alt={image.alt} class="slide-image" />
+      </div>
+    ))}
+  </div>
+  <!-- Dark overlay with gradient -->
+  <div class={`absolute inset-0 bg-gradient-to-br ${overlayClasses[overlayIntensity]}`}></div>
+  <!-- Additional gradient for better text readability -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20"></div>
+  
+  <!-- Subtle Image Captions - Bottom Center -->
+  {showCaptions && (
+    <div class={`caption-container absolute bottom-4 md:bottom-6 left-0 right-0 z-10 ${slideshowId}-captions`}>
+      <div class="flex justify-center px-4 md:px-8">
+        {images.map((image, index) => (
+          <div class={`caption fade-caption absolute transition-all duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}`}>
+            <div class="bg-black/30 backdrop-blur-sm rounded-full px-3 py-1.5 md:px-4 md:py-2">
+              <p class="text-xs md:text-sm text-white/90 font-medium text-center whitespace-nowrap max-w-[280px] md:max-w-none truncate">
+                {image.alt}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+<style define:vars={{ slideDuration: `${slideDuration}ms`, kenBurnsDuration: `${kenBurnsDuration}ms`, slideshowId }}>
+  .hero-slideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .slide.active {
+    opacity: 1;
+  }
+
+  .slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    animation: kenBurns var(--kenBurnsDuration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes kenBurns {
+    0% {
+      transform: scale(1.05) translate(0, 0);
+    }
+    33% {
+      transform: scale(1.1) translate(-1%, -0.5%);
+    }
+    66% {
+      transform: scale(1.08) translate(0.5%, -1%);
+    }
+    100% {
+      transform: scale(1.05) translate(0, 0);
+    }
+  }
+
+  /* Stagger animations for variety - each image has unique motion */
+  .slide:nth-child(2) .slide-image {
+    animation-delay: -3s;
+  }
+  .slide:nth-child(3) .slide-image {
+    animation-delay: -6s;
+    animation-direction: reverse;
+  }
+  .slide:nth-child(4) .slide-image {
+    animation-delay: -9s;
+  }
+  .slide:nth-child(5) .slide-image {
+    animation-delay: -12s;
+    animation-direction: reverse;
+  }
+  .slide:nth-child(6) .slide-image {
+    animation-delay: -15s;
+  }
+  .slide:nth-child(7) .slide-image {
+    animation-delay: -18s;
+    animation-direction: reverse;
+  }
+  .slide:nth-child(8) .slide-image {
+    animation-delay: -21s;
+  }
+
+  /* Pause animation on hover */
+  .hero-slideshow:hover .slide-image {
+    animation-play-state: paused;
+  }
+</style>
+
+<script define:vars={{ slideshowId, slideDuration, showCaptions }}>
+  (() => {
+    let currentSlide = 0;
+    let isHovered = false;
+    const slides = document.querySelectorAll(`.${slideshowId} .slide`);
+    const captions = document.querySelectorAll(`.${slideshowId}-captions .caption`);
+    const totalSlides = slides.length;
+    
+    if (totalSlides <= 1) return; // Don't run slideshow for single images
+    
+    function nextSlide() {
+      if (isHovered) return;
+      
+      slides[currentSlide].classList.remove('active');
+      if (showCaptions && captions[currentSlide]) {
+        captions[currentSlide].classList.remove('opacity-100');
+        captions[currentSlide].classList.add('opacity-0');
+      }
+      
+      currentSlide = (currentSlide + 1) % totalSlides;
+      slides[currentSlide].classList.add('active');
+      
+      if (showCaptions && captions[currentSlide]) {
+        captions[currentSlide].classList.remove('opacity-0');
+        captions[currentSlide].classList.add('opacity-100');
+      }
+    }
+
+    // Auto-advance
+    const interval = setInterval(nextSlide, slideDuration);
+
+    // Pause on hover
+    const heroSection = document.querySelector(`.${slideshowId}`);
+    if (heroSection) {
+      heroSection.addEventListener('mouseenter', () => {
+        isHovered = true;
+      });
+      
+      heroSection.addEventListener('mouseleave', () => {
+        isHovered = false;
+      });
+    }
+
+    // Preload images
+    slides.forEach((slide, index) => {
+      if (index > 0) {
+        const img = slide.querySelector('img');
+        if (img) {
+          const preloadImg = new Image();
+          preloadImg.src = img.src;
+        }
+      }
+    });
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+      clearInterval(interval);
+    });
+  })();
+</script>

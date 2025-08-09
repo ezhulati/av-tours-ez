@@ -8,6 +8,8 @@ import { createPublicEndpoint } from '@/lib/security/secure-api-handler'
 import { sanitizers } from '@/lib/security/middleware'
 import { generateSecureToken, anonymizeIP } from '@/lib/security/encryption'
 import { getTourDetail } from '@/lib/queries'
+
+export const prerender = false
 import { supabaseServer } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 import { z } from 'zod'

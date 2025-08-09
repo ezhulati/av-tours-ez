@@ -15,7 +15,7 @@ const {
   title, 
   description = 'Discover authentic mountain tours in Albania and the Balkans with AlbaniaVisit. Expert guides, real adventures.',
   canonical,
-  ogImage = '/og-default.jpg',
+  ogImage = '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg',
   ogType = 'website',
   noindex = false,
   jsonLd
@@ -23,6 +23,8 @@ const {
 
 const siteUrl = 'https://tours.albaniavisit.com'
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).toString()
+// Ensure ogImage is always an absolute URL
+const absoluteOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`
 const GA4_ID = import.meta.env.GA4_ID
 ---
 
@@ -39,15 +41,20 @@ const GA4_ID = import.meta.env.GA4_ID
   <!-- OpenGraph -->
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
-  <meta property="og:image" content={ogImage}>
+  <meta property="og:image" content={absoluteOgImage}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:type" content={ogType}>
   <meta property="og:url" content={canonicalURL}>
-  <meta property="og:site_name" content="AlbaniaVisit">
+  <meta property="og:site_name" content="AlbaniaVisit Tours">
+  <meta property="og:locale" content="en_US">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content={title}>
   <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={absoluteOgImage}>
+  <meta name="twitter:site" content="@AlbaniaVisit">
   <meta name="twitter:image" content={ogImage}>
   
   {noindex && <meta name="robots" content="noindex, nofollow">}
@@ -80,7 +87,13 @@ const GA4_ID = import.meta.env.GA4_ID
   
   <!-- JSON-LD -->
   {jsonLd && (
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+    Array.isArray(jsonLd) ? (
+      jsonLd.map(schema => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+      ))
+    ) : (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+    )
   )}
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -523,18 +536,19 @@ const GA4_ID = import.meta.env.GA4_ID
     
     // Mobile contact button
     document.getElementById('mobile-contact-btn')?.addEventListener('click', () => {
-      // Try to open inquiry form if on a tour page
+      // Check if we're on a tour page (has inquiry form)
       const inquiryBtn = document.getElementById('inquiry-btn');
       if (inquiryBtn) {
+        // On tour pages, open tour-specific inquiry (goes to BNAdventure + AlbaniaVisit)
         inquiryBtn.click();
       } else {
-        // Dispatch global event that InquiryForm component can listen to
-        const event = new CustomEvent('open-inquiry-form');
+        // On other pages, open general contact (goes to AlbaniaVisit only)
+        const event = new CustomEvent('open-contact-form');
         window.dispatchEvent(event);
         
-        // If still no form available, fallback to email
+        // Fallback to email if no form available
         setTimeout(() => {
-          const formVisible = document.querySelector('[data-inquiry-modal]');
+          const formVisible = document.querySelector('[data-contact-modal]');
           if (!formVisible) {
             window.location.href = 'mailto:tours@albaniavisit.com';
           }
@@ -545,5 +559,37 @@ const GA4_ID = import.meta.env.GA4_ID
     // Improve touch responsiveness
     document.addEventListener('touchstart', () => {}, { passive: true });
   </script>
+
+  <!-- Hidden Netlify Forms for detection -->
+  <div style="display: none;">
+    <!-- Tour Inquiry Form for BNAdventure + AlbaniaVisit routing -->
+    <form name="tour-inquiry" data-netlify="true" action="/thank-you" method="POST">
+      <input type="hidden" name="form-name" value="tour-inquiry" />
+      <input type="text" name="tour-title" />
+      <input type="text" name="tour-slug" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="date" name="travel-date" />
+      <input type="number" name="group-size" />
+      <textarea name="message"></textarea>
+      <input type="text" name="operator" />
+      <input type="text" name="email-recipients" />
+      <input type="text" name="utm-source" />
+      <input type="text" name="utm-campaign" />
+      <input type="text" name="created-at" />
+    </form>
+
+    <!-- General Contact Form for AlbaniaVisit only -->
+    <form name="general-contact" data-netlify="true" action="/thank-you" method="POST">
+      <input type="hidden" name="form-name" value="general-contact" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+      <input type="text" name="subject" />
+      <input type="text" name="created-at" />
+    </form>
+  </div>
 </body>
 </html>

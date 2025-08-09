@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro'
 import { getTourDetail } from '@/lib/queries'
 import { injectAffiliateParams, logAffiliateClick, generateCookieId } from '@/lib/affiliate'
 
+export const prerender = false
+
 export const GET: APIRoute = async ({ params, request, cookies }) => {
   try {
     const { slug } = params

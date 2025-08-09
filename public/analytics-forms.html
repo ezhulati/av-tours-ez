@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Analytics Report Forms</title>
+</head>
+<body>
+  <!-- Hidden forms for Netlify to detect and set up email notifications -->
+  
+  <!-- Weekly Analytics Report Form -->
+  <form name="weekly-analytics-report" netlify netlify-honeypot="bot-field" hidden>
+    <input type="email" name="to" value="tours@albaniavisit.com" />
+    <input type="text" name="subject" />
+    <textarea name="html_content"></textarea>
+    <input type="text" name="sent_at" />
+  </form>
+
+  <!-- Monthly Analytics Report Form -->
+  <form name="monthly-analytics-report" netlify netlify-honeypot="bot-field" hidden>
+    <input type="email" name="to" value="tours@albaniavisit.com" />
+    <input type="text" name="subject" />
+    <textarea name="html_content"></textarea>
+    <input type="text" name="sent_at" />
+  </form>
+
+  <p>Analytics forms configured for Netlify.</p>
+</body>
+</html>

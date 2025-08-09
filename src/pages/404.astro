@@ -1,37 +1,63 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import HeroSlideshow from '@/components/HeroSlideshow.astro'
+
+// 404 page slideshow - mix of beautiful destinations  
+const notFoundImages = [
+  { url: '/Assets/Albania/Accursed_Mountains.jpeg', alt: 'Accursed Mountains' },
+  { url: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg', alt: 'Albanian Riviera' },
+  { url: '/Assets/Albania/Northern_Albania_Shala_River.jpeg', alt: 'Shala River' },
+  { url: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg', alt: 'Gjeravica Peak Kosovo' },
+  { url: '/Assets/Montenegro/Kotor Montenegro_123711552.jpeg', alt: 'Bay of Kotor' },
+  { url: '/Assets/Albania/Albania_Lake_Koman.jpeg', alt: 'Lake Koman' }
+]
 ---
 
 <BaseLayout 
   title="Page Not Found - AlbaniaVisit Tours"
   description="The page you're looking for doesn't exist."
+  ogImage="/Assets/Albania/Albanian_Alps.jpg"
   noindex={true}
 >
-  <div class="container mx-auto px-4 py-16">
-    <div class="max-w-2xl mx-auto text-center">
+  <!-- Hero Section -->
+  <section class="relative h-[70vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+    <HeroSlideshow images={notFoundImages} overlayIntensity="medium" />
+    
+    <div class="relative z-10 text-center text-white px-4 max-w-3xl mx-auto">
       <div class="mb-8">
-        <span class="text-9xl font-bold text-gray-200">404</span>
+        <span class="text-8xl md:text-9xl font-bold text-white/20 drop-shadow-2xl">404</span>
       </div>
-      <h1 class="text-4xl font-bold mb-4">Page Not Found</h1>
-      <p class="text-xl text-gray-600 mb-8">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 drop-shadow-2xl">Page Not Found</h1>
+      <p class="text-xl md:text-2xl text-gray-100 mb-8 drop-shadow-lg">
         Sorry, we couldn't find the page you're looking for. 
-        It might have been moved or doesn't exist.
+        But look at these beautiful destinations waiting to be explored!
       </p>
       
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a 
           href="/"
-          class="inline-flex items-center justify-center bg-accent text-white p-3 rounded-lg hover:bg-accent-600 transition font-medium whitespace-nowrap min-h-[48px]"
+          class="inline-flex items-center justify-center bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all transform hover:scale-105 shadow-2xl shadow-accent/20 hover:shadow-accent/30"
         >
-          Go to Homepage
+          <span>Go to Homepage</span>
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
         </a>
         <a 
           href="/tours"
-          class="inline-flex items-center justify-center bg-gray-200 text-gray-800 p-3 rounded-lg hover:bg-gray-300 transition font-medium whitespace-nowrap min-h-[48px]"
+          class="inline-flex items-center justify-center bg-white/10 backdrop-blur-lg hover:bg-white/20 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all border border-white/20 hover:border-white/30"
         >
-          Browse All Tours
+          <span>Browse All Tours</span>
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
         </a>
       </div>
+    </div>
+  </section>
+
+  <div class="container mx-auto px-4 py-16">
+    <div class="max-w-4xl mx-auto">
 
       <div class="mt-16 pt-16 border-t">
         <h2 class="text-2xl font-bold mb-6">Popular Destinations</h2>

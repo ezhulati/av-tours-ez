@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getTourCardPage } from '@/lib/queries'
-import { generateBreadcrumbSchema } from '@/lib/seo'
-import HeroCarousel from '@/components/HeroCarousel'
+import { generateBreadcrumbSchema, generateDestinationSchema } from '@/lib/seo'
+import HeroSlideshow from '@/components/HeroSlideshow.astro'
+import PhotoGallery from '@/components/PhotoGallery'
 
 export const prerender = false
 
@@ -61,52 +62,85 @@ const breadcrumbs = generateBreadcrumbSchema([
   { name: country.name, url: `https://tours.albaniavisit.com/country/${code}` }
 ])
 
-// Country-specific hero images for carousel
-const albaniaCarouselImages = [
-  { url: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg', title: 'Albanian Riviera - Crystal Blue Waters' },
-  { url: '/Assets/Albania/Accursed_Mountains.jpeg', title: 'Accursed Mountains - Majestic Peaks' },
-  { url: '/Assets/Albania/Northern_Albania_Shala_River.jpeg', title: 'Shala River - Northern Albania Paradise' },
-  { url: '/Assets/Albania/Albania_Coast.jpeg', title: 'Albanian Coast - Endless Beauty' },
-  { url: '/Assets/Albania/Valbona_Valley_Guesthouse.jpg', title: 'Valbona Valley - Mountain Hospitality' },
-  { url: '/Assets/Albania/Albania_Lake_Koman.jpeg', title: 'Lake Koman - Hidden Fjords' },
-  { url: '/Assets/Albania/Ali_Pasha_Fortress_Porto_Palermo.jpeg', title: 'Ali Pasha Fortress - Porto Palermo' },
-  { url: '/Assets/Albania/Lukove_beach.jpeg', title: 'Lukove Beach - Hidden Gem' },
-  { url: '/Assets/Albania/Lake_Prespa_Albania.jpeg', title: 'Lake Prespa - Tranquil Waters' },
-  { url: '/Assets/Albania/Albanian_Alps.jpg', title: 'Albanian Alps - Majestic Wilderness' },
-  { url: '/Assets/Albania/Albania_Hiking.jpeg', title: 'Mountain Trails - Adventure Awaits' },
-  { url: '/Assets/Albania/Albanian_Flag_Porto_Palermo.jpeg', title: 'Porto Palermo Castle - National Pride' },
-  { url: '/Assets/Albania/Old_Mes_Bridge.jpeg', title: 'Mes Bridge - Historic Architecture' },
-  { url: '/Assets/Albania/albanian-riviera-5.jpg', title: 'Albanian Riviera - Coastal Paradise' },
-  { url: '/Assets/Albania/albanian-riviera-2.jpeg', title: 'Albanian Riviera - Azure Waters' }
-]
+const destinationSchema = generateDestinationSchema(
+  country.name,
+  country.description,
+  tours.items,
+  `https://tours.albaniavisit.com/country/${code}`
+)
 
-const kosovoCarouselImages = [
-  { url: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg', title: 'Gjeravica Peak - Kosovo\'s Roof at 2,656m' },
-  { url: '/Assets/Kosovo/Kosovo_329920270.jpeg', title: 'The Untamed Beauty of Kosovo\'s Highlands' },
-  { url: '/Assets/Kosovo/Kucisko_Lake_Kosovo_135448859.jpeg', title: 'Kuçishte Lake - A Hidden Alpine Gem' },
-  { url: '/Assets/Kosovo/Lac Leqinat Pejë Kosovo_220878090.jpeg', title: 'Leqinat Lakes - Where Mountains Mirror the Sky' }
-]
+// Smart slideshow: Use UNIQUE images from actual tours in this country
+const uniqueSlideshowMap = new Map()
+tours.items.forEach(tour => {
+  if (tour.primaryImageUrl && !uniqueSlideshowMap.has(tour.primaryImageUrl)) {
+    uniqueSlideshowMap.set(tour.primaryImageUrl, {
+      url: tour.primaryImageUrl,
+      alt: `${tour.title} - ${tour.countries.join(', ')}`
+    })
+  }
+})
+const smartCountryImages = Array.from(uniqueSlideshowMap.values()).slice(0, 8)
 
-const montenegroCarouselImages = [
-  { url: '/Assets/Montenegro/Kotor Montenegro_123711552.jpeg', title: 'Bay of Kotor - Europe\'s Southernmost Fjord' },
-  { url: '/Assets/Montenegro/Lovcen Mountains National park Montenegro_165889777.jpeg', title: 'Lovćen Mountains - Montenegro\'s Black Mountain' },
-  { url: '/Assets/Montenegro/Montenegro_216089172.jpeg', title: 'Wild Beauty of Montenegro' },
-  { url: '/Assets/Montenegro/Moracha Monastery Montenegro_382804243.jpeg', title: 'Morača Monastery - Spiritual Heritage' }
-]
+// Fallback country-specific images for when there aren't enough tours
+const countryFallbacks = {
+  albania: [
+    { url: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg', alt: 'Albanian Riviera - Crystal Blue Waters' },
+    { url: '/Assets/Albania/Accursed_Mountains.jpeg', alt: 'Accursed Mountains - Majestic Peaks' },
+    { url: '/Assets/Albania/Northern_Albania_Shala_River.jpeg', alt: 'Shala River - Northern Albania Paradise' },
+    { url: '/Assets/Albania/Albania_Coast.jpeg', alt: 'Albanian Coast - Endless Beauty' },
+    { url: '/Assets/Albania/Valbona_Valley_Guesthouse.jpg', alt: 'Valbona Valley - Mountain Hospitality' },
+    { url: '/Assets/Albania/Albania_Lake_Koman.jpeg', alt: 'Lake Koman - Hidden Fjords' },
+    { url: '/Assets/Albania/Ali_Pasha_Fortress_Porto_Palermo.jpeg', alt: 'Ali Pasha Fortress - Porto Palermo' },
+    { url: '/Assets/Albania/Albanian_Alps.jpg', alt: 'Albanian Alps - Majestic Wilderness' }
+  ],
+  kosovo: [
+    { url: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg', alt: 'Gjeravica Peak - Kosovo\'s Roof at 2,656m' },
+    { url: '/Assets/Kosovo/Kosovo_329920270.jpeg', alt: 'The Untamed Beauty of Kosovo\'s Highlands' },
+    { url: '/Assets/Kosovo/Kucisko_Lake_Kosovo_135448859.jpeg', alt: 'Kuçishte Lake - A Hidden Alpine Gem' },
+    { url: '/Assets/Kosovo/Lac Leqinat Pejë Kosovo_220878090.jpeg', alt: 'Leqinat Lakes - Where Mountains Mirror the Sky' }
+  ],
+  montenegro: [
+    { url: '/Assets/Montenegro/Kotor Montenegro_123711552.jpeg', alt: 'Bay of Kotor - Europe\'s Southernmost Fjord' },
+    { url: '/Assets/Montenegro/Lovcen Mountains National park Montenegro_165889777.jpeg', alt: 'Lovćen Mountains - Montenegro\'s Black Mountain' },
+    { url: '/Assets/Montenegro/Montenegro_216089172.jpeg', alt: 'Wild Beauty of Montenegro' },
+    { url: '/Assets/Montenegro/Moracha Monastery Montenegro_382804243.jpeg', alt: 'Morača Monastery - Spiritual Heritage' }
+  ],
+  macedonia: [
+    { url: '/Assets/North Macedonia/North Macedonia_456949808.jpeg', alt: 'North Macedonia - Land of Ancient Wonders' },
+    { url: '/Assets/North Macedonia/Roman_Aquaduct_in_Macedonia_484708122.jpeg', alt: 'Roman Aqueduct - Living History' },
+    { url: '/Assets/North Macedonia/Skopje Macedonia_230959493.jpeg', alt: 'Skopje - Where Old Meets New' },
+    { url: '/Assets/North Macedonia/Skopje, Macedonia_607034892.jpeg', alt: 'Skopje Cityscape - Modern Macedonia' }
+  ]
+}
 
-const macedoniaCarouselImages = [
-  { url: '/Assets/North Macedonia/North Macedonia_456949808.jpeg', title: 'North Macedonia - Land of Ancient Wonders' },
-  { url: '/Assets/North Macedonia/Roman_Aquaduct_in_Macedonia_484708122.jpeg', title: 'Roman Aqueduct - Living History' },
-  { url: '/Assets/North Macedonia/Skopje Macedonia_230959493.jpeg', title: 'Skopje - Where Old Meets New' },
-  { url: '/Assets/North Macedonia/Skopje, Macedonia_607034892.jpeg', title: 'Skopje Cityscape - Modern Macedonia' }
-]
+// Use smart images first, then fallback to country-specific images (no duplicates)
+const fallbackForCountry = countryFallbacks[code] || countryFallbacks['albania']
+const seenUrls = new Set(smartCountryImages.map(img => img.url))
+const countrySlideshow = {
+  [code]: [
+    ...smartCountryImages,
+    ...fallbackForCountry.filter(img => !seenUrls.has(img.url))
+  ].slice(0, 8)
+}
+
+// Create unique gallery images from all tours in country
+const uniqueCountryImages = new Map()
+tours.items.forEach(tour => {
+  if (tour.primaryImageUrl && !uniqueCountryImages.has(tour.primaryImageUrl)) {
+    uniqueCountryImages.set(tour.primaryImageUrl, {
+      url: tour.primaryImageUrl,
+      alt: `${tour.title} - ${tour.countries.join(', ')}`
+    })
+  }
+})
+const galleryImages = Array.from(uniqueCountryImages.values())
 
 // Default hero images for other countries
 const heroImages = {
-  albania: albaniaCarouselImages[0].url,
-  kosovo: kosovoCarouselImages[0].url,
-  montenegro: montenegroCarouselImages[0].url,
-  macedonia: macedoniaCarouselImages[0].url,
+  albania: countryFallbacks.albania[0].url,
+  kosovo: countryFallbacks.kosovo[0].url,
+  montenegro: countryFallbacks.montenegro[0].url,
+  macedonia: countryFallbacks.macedonia[0].url,
   bosnia: 'https://images.unsplash.com/photo-1558618047-71548e9a0b48?w=1920',
   croatia: 'https://images.unsplash.com/photo-1559157693-c34c0a6e5e3c?w=1920',
   serbia: 'https://images.unsplash.com/photo-1598266663439-2c0036d53f0d?w=1920',
@@ -118,57 +152,45 @@ const heroImages = {
   title={`${country.name} Tours - AlbaniaVisit Tours`}
   description={`Explore ${country.name}: ${country.description}`}
   ogImage={heroImages[code]}
-  jsonLd={breadcrumbs}
+  jsonLd={[breadcrumbs, destinationSchema]}
 >
-  <!-- Hero Section with Carousel for Albania, Kosovo, Montenegro, and Macedonia, static for others -->
-  {code === 'albania' ? (
-    <HeroCarousel 
-      images={albaniaCarouselImages}
-      country={country.name}
-      description={country.description}
-      client:load
-    />
-  ) : code === 'kosovo' ? (
-    <HeroCarousel 
-      images={kosovoCarouselImages}
-      country={country.name}
-      description={country.description}
-      client:load
-    />
-  ) : code === 'montenegro' ? (
-    <HeroCarousel 
-      images={montenegroCarouselImages}
-      country={country.name}
-      description={country.description}
-      client:load
-    />
-  ) : code === 'macedonia' ? (
-    <HeroCarousel 
-      images={macedoniaCarouselImages}
-      country={country.name}
-      description={country.description}
-      client:load
-    />
-  ) : (
-    <section class="relative h-[75vh] min-h-[600px] flex items-center justify-center">
-      <div class="absolute inset-0">
-        <img 
-          src={heroImages[code]} 
-          alt={country.name}
-          class="w-full h-full object-cover"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
-      </div>
-      <div class="relative z-10 text-center text-white px-4">
-        <h1 class="text-5xl md:text-6xl font-bold mb-4">
-          {country.name}
-        </h1>
-        <p class="text-xl md:text-2xl max-w-3xl mx-auto">
-          {country.description}
-        </p>
-      </div>
-    </section>
-  )}
+  <!-- Hero Section with Ken Burns Slideshow -->
+  <section class="relative h-[75vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+    {countrySlideshow[code] ? (
+      <HeroSlideshow images={countrySlideshow[code]} overlayIntensity="medium" />
+    ) : (
+      <!-- Fallback static image for other countries -->
+      <>
+        <div class="absolute inset-0">
+          <img 
+            src={heroImages[code]} 
+            alt={country.name}
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-gray-800/50 to-gray-900/55"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20"></div>
+      </>
+    )}
+    
+    <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl">
+        {country.name}
+      </h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto drop-shadow-lg text-gray-100">
+        {country.description}
+      </p>
+      
+      {tours.items.length > 0 && (
+        <div class="mt-8 flex justify-center gap-8 text-center">
+          <div>
+            <div class="text-3xl font-bold text-accent drop-shadow-lg">{tours.items.length}</div>
+            <div class="text-sm text-gray-300">Available Tours</div>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
 
   <div class="container mx-auto px-4 py-8">
     <!-- Breadcrumbs -->
@@ -422,5 +444,15 @@ const heroImages = {
         ))}
       </div>
     </div>
+
+    <!-- Compact Gallery - Only if we have images -->
+    {galleryImages.length > 0 && (
+      <PhotoGallery 
+        client:load
+        photos={galleryImages}
+        title={`More from ${country.name}`}
+        className="py-8"
+      />
+    )}
   </div>
 </BaseLayout>

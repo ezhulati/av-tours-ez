@@ -1,49 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
-interface InquiryFormProps {
-  tourId: string
-  tourSlug: string
-  tourTitle?: string
-  inquiryType?: 'tour' | 'general'
+interface ContactFormProps {
+  subject?: string
 }
 
-export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType = 'tour' }: InquiryFormProps) {
+export default function ContactForm({ subject }: ContactFormProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
-  const [csrfToken, setCsrfToken] = useState('')
   
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: '',
-    travelDate: '',
-    groupSize: 1
+    subject: subject || ''
   })
 
   useEffect(() => {
-    const handleOpenInquiry = () => setIsOpen(true)
-    window.addEventListener('open-inquiry-form', handleOpenInquiry)
-    return () => window.removeEventListener('open-inquiry-form', handleOpenInquiry)
-  }, [])
-
-  useEffect(() => {
-    const fetchCSRFToken = async () => {
-      try {
-        const response = await fetch('/api/csrf-token')
-        const data = await response.json()
-        if (data.csrfToken) {
-          setCsrfToken(data.csrfToken)
-        }
-      } catch (error) {
-        console.error('Failed to fetch CSRF token:', error)
-      }
-    }
-
-    fetchCSRFToken()
+    const handleOpenContact = () => setIsOpen(true)
+    window.addEventListener('open-contact-form', handleOpenContact)
+    return () => window.removeEventListener('open-contact-form', handleOpenContact)
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,66 +30,40 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
     setLoading(true)
     setError('')
 
-    if (!csrfToken) {
-      setError('Security token missing. Please refresh the page and try again.')
-      setLoading(false)
-      return
-    }
-
     try {
-      // Step 1: Submit to our enhanced API for tracking and routing
-      const enhancedResponse = await fetch('/api/inquiries-enhanced', {
+      // Submit directly to Netlify Forms (general contact only goes to AlbaniaVisit)
+      const netlifyFormData = new FormData()
+      netlifyFormData.append('form-name', 'general-contact')
+      netlifyFormData.append('name', formData.name)
+      netlifyFormData.append('email', formData.email)
+      netlifyFormData.append('phone', formData.phone || '')
+      netlifyFormData.append('message', formData.message)
+      netlifyFormData.append('subject', formData.subject)
+      netlifyFormData.append('created-at', new Date().toISOString())
+
+      const netlifyResponse = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tourId,
-          tourSlug,
-          tourTitle,
-          inquiryType,
-          csrfToken,
-          ...formData,
-          utm_source: new URLSearchParams(window.location.search).get('utm_source'),
-          utm_medium: new URLSearchParams(window.location.search).get('utm_medium'),
-          utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign')
-        })
+        body: netlifyFormData
       })
 
-      const enhancedData = await enhancedResponse.json()
-
-      if (enhancedData.ok && enhancedData.netlifyFormData) {
-        // Step 2: Submit to Netlify Forms for actual email delivery
-        const netlifyFormData = new FormData()
-        Object.entries(enhancedData.netlifyFormData).forEach(([key, value]) => {
-          netlifyFormData.append(key, value as string)
+      if (netlifyResponse.ok) {
+        setSuccess(true)
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          subject: subject || ''
         })
-
-        const netlifyResponse = await fetch('/', {
-          method: 'POST',
-          body: netlifyFormData
-        })
-
-        if (netlifyResponse.ok) {
-          setSuccess(true)
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            message: '',
-            travelDate: '',
-            groupSize: 1
-          })
-          setTimeout(() => {
-            setIsOpen(false)
-            setSuccess(false)
-          }, 3000)
-        } else {
-          throw new Error('Failed to send inquiry via Netlify')
-        }
+        setTimeout(() => {
+          setIsOpen(false)
+          setSuccess(false)
+        }, 3000)
       } else {
-        setError(enhancedData.error || 'Failed to process inquiry')
+        throw new Error('Failed to send message')
       }
     } catch (err) {
-      console.error('Inquiry submission error:', err)
+      console.error('Contact form error:', err)
       setError('Network error. Please try again.')
     } finally {
       setLoading(false)
@@ -123,7 +76,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => setIsOpen(false)}>
       <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Send Inquiry</h2>
+          <h2 className="text-2xl font-bold">Contact Us</h2>
           <button
             onClick={() => setIsOpen(false)}
             className="text-gray-500 hover:text-gray-700"
@@ -134,15 +87,13 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
           </button>
         </div>
 
-        {tourTitle && (
-          <p className="text-sm text-gray-600 mb-4">
-            Inquiring about: <strong>{tourTitle}</strong>
-          </p>
-        )}
+        <p className="text-sm text-gray-600 mb-4">
+          Get in touch with our team. We'd love to hear from you!
+        </p>
 
         {success ? (
           <div className="bg-gray-50 border border-gray-200 text-gray-800 p-4 rounded-lg">
-            <p className="font-semibold">Thank you for your inquiry!</p>
+            <p className="font-semibold">Thank you for your message!</p>
             <p className="text-sm mt-1">We'll get back to you within 24 hours.</p>
           </div>
         ) : (
@@ -179,27 +130,15 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Travel Date</label>
-                <input
-                  type="date"
-                  value={formData.travelDate}
-                  onChange={(e) => setFormData({...formData, travelDate: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Group Size</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={formData.groupSize}
-                  onChange={(e) => setFormData({...formData, groupSize: parseInt(e.target.value)})}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Subject</label>
+              <input
+                type="text"
+                value={formData.subject}
+                onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="What can we help you with?"
+              />
             </div>
 
             <div>
@@ -210,7 +149,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
                 value={formData.message}
                 onChange={(e) => setFormData({...formData, message: e.target.value})}
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-                placeholder="Tell us about your travel plans, special requirements, or questions..."
+                placeholder="Tell us how we can help..."
               />
             </div>
 
@@ -233,7 +172,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
                 disabled={loading}
                 className="flex-1"
               >
-                {loading ? 'Sending...' : 'Send Inquiry'}
+                {loading ? 'Sending...' : 'Send Message'}
               </Button>
             </div>
           </form>

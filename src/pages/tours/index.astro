@@ -1,46 +1,106 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getTourCardPage } from '@/lib/queries'
-import { generateBreadcrumbSchema } from '@/lib/seo'
+import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/seo'
 import { getEnhancedTour, getBadgeEmoji } from '@/data/enhancedTours'
 import FilterBar from '@/components/tours/FilterBar'
 import BookingButton from '@/components/tours/BookingButton'
 import InquiryForm from '@/components/tours/InquiryForm'
+import HeroSlideshow from '@/components/HeroSlideshow.astro'
+import PhotoGallery from '@/components/PhotoGallery'
 
 // Get initial tours (SSG)
 const initialData = await getTourCardPage({}, { page: 1, limit: 12 })
-
 
 const breadcrumbs = generateBreadcrumbSchema([
   { name: 'Home', url: 'https://tours.albaniavisit.com' },
   { name: 'All Tours', url: 'https://tours.albaniavisit.com/tours' }
 ])
+
+const collectionSchema = generateCollectionPageSchema(
+  'All Tours - Mountain Adventures in Albania & Balkans',
+  `Browse ${initialData.pagination.total} handpicked tours across Albania, Kosovo, Montenegro and North Macedonia`,
+  initialData.items,
+  'https://tours.albaniavisit.com/tours'
+)
+
+// Smart slideshow: Use UNIQUE images from actual tours on this page
+const uniqueSlideshowImages = new Map()
+initialData.items.forEach(tour => {
+  if (tour.primaryImageUrl && !uniqueSlideshowImages.has(tour.primaryImageUrl)) {
+    uniqueSlideshowImages.set(tour.primaryImageUrl, {
+      url: tour.primaryImageUrl,
+      alt: `${tour.title} - ${tour.countries.join(', ')}`
+    })
+  }
+})
+const smartToursImages = Array.from(uniqueSlideshowImages.values()).slice(0, 8)
+
+// Fallback images if we don't have enough tours - also deduplicated
+const fallbackImages = [
+  { url: '/Assets/Albania/Valbona_to_Theth_Trail.jpg', alt: 'Valbona to Theth Hiking Trail' },
+  { url: '/Assets/Albania/Albanian_Alps.jpg', alt: 'Albanian Alps' },
+  { url: '/Assets/Albania/Albania_Hiking.jpeg', alt: 'Mountain Hiking in Albania' },
+  { url: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg', alt: 'Gjeravica Peak Kosovo' },
+  { url: '/Assets/Montenegro/Lovcen Mountains National park Montenegro_165889777.jpeg', alt: 'Lovćen National Park Montenegro' },
+  { url: '/Assets/Albania/Accursed_Mountains.jpeg', alt: 'Accursed Mountains' },
+  { url: '/Assets/Albania/Northern_Albania_Shala_River.jpeg', alt: 'Shala River Northern Albania' },
+  { url: '/Assets/Albania/Lake_Prespa_Albania.jpeg', alt: 'Lake Prespa Albania' }
+]
+
+// Combine smart images with fallbacks, ensuring NO duplicates
+const seenUrls = new Set(smartToursImages.map(img => img.url))
+const toursHeroImages = [
+  ...smartToursImages,
+  ...fallbackImages.filter(img => !seenUrls.has(img.url))
+].slice(0, 8)
+
+// Create unique gallery images - get ALL tour images, no duplicates
+const uniqueTourImages = new Map()
+initialData.items.forEach(tour => {
+  if (tour.primaryImageUrl && !uniqueTourImages.has(tour.primaryImageUrl)) {
+    uniqueTourImages.set(tour.primaryImageUrl, {
+      url: tour.primaryImageUrl,
+      alt: `${tour.title} - ${tour.countries.join(', ')}`
+    })
+  }
+})
+const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limit to 12 unique images
 ---
 
 <BaseLayout 
   title="Premium Mountain Tours in Albania & Balkans | AlbaniaVisit"
   description="Find and compare the best tours in Albania, Kosovo, Montenegro & Macedonia. Connect with trusted local operators for authentic adventures."
-  jsonLd={breadcrumbs}
+  ogImage="/Assets/Albania/Albanian_Alps.jpg"
+  jsonLd={[breadcrumbs, collectionSchema]}
 >
   <!-- Hero Section -->
-  <section class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20">
-    <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto text-center">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6">
-          Explore the <span class="text-accent">Untamed Balkans</span>
-        </h1>
-        <p class="text-xl text-gray-300 mb-8">
-          {initialData.pagination.total} handpicked adventures across Albania's peaks, Kosovo's valleys, and Montenegro's wild coastlines
-        </p>
-        
-        <!-- Quick Stats -->
-        <div class="flex justify-center gap-8 text-center">
-          <div>
-            <div class="text-3xl font-bold text-accent">{initialData.pagination.total}</div>
-            <div class="text-sm text-gray-400">Active Tours</div>
-          </div>
+  <section class="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+    <HeroSlideshow images={toursHeroImages} overlayIntensity="medium" />
+    
+    <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+      <h1 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-2xl">
+        Explore the <span class="text-accent">Untamed Balkans</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-100 mb-8 drop-shadow-lg">
+        {initialData.pagination.total} handpicked adventures across Albania's peaks, Kosovo's valleys, and Montenegro's wild coastlines
+      </p>
+      
+      <!-- Quick Stats -->
+      <div class="flex justify-center gap-8 text-center mb-8">
+        <div>
+          <div class="text-3xl font-bold text-accent drop-shadow-lg">{initialData.pagination.total}</div>
+          <div class="text-sm text-gray-300">Active Tours</div>
         </div>
       </div>
+
+      <!-- CTA -->
+      <a href="#tours-grid" class="inline-flex items-center justify-center bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all transform hover:scale-105 shadow-2xl shadow-accent/20 hover:shadow-accent/30">
+        <span>Browse All Tours</span>
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </a>
     </div>
   </section>
 
@@ -51,7 +111,7 @@ const breadcrumbs = generateBreadcrumbSchema([
     </div>
 
     <!-- Tours Grid -->
-    <div id="tours-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+    <div id="tours-grid" class="scroll-mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
       {initialData.items.map((tour) => {
         const enhancedTour = getEnhancedTour(tour.slug);
         return (
@@ -179,6 +239,16 @@ const breadcrumbs = generateBreadcrumbSchema([
       </div>
     )}
   </div>
+
+  <!-- Compact Photo Gallery - After main content -->
+  {galleryImages.length > 0 && (
+    <PhotoGallery 
+      client:load
+      photos={galleryImages}
+      title="Tour Photo Gallery"
+      className="py-8"
+    />
+  )}
 
   <!-- Bottom CTA -->
   <section class="bg-gray-50 py-16">

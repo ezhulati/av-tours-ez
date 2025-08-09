@@ -1,9 +1,26 @@
 import type { APIRoute } from 'astro'
 import { getTourCardPage } from '@/lib/queries'
 import type { TourFilters, PaginationParams } from '@/lib/dto'
+import { toursApiLimiter } from '@/lib/rateLimit'
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ request, url }) => {
   try {
+    // Apply rate limiting
+    const rateLimitResult = toursApiLimiter(request)
+    if (!rateLimitResult.success) {
+      return new Response(JSON.stringify({ 
+        error: rateLimitResult.error,
+        rateLimited: true 
+      }), {
+        status: 429,
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-RateLimit-Remaining': '0',
+          'Retry-After': '60'
+        }
+      })
+    }
+    
     const params = url.searchParams
     
     // Parse filters
