@@ -1,4 +1,4 @@
-# Astro Starter Kit: Minimal
+# AlbaniaVisit Tours - Mountain Adventures Platform
 
 ```sh
 pnpm create astro@latest -- --template minimal
