@@ -1,0 +1,176 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getTourCardPage } from '@/lib/queries'
+import { generateBreadcrumbSchema } from '@/lib/seo'
+
+export const prerender = false
+
+const { slug } = Astro.params
+
+// Define main categories based on activity types in the database
+const categories: Record<string, { name: string, description: string }> = {
+  'adventure': { 
+    name: 'Adventure Tours',
+    description: 'Heart-pumping adventures and adrenaline-fueled activities across the Balkans.'
+  },
+  'hiking': { 
+    name: 'Hiking & Trekking',
+    description: 'Explore pristine mountain trails, ancient paths, and breathtaking peaks.'
+  },
+  'cultural': { 
+    name: 'Cultural Tours',
+    description: 'Immerse yourself in rich history, traditions, and local life.'
+  },
+  'beach': { 
+    name: 'Beach & Coast',
+    description: 'Discover hidden beaches, crystal-clear waters, and coastal adventures.'
+  },
+  'winter': { 
+    name: 'Winter Sports',
+    description: 'Ski slopes, snowshoeing, and winter wonderland experiences.'
+  },
+  'cycling': { 
+    name: 'Cycling & E-Biking',
+    description: 'Pedal through scenic routes on traditional bikes or modern e-bikes.'
+  },
+  'food': { 
+    name: 'Food & Wine',
+    description: 'Savor local cuisine, wines, and culinary traditions.'
+  },
+  'nature': { 
+    name: 'Nature & Wildlife',
+    description: 'Connect with nature through wildlife watching and eco-tours.'
+  }
+}
+
+const category = categories[slug] || { name: 'Tours', description: 'Explore all tours' }
+
+// Get tours for this category
+const tours = await getTourCardPage(
+  { category: slug },
+  { page: 1, limit: 24 }
+)
+
+const breadcrumbs = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' },
+  { name: 'Categories', url: 'https://tours.albaniavisit.com/tours' },
+  { name: category.name, url: `https://tours.albaniavisit.com/category/${slug}` }
+])
+---
+
+<BaseLayout 
+  title={`${category.name} - AlbaniaVisit Tours`}
+  description={`Discover the best ${category.name.toLowerCase()} in Albania and the Balkans. Expert guides, unforgettable experiences.`}
+  jsonLd={breadcrumbs}
+>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumbs -->
+    <nav class="mb-6">
+      <ol class="flex items-center space-x-2 text-sm">
+        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/tours" class="text-gray-600 hover:text-gray-900">Tours</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900">{category.name}</li>
+      </ol>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="mb-12 text-center">
+      <h1 class="text-4xl font-bold mb-4">{category.name}</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        {category.description}
+      </p>
+    </div>
+
+    <!-- Tours Grid -->
+    {tours.items.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+        {tours.items.map((tour) => (
+          <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+            <div class="aspect-[4/3] relative">
+              <img 
+                src={tour.primaryImageUrl} 
+                alt={tour.title}
+                loading="lazy"
+                class="w-full h-full object-cover"
+              />
+              {tour.featured && (
+                <span class="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  Featured
+                </span>
+              )}
+            </div>
+            <div class="p-5">
+              <h2 class="text-lg font-bold mb-2 line-clamp-2">
+                <a href={`/tours/${tour.slug}`} class="hover:text-blue-600">
+                  {tour.title}
+                </a>
+              </h2>
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                {tour.shortDescription}
+              </p>
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex gap-2">
+                  {tour.durationDisplay && (
+                    <span class="text-xs bg-gray-100 px-2 py-1 rounded">
+                      {tour.durationDisplay}
+                    </span>
+                  )}
+                  {tour.difficulty && (
+                    <span class="text-xs bg-gray-100 px-2 py-1 rounded capitalize">
+                      {tour.difficulty}
+                    </span>
+                  )}
+                </div>
+                {tour.priceMin && (
+                  <span class="font-bold text-sm">
+                    €{tour.priceMin}
+                  </span>
+                )}
+              </div>
+              <a 
+                href={`/out/${tour.slug}`}
+                rel="sponsored nofollow noopener"
+                class="block w-full bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 transition text-sm"
+              >
+                View Tour
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-xl text-gray-600 mb-6">No tours found in this category yet.</p>
+        <a href="/tours" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+          Browse All Tours
+        </a>
+      </div>
+    )}
+
+    <!-- Pagination if needed -->
+    {tours.pagination.totalPages > 1 && (
+      <div class="flex justify-center gap-2">
+        <span class="text-sm text-gray-600">
+          Showing {tours.items.length} of {tours.pagination.total} tours
+        </span>
+      </div>
+    )}
+
+    <!-- Related Categories -->
+    <div class="mt-16 border-t pt-12">
+      <h2 class="text-2xl font-bold mb-6 text-center">Explore Other Categories</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {['adventure', 'hiking', 'cultural', 'beach'].filter(c => c !== slug).map(cat => (
+          <a 
+            href={`/category/${cat}`}
+            class="bg-gray-100 rounded-lg p-4 text-center hover:bg-gray-200 transition"
+          >
+            <h3 class="font-semibold capitalize">{cat}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

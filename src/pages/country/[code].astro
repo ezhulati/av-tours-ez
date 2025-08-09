@@ -1,0 +1,298 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getTourCardPage } from '@/lib/queries'
+import { generateBreadcrumbSchema } from '@/lib/seo'
+
+export const prerender = false
+
+const { code } = Astro.params
+
+const countries: Record<string, { name: string, description: string }> = {
+  'albania': { 
+    name: 'Albania', 
+    description: 'The hidden gem of Europe with pristine beaches, rugged mountains, and ancient history.' 
+  },
+  'kosovo': { 
+    name: 'Kosovo', 
+    description: 'Europe\'s youngest nation with medieval monasteries, vibrant cities, and untouched nature.' 
+  },
+  'montenegro': { 
+    name: 'Montenegro', 
+    description: 'Wild beauty of the Adriatic with dramatic coastlines, deep canyons, and medieval towns.' 
+  },
+  'macedonia': { 
+    name: 'North Macedonia', 
+    description: 'Land of lakes, mountains, and ancient heritage at the crossroads of civilizations.' 
+  },
+  'bosnia': { 
+    name: 'Bosnia & Herzegovina', 
+    description: 'Where East meets West, with Ottoman heritage, stunning nature, and warm hospitality.' 
+  },
+  'croatia': { 
+    name: 'Croatia', 
+    description: 'Stunning Adriatic coastline, historic cities, and thousands of islands to explore.' 
+  },
+  'serbia': { 
+    name: 'Serbia', 
+    description: 'Vibrant culture, historic monasteries, and the mighty Danube River.' 
+  },
+  'greece': { 
+    name: 'Greece', 
+    description: 'Ancient wonders, island paradise, and the birthplace of Western civilization.' 
+  }
+}
+
+const country = countries[code] || { name: 'Unknown', description: 'Explore tours in this region.' }
+
+if (!countries[code]) {
+  return Astro.redirect('/404')
+}
+
+// Get tours for this country
+const tours = await getTourCardPage(
+  { country: country.name },
+  { page: 1, limit: 24, sort: 'popular' }
+)
+
+const breadcrumbs = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' },
+  { name: 'Destinations', url: 'https://tours.albaniavisit.com/tours' },
+  { name: country.name, url: `https://tours.albaniavisit.com/country/${code}` }
+])
+
+// Country-specific hero images
+const heroImages = {
+  albania: 'https://images.unsplash.com/photo-1609951277973-eae0ca26d71e?w=1920',
+  kosovo: 'https://images.unsplash.com/photo-1568707126882-6d8c5b3c3f0c?w=1920',
+  montenegro: 'https://images.unsplash.com/photo-1565951727117-67469f924e48?w=1920',
+  macedonia: 'https://images.unsplash.com/photo-1608460627820-5e3862c0c3b3?w=1920',
+  bosnia: 'https://images.unsplash.com/photo-1558618047-71548e9a0b48?w=1920',
+  croatia: 'https://images.unsplash.com/photo-1559157693-c34c0a6e5e3c?w=1920',
+  serbia: 'https://images.unsplash.com/photo-1598266663439-2c0036d53f0d?w=1920',
+  greece: 'https://images.unsplash.com/photo-1503152394-c571994fd383?w=1920'
+}
+---
+
+<BaseLayout 
+  title={`${country.name} Tours - AlbaniaVisit Tours`}
+  description={`Explore ${country.name}: ${country.description}`}
+  ogImage={heroImages[code]}
+  jsonLd={breadcrumbs}
+>
+  <!-- Hero Section -->
+  <section class="relative h-[50vh] min-h-[400px] flex items-center justify-center">
+    <div class="absolute inset-0">
+      <img 
+        src={heroImages[code]} 
+        alt={country.name}
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+    </div>
+    <div class="relative z-10 text-center text-white px-4">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">
+        {country.name}
+      </h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto">
+        {country.description}
+      </p>
+    </div>
+  </section>
+
+  <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumbs -->
+    <nav class="mb-6">
+      <ol class="flex items-center space-x-2 text-sm">
+        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/tours" class="text-gray-600 hover:text-gray-900">Tours</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900">{country.name}</li>
+      </ol>
+    </nav>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+      <div class="bg-white rounded-lg p-4 text-center shadow">
+        <div class="text-3xl font-bold text-blue-600">{tours.pagination.total}</div>
+        <div class="text-sm text-gray-600">Available Tours</div>
+      </div>
+      <div class="bg-white rounded-lg p-4 text-center shadow">
+        <div class="text-3xl font-bold text-green-600">4.8★</div>
+        <div class="text-sm text-gray-600">Average Rating</div>
+      </div>
+      <div class="bg-white rounded-lg p-4 text-center shadow">
+        <div class="text-3xl font-bold text-purple-600">All Year</div>
+        <div class="text-sm text-gray-600">Best Time</div>
+      </div>
+      <div class="bg-white rounded-lg p-4 text-center shadow">
+        <div class="text-3xl font-bold text-orange-600">€{tours.items[0]?.priceMin || 45}+</div>
+        <div class="text-sm text-gray-600">Starting From</div>
+      </div>
+    </div>
+
+    <!-- Tours Section -->
+    <div class="mb-12">
+      <h2 class="text-3xl font-bold mb-8">Popular Tours in {country.name}</h2>
+      
+      {tours.items.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {tours.items.map((tour) => (
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+              <div class="aspect-[4/3] relative">
+                <img 
+                  src={tour.primaryImageUrl} 
+                  alt={tour.title}
+                  loading="lazy"
+                  class="w-full h-full object-cover"
+                />
+                {tour.featured && (
+                  <span class="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    Featured
+                  </span>
+                )}
+                <span class="absolute bottom-4 left-4 bg-black/70 text-white px-2 py-1 rounded text-xs">
+                  {tour.countries.join(' • ')}
+                </span>
+              </div>
+              <div class="p-5">
+                <h3 class="text-lg font-bold mb-2 line-clamp-2">
+                  <a href={`/tours/${tour.slug}`} class="hover:text-blue-600">
+                    {tour.title}
+                  </a>
+                </h3>
+                <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                  {tour.shortDescription}
+                </p>
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex gap-2">
+                    {tour.durationDisplay && (
+                      <span class="text-xs bg-gray-100 px-2 py-1 rounded">
+                        {tour.durationDisplay}
+                      </span>
+                    )}
+                    {tour.difficulty && (
+                      <span class="text-xs bg-gray-100 px-2 py-1 rounded capitalize">
+                        {tour.difficulty}
+                      </span>
+                    )}
+                  </div>
+                  {tour.priceMin && (
+                    <span class="font-bold text-sm">
+                      €{tour.priceMin}
+                    </span>
+                  )}
+                </div>
+                <a 
+                  href={`/out/${tour.slug}`}
+                  rel="sponsored nofollow noopener"
+                  class="block w-full bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 transition text-sm"
+                >
+                  View Tour
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12 bg-gray-50 rounded-lg">
+          <p class="text-xl text-gray-600 mb-6">No tours available for {country.name} yet.</p>
+          <a href="/tours" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+            Browse All Tours
+          </a>
+        </div>
+      )}
+    </div>
+
+    {tours.pagination.totalPages > 1 && (
+      <div class="text-center mb-12">
+        <a href={`/tours?country=${country.name}`} class="inline-block bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition">
+          View All {tours.pagination.total} Tours in {country.name}
+        </a>
+      </div>
+    )}
+
+    <!-- Travel Info -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      <div class="bg-white rounded-lg p-6 shadow">
+        <h3 class="font-bold mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Getting There
+        </h3>
+        <p class="text-sm text-gray-600">
+          {code === 'albania' && 'Fly into Tirana International Airport (TIA) with connections from major European cities.'}
+          {code === 'kosovo' && 'Pristina International Airport (PRN) serves as the main gateway with direct flights from Europe.'}
+          {code === 'montenegro' && 'Podgorica (TGD) and Tivat (TIV) airports offer easy access from European destinations.'}
+          {code === 'macedonia' && 'Skopje International Airport (SKP) connects to major European hubs.'}
+          {code === 'bosnia' && 'Sarajevo International Airport (SJJ) is the main entry point.'}
+          {code === 'croatia' && 'Multiple airports including Zagreb, Split, and Dubrovnik serve international flights.'}
+          {code === 'serbia' && 'Belgrade Nikola Tesla Airport (BEG) is the largest hub in the region.'}
+          {code === 'greece' && 'Athens International Airport (ATH) and many island airports offer global connections.'}
+        </p>
+      </div>
+      
+      <div class="bg-white rounded-lg p-6 shadow">
+        <h3 class="font-bold mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+          Currency
+        </h3>
+        <p class="text-sm text-gray-600">
+          {code === 'albania' && 'Albanian Lek (ALL). Euro widely accepted in tourist areas. ATMs available in cities.'}
+          {code === 'kosovo' && 'Euro (EUR) is the official currency. Cards accepted in cities.'}
+          {code === 'montenegro' && 'Euro (EUR) is used throughout the country.'}
+          {code === 'macedonia' && 'Macedonian Denar (MKD). Euro accepted in some tourist areas.'}
+          {code === 'bosnia' && 'Convertible Mark (BAM) pegged to the Euro. Cards widely accepted.'}
+          {code === 'croatia' && 'Euro (EUR) since 2023. Previously Croatian Kuna.'}
+          {code === 'serbia' && 'Serbian Dinar (RSD). Euro accepted in some places.'}
+          {code === 'greece' && 'Euro (EUR). Cards widely accepted everywhere.'}
+        </p>
+      </div>
+      
+      <div class="bg-white rounded-lg p-6 shadow">
+        <h3 class="font-bold mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Best Time to Visit
+        </h3>
+        <p class="text-sm text-gray-600">
+          {code === 'albania' && 'May-September for beaches and hiking. April-June and September-October for mild weather.'}
+          {code === 'kosovo' && 'May-September for outdoor activities. Winter for skiing in the Sharr Mountains.'}
+          {code === 'montenegro' && 'June-September for coast and mountains. December-March for winter sports.'}
+          {code === 'macedonia' && 'April-October for sightseeing. July-August can be hot. Winter for Mavrovo skiing.'}
+          {code === 'bosnia' && 'May-September for general travel. Winter for skiing near Sarajevo.'}
+          {code === 'croatia' && 'May-September for coast. April-May and September-October avoid crowds.'}
+          {code === 'serbia' && 'April-October for sightseeing. Winter for mountain resorts.'}
+          {code === 'greece' && 'April-October for islands. Spring and autumn ideal for mainland.'}
+        </p>
+      </div>
+    </div>
+
+    <!-- Neighboring Countries -->
+    <div class="border-t pt-12">
+      <h2 class="text-2xl font-bold mb-6 text-center">Explore Neighboring Countries</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {['albania', 'kosovo', 'montenegro', 'macedonia'].filter(c => c !== code).slice(0, 4).map(countryCode => (
+          <a 
+            href={`/country/${countryCode}`}
+            class="group relative h-32 rounded-lg overflow-hidden"
+          >
+            <img 
+              src={heroImages[countryCode]} 
+              alt={countryCode}
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div class="absolute bottom-4 left-4 text-white">
+              <h3 class="font-bold capitalize">{countryCode}</h3>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

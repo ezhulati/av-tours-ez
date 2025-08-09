@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Directories
+Allow: /tours/
+Allow: /category/
+Allow: /country/
+
+# API endpoints (block from crawling)
+Disallow: /api/
+
+# Affiliate redirects (allow for tracking)
+Allow: /out/
+
+# Sitemap
+Sitemap: https://tours.albaniavisit.com/sitemap-index.xml

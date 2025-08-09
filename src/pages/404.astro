@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+---
+
+<BaseLayout 
+  title="Page Not Found - AlbaniaVisit Tours"
+  description="The page you're looking for doesn't exist."
+  noindex={true}
+>
+  <div class="container mx-auto px-4 py-16">
+    <div class="max-w-2xl mx-auto text-center">
+      <div class="mb-8">
+        <span class="text-9xl font-bold text-gray-200">404</span>
+      </div>
+      <h1 class="text-4xl font-bold mb-4">Page Not Found</h1>
+      <p class="text-xl text-gray-600 mb-8">
+        Sorry, we couldn't find the page you're looking for. 
+        It might have been moved or doesn't exist.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/"
+          class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+        >
+          Go to Homepage
+        </a>
+        <a 
+          href="/tours"
+          class="inline-block bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition"
+        >
+          Browse All Tours
+        </a>
+      </div>
+
+      <div class="mt-16 pt-16 border-t">
+        <h2 class="text-2xl font-bold mb-6">Popular Destinations</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <a href="/country/albania" class="bg-gray-100 rounded-lg p-4 hover:bg-gray-200 transition">
+            <h3 class="font-semibold">Albania</h3>
+          </a>
+          <a href="/country/kosovo" class="bg-gray-100 rounded-lg p-4 hover:bg-gray-200 transition">
+            <h3 class="font-semibold">Kosovo</h3>
+          </a>
+          <a href="/country/montenegro" class="bg-gray-100 rounded-lg p-4 hover:bg-gray-200 transition">
+            <h3 class="font-semibold">Montenegro</h3>
+          </a>
+          <a href="/country/macedonia" class="bg-gray-100 rounded-lg p-4 hover:bg-gray-200 transition">
+            <h3 class="font-semibold">North Macedonia</h3>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

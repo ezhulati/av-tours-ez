@@ -2,6 +2,9 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getAllSlugs, getTourDetail } from '@/lib/queries'
 import { generateTouristTripSchema, generateBreadcrumbSchema, generateMetaTags } from '@/lib/seo'
+import TourGallery from '@/components/tours/TourGallery'
+import InquiryForm from '@/components/tours/InquiryForm'
+import BookingButton from '@/components/tours/BookingButton'
 
 export async function getStaticPaths() {
   const slugs = await getAllSlugs()
@@ -97,7 +100,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
 
         <!-- Gallery (React Island) -->
         {tour.images.length > 1 && (
-          <div id="tour-gallery" class="mb-8" data-images={JSON.stringify(tour.images)}></div>
+          <TourGallery images={tour.images} client:load />
         )}
 
         <!-- Inclusions/Exclusions -->
@@ -228,7 +231,12 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   </div>
 
   <!-- Inquiry Form Modal (React Island) -->
-  <div id="inquiry-modal" data-tour-id={tour.id} data-tour-slug={tour.slug}></div>
+  <InquiryForm 
+    tourId={tour.id} 
+    tourSlug={tour.slug} 
+    tourTitle={tour.title}
+    client:idle 
+  />
 
   <script>
     // Handle booking button GA event

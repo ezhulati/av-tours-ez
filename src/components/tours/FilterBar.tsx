@@ -1,6 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { debounce } from '@/lib/utils'
 import type { TourFilters, PaginationParams, PaginatedResponse, TourCardDTO } from '@/lib/dto'
+
+// Debounce utility
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null
+  
+  return (...args: Parameters<T>) => {
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(() => func(...args), wait)
+  }
+}
 
 interface FilterBarProps {
   onFiltersChange?: (filters: TourFilters, pagination: PaginationParams) => void
@@ -181,17 +193,4 @@ export default function FilterBar({
       </div>
     </div>
   )
-}
-
-// Debounce utility
-function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null
-  
-  return (...args: Parameters<T>) => {
-    if (timeout) clearTimeout(timeout)
-    timeout = setTimeout(() => func(...args), wait)
-  }
 }
