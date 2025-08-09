@@ -65,22 +65,24 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     <!-- Hero Content Container - Mobile Safe Areas -->
     <div class="relative z-10 text-center text-white px-6 sm:px-8 md:px-4 max-w-7xl mx-auto pb-16 md:pb-0">
       <!-- Hero Typography Stack - Mobile-First Design -->
-      <div class="space-y-4 sm:space-y-6 md:space-y-8">
+      <div class="space-y-6 sm:space-y-8 md:space-y-10">
         <!-- Main Headline - Bold & Impactful on All Screens -->
-        <h1 class="font-serif font-bold leading-[0.85] tracking-tight animate-fade-in">
-          <span class="block text-[clamp(3.5rem,12vw,7rem)] sm:text-[clamp(4rem,10vw,7rem)] text-white drop-shadow-2xl">
-            Elevate Your
-          </span>
-          <span class="block text-[clamp(4rem,14vw,8rem)] sm:text-[clamp(4.5rem,12vw,8rem)] text-accent drop-shadow-2xl mt-2 sm:mt-1 md:mt-0">
-            Experience
-          </span>
-        </h1>
-        
-        <!-- Subheadline - Bigger & Clearer -->
-        <p class="text-[clamp(1.125rem,3.5vw,1.875rem)] sm:text-[clamp(1.25rem,3vw,1.875rem)] font-normal leading-snug max-w-4xl mx-auto text-white/95 px-2">
-          <span class="hidden sm:inline">No tourist traps. Just raw terrain and local guides.</span>
-          <span class="sm:hidden">Raw terrain. Local guides.</span>
-        </p>
+        <div class="max-w-fit mx-auto">
+          <h1 class="font-serif font-bold leading-[0.85] tracking-tight animate-fade-in">
+            <span class="block text-[clamp(3.5rem,12vw,7rem)] sm:text-[clamp(4rem,10vw,7rem)] text-white drop-shadow-2xl">
+              Elevate Your
+            </span>
+            <span class="block text-[clamp(4rem,14vw,8rem)] sm:text-[clamp(4.5rem,12vw,8rem)] text-accent drop-shadow-2xl mt-2 sm:mt-1 md:mt-0">
+              Experience
+            </span>
+          </h1>
+          
+          <!-- Subheadline - Matches H1 Width -->
+          <p class="text-[clamp(1.75rem,5.5vw,2.75rem)] sm:text-[clamp(2rem,4.5vw,2.75rem)] font-semibold leading-[1.1] text-white mt-4 sm:mt-6 tracking-tight uppercase">
+            <span class="hidden sm:inline">No tourist traps. Just raw terrain.</span>
+            <span class="sm:hidden block">Raw terrain.<br/>Local guides.</span>
+          </p>
+        </div>
         
         <!-- Supporting Text - More Prominent -->
         <p class="text-[clamp(1rem,2.5vw,1.25rem)] sm:text-[clamp(1rem,2.2vw,1.25rem)] opacity-90 max-w-2xl mx-auto text-white/80">
@@ -375,10 +377,17 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     
     .animate-fade-in {
       animation: fadeInUp 1s ease-out;
+      animation-fill-mode: both;
     }
     
     .animate-fade-in span:nth-child(2) {
       animation-delay: 0.2s;
+      animation-fill-mode: both;
+    }
+    
+    .animate-fade-in + p {
+      animation: fadeInUp 1s ease-out;
+      animation-delay: 0.4s;
       animation-fill-mode: both;
     }
     
