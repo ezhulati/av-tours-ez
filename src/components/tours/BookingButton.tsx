@@ -83,9 +83,17 @@ export default function BookingButton({
       <>
         <button 
           onClick={handleClick}
-          className={`inline-block bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent-600 transition font-semibold text-sm whitespace-nowrap ${className || ''}`}
+          className={`inline-flex items-center justify-center min-h-[44px] bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent-600 active:bg-accent-700 transition-all duration-200 font-semibold text-sm whitespace-nowrap touch-manipulation transform hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${className || ''}`}
         >
-          {children || 'Check Availability'}
+          <span className="mr-1">{children || 'Check Availability'}</span>
+          <svg 
+            className="w-3 h-3 flex-shrink-0" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+          </svg>
         </button>
         
         {showModal && (
@@ -107,10 +115,18 @@ export default function BookingButton({
     <>
       <button
         onClick={handleClick}
-        className={`${className || ''} inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-accent text-white hover:bg-accent-700 shadow-sm hover:shadow-md rounded-lg h-12 px-6`}
+        className={`${className || ''} inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-accent text-white hover:bg-accent-700 active:bg-accent-800 shadow-sm hover:shadow-lg active:shadow-md rounded-lg min-h-[44px] h-12 px-6 touch-manipulation transform hover:scale-105 active:scale-95`}
         type="button"
       >
-        {children || defaultCTA}
+        <span className="mr-1">{children || defaultCTA}</span>
+        <svg 
+          className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-x-1" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
       </button>
       
       {showModal && (

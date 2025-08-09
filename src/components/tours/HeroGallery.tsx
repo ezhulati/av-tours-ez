@@ -48,16 +48,16 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
           {/* Gradient Overlay for better text visibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           
-          {/* Navigation Arrows - Only show if multiple images */}
+          {/* Navigation Arrows - Enhanced for mobile touch */}
           {allImages.length > 1 && (
             <>
               <button
                 onClick={handlePrevious}
-                className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 transition-all shadow-xl group z-10"
+                className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-xl group z-10 touch-manipulation"
                 aria-label="Previous image"
               >
                 <svg 
-                  className="w-5 h-5 text-gray-800 group-hover:scale-110 transition-transform" 
+                  className="w-4 h-4 md:w-5 md:h-5 text-gray-800 group-hover:scale-110 transition-transform" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -68,11 +68,11 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
               
               <button
                 onClick={handleNext}
-                className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 transition-all shadow-xl group z-10"
+                className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-xl group z-10 touch-manipulation"
                 aria-label="Next image"
               >
                 <svg 
-                  className="w-5 h-5 text-gray-800 group-hover:scale-110 transition-transform" 
+                  className="w-4 h-4 md:w-5 md:h-5 text-gray-800 group-hover:scale-110 transition-transform" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -83,10 +83,11 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
             </>
           )}
           
-          {/* View All Photos Button - Mobile prominent, desktop minimal */}
+          {/* View All Photos Button - Enhanced for mobile */}
           <button
             onClick={openModal}
-            className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-gray-900 px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold text-sm hover:bg-white hover:scale-105 transition-all shadow-xl flex items-center gap-2 whitespace-nowrap z-30"
+            className="absolute top-4 right-4 min-h-[44px] bg-white/95 backdrop-blur-sm text-gray-900 px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold text-sm hover:bg-white hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center gap-2 whitespace-nowrap z-30 touch-manipulation"
+            aria-label={`View all ${allImages.length} photos`}
           >
             <svg 
               className="w-4 h-4" 
@@ -96,8 +97,8 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
-            <span className="hidden sm:inline">View All </span>
-            📸 {allImages.length}
+            <span className="hidden sm:inline">View All</span>
+            <span className="font-bold">{allImages.length}</span>
           </button>
           
           {/* Mobile: Additional floating "View All Photos" button */}

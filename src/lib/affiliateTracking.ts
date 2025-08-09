@@ -57,6 +57,12 @@ export function buildAffiliateUrl(
   tour: Tour,
   context: 'tour-detail' | 'tour-card' | 'featured' = 'tour-detail'
 ): string {
+  // Validate required tour data
+  if (!tour || !tour.slug) {
+    console.error('Invalid tour data provided to buildAffiliateUrl:', tour)
+    return 'https://www.bnadventure.com/?partner_id=9&tid=albaniavisit'
+  }
+  
   // Start with the base affiliate URL or construct from operator
   let baseUrl = tour.affiliateUrl || ''
   
@@ -71,7 +77,18 @@ export function buildAffiliateUrl(
     baseUrl = `https://www.bnadventure.com/tours/${tour.slug}`
   }
   
+  // Validate base URL before proceeding
+  if (!baseUrl || typeof baseUrl !== 'string') {
+    console.error('Invalid base URL generated:', baseUrl)
+    return `https://www.bnadventure.com/tours/${tour.slug}?partner_id=9&tid=albaniavisit`
+  }
+  
   try {
+    // Ensure the URL has a protocol
+    if (!baseUrl.match(/^https?:\/\//)) {
+      baseUrl = 'https://' + baseUrl
+    }
+    
     const url = new URL(baseUrl)
     
     // Add default affiliate parameters if not present
@@ -82,8 +99,13 @@ export function buildAffiliateUrl(
       url.searchParams.set('tid', 'albaniavisit')
     }
     
-    // Extract current page UTM params
-    const pageUTMParams = extractUTMParams()
+    // Extract current page UTM params (safely handle server-side)
+    let pageUTMParams = {}
+    try {
+      pageUTMParams = extractUTMParams()
+    } catch (utmError) {
+      console.warn('Failed to extract UTM params:', utmError)
+    }
     
     // Set UTM parameters with AlbaniaVisit defaults
     url.searchParams.set('utm_source', pageUTMParams.utm_source || 'albaniavisit')
@@ -102,8 +124,9 @@ export function buildAffiliateUrl(
     
     return url.toString()
   } catch (error) {
-    console.error('Error building affiliate URL:', error)
-    return baseUrl
+    console.error('Error building affiliate URL for tour:', tour.slug, error)
+    // Return safe fallback URL with basic tracking
+    return `https://www.bnadventure.com/tours/${tour.slug}?partner_id=9&tid=albaniavisit&utm_source=albaniavisit&utm_medium=affiliate&utm_campaign=${context}&utm_content=${tour.slug}`
   }
 }
 
@@ -111,46 +134,93 @@ export function buildAffiliateUrl(
  * Track booking click across multiple platforms
  */
 export async function trackBookingClick(tour: Tour, context: string = 'tour-detail'): Promise<void> {
+  // Validate tour data
+  if (!tour || !tour.id || !tour.slug) {
+    console.error('Invalid tour data provided to trackBookingClick:', tour)
+    return
+  }
+
+  // Extract UTM params safely
+  let utmParams = {}
+  try {
+    utmParams = extractUTMParams()
+  } catch (utmError) {
+    console.warn('Failed to extract UTM params for tracking:', utmError)
+  }
+
   const clickData = {
     tour_id: tour.id,
     tour_slug: tour.slug,
-    tour_title: tour.title,
+    tour_title: tour.title || 'Unknown Tour',
     operator: tour.operator?.name || 'unknown',
     context,
     timestamp: Date.now(),
-    utm_params: extractUTMParams()
+    utm_params: utmParams
   }
   
-  // Track with Google Analytics 4
+  // Track with Google Analytics 4 (client-side only)
   if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'affiliate_click', {
-      tour_slug: tour.slug,
-      tour_id: tour.id,
-      tour_title: tour.title,
-      event_category: 'engagement',
-      event_label: context,
-      value: 1
-    })
+    try {
+      (window as any).gtag('event', 'affiliate_click', {
+        tour_slug: tour.slug,
+        tour_id: tour.id,
+        tour_title: tour.title,
+        event_category: 'engagement',
+        event_label: context,
+        value: 1
+      })
+    } catch (gaError) {
+      console.warn('Failed to track with Google Analytics:', gaError)
+    }
   }
   
-  // Track with Facebook Pixel if available
+  // Track with Facebook Pixel if available (client-side only)
   if (typeof window !== 'undefined' && (window as any).fbq) {
-    (window as any).fbq('track', 'ViewContent', {
-      content_ids: [tour.id],
-      content_name: tour.title,
-      content_type: 'product',
-      content_category: context
-    })
+    try {
+      (window as any).fbq('track', 'ViewContent', {
+        content_ids: [tour.id],
+        content_name: tour.title,
+        content_type: 'product',
+        content_category: context
+      })
+    } catch (fbError) {
+      console.warn('Failed to track with Facebook Pixel:', fbError)
+    }
   }
   
-  // Server-side tracking
-  try {
-    await fetch('/api/track-click', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(clickData)
-    })
-  } catch (error) {
-    console.error('Failed to track click server-side:', error)
+  // Server-side tracking - make it non-blocking
+  if (typeof window !== 'undefined') {
+    // Client-side: use fetch with timeout
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 3000) // 3 second timeout
+    
+    try {
+      await fetch('/api/track-click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(clickData),
+        signal: controller.signal
+      })
+      clearTimeout(timeoutId)
+    } catch (error) {
+      clearTimeout(timeoutId)
+      console.warn('Failed to track click server-side (non-critical):', error)
+      // Don't throw - this shouldn't block user interaction
+    }
+  } else {
+    // Server-side: use standard fetch
+    try {
+      const response = await fetch('https://tours.albaniavisit.com/api/track-click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(clickData)
+      })
+      if (!response.ok) {
+        console.warn('Server-side tracking response not OK:', response.status)
+      }
+    } catch (error) {
+      console.warn('Failed to track click server-side (non-critical):', error)
+      // Don't throw - this shouldn't block the redirect
+    }
   }
 }

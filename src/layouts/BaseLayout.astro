@@ -84,6 +84,9 @@ const GA4_ID = import.meta.env.GA4_ID
   )}
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
   <!-- Header with scroll effect -->
   <header id="main-header" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
     <nav class="container mx-auto px-4">
@@ -141,8 +144,12 @@ const GA4_ID = import.meta.env.GA4_ID
           </a>
         </div>
 
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" class="md:hidden text-gray-700">
+        <!-- Mobile Menu Button - Optimized touch target -->
+        <button 
+          id="mobile-menu-btn" 
+          class="md:hidden w-12 h-12 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation"
+          aria-label="Toggle mobile menu"
+        >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
@@ -150,19 +157,42 @@ const GA4_ID = import.meta.env.GA4_ID
       </div>
     </nav>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
-      <div class="container mx-auto px-4 py-4 space-y-2">
-        <a href="/tours" class="block py-2 text-gray-700 hover:text-accent">All Tours</a>
-        <a href="/country/albania" class="block py-2 text-gray-700 hover:text-accent">Albania</a>
-        <a href="/country/kosovo" class="block py-2 text-gray-700 hover:text-accent">Kosovo</a>
-        <a href="/category/adventure" class="block py-2 text-gray-700 hover:text-accent">Adventure</a>
-        <a href="/category/hiking" class="block py-2 text-gray-700 hover:text-accent">Hiking</a>
+    <!-- Mobile Menu - Enhanced for touch -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t shadow-lg">
+      <div class="container mx-auto px-4 py-2">
+        <!-- Primary Links -->
+        <div class="space-y-1 border-b border-gray-100 pb-3 mb-3">
+          <a 
+            href="/tours" 
+            class="flex items-center justify-between py-3 px-2 min-h-[48px] text-gray-700 hover:text-accent hover:bg-gray-50 rounded-lg transition-colors touch-manipulation"
+          >
+            <span class="font-medium">All Tours</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+        
+        <!-- Destinations -->
+        <div class="space-y-1 border-b border-gray-100 pb-3 mb-3">
+          <p class="px-2 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">Destinations</p>
+          <a href="/country/albania" class="block py-3 px-2 min-h-[48px] text-gray-700 hover:text-accent hover:bg-gray-50 rounded-lg transition-colors touch-manipulation">Albania</a>
+          <a href="/country/kosovo" class="block py-3 px-2 min-h-[48px] text-gray-700 hover:text-accent hover:bg-gray-50 rounded-lg transition-colors touch-manipulation">Kosovo</a>
+          <a href="/country/montenegro" class="block py-3 px-2 min-h-[48px] text-gray-700 hover:text-accent hover:bg-gray-50 rounded-lg transition-colors touch-manipulation">Montenegro</a>
+        </div>
+        
+        <!-- Activities -->
+        <div class="space-y-1 pb-3">
+          <p class="px-2 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">Activities</p>
+          <a href="/category/adventure" class="block py-3 px-2 min-h-[48px] text-gray-700 hover:text-accent hover:bg-gray-50 rounded-lg transition-colors touch-manipulation">Adventure</a>
+          <a href="/category/hiking" class="block py-3 px-2 min-h-[48px] text-gray-700 hover:text-accent hover:bg-gray-50 rounded-lg transition-colors touch-manipulation">Hiking</a>
+          <a href="/category/cultural" class="block py-3 px-2 min-h-[48px] text-gray-700 hover:text-accent hover:bg-gray-50 rounded-lg transition-colors touch-manipulation">Cultural</a>
+        </div>
       </div>
     </div>
   </header>
   
-  <main class="pt-16">
+  <main id="main-content" class="pt-16" role="main">
     <slot />
   </main>
   
@@ -372,7 +402,6 @@ const GA4_ID = import.meta.env.GA4_ID
 
   <script>
     // Header scroll effect
-    let lastScrollY = 0;
     const header = document.getElementById('main-header');
     
     window.addEventListener('scroll', () => {
@@ -383,8 +412,6 @@ const GA4_ID = import.meta.env.GA4_ID
       } else {
         header?.classList.remove('bg-white', 'shadow-lg', 'backdrop-blur-md', 'bg-opacity-95');
       }
-      
-      lastScrollY = currentScrollY;
     });
 
     // Mobile menu toggle

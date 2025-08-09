@@ -67,36 +67,45 @@
     @apply whitespace-nowrap;
   }
   
-  /* Standardized button system */
+  /* Mobile-first button system with proper touch targets */
   .btn-primary {
-    @apply inline-flex items-center justify-center h-12 px-6 text-sm font-semibold bg-accent text-white rounded-lg hover:bg-accent-700 transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap;
+    @apply inline-flex items-center justify-center min-h-[44px] h-12 px-6 text-sm font-semibold bg-accent text-white rounded-lg hover:bg-accent-700 active:bg-accent-800 transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap touch-manipulation;
   }
   
   .btn-secondary {
-    @apply inline-flex items-center justify-center h-12 px-6 text-sm font-semibold bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-all duration-200 whitespace-nowrap;
+    @apply inline-flex items-center justify-center min-h-[44px] h-12 px-6 text-sm font-semibold bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 whitespace-nowrap touch-manipulation;
   }
   
   .btn-outline {
-    @apply inline-flex items-center justify-center h-12 px-6 text-sm font-semibold border-2 border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 whitespace-nowrap;
+    @apply inline-flex items-center justify-center min-h-[44px] h-12 px-6 text-sm font-semibold border-2 border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 whitespace-nowrap touch-manipulation;
   }
   
   .btn-sm {
-    @apply h-10 px-4;
+    @apply min-h-[40px] h-10 px-4;
   }
   
   .btn-lg {
-    @apply h-14 px-8;
+    @apply min-h-[48px] h-14 px-8 text-base;
   }
   
-  /* Responsive font sizes for buttons on smaller screens */
+  /* Mobile-optimized touch targets */
   @media (max-width: 640px) {
-    button,
-    a[class*="btn"],
-    a[class*="button"],
     .btn-primary,
     .btn-secondary,
     .btn-outline {
-      @apply text-sm px-4;
+      @apply min-h-[48px] h-12 px-4 text-sm;
+    }
+    
+    .btn-lg {
+      @apply min-h-[52px] h-14 px-6 text-base;
+    }
+    
+    /* Ensure all interactive elements meet minimum touch target size */
+    button,
+    a[class*="btn"],
+    a[role="button"],
+    [onclick] {
+      @apply min-h-[44px] touch-manipulation;
     }
   }
   
@@ -167,20 +176,80 @@
     -webkit-line-clamp: 3;
   }
   
-  /* Better responsive text scaling */
+  /* Mobile-optimized responsive text scaling */
   .responsive-hero-text {
-    font-size: clamp(2rem, 8vw, 6rem);
+    font-size: clamp(1.75rem, 6vw, 6rem);
     line-height: 1.1;
   }
   
   .responsive-hero-subtitle {
-    font-size: clamp(1.25rem, 4vw, 2rem);
-    line-height: 1.3;
+    font-size: clamp(1rem, 3vw, 2rem);
+    line-height: 1.4;
+  }
+  
+  /* Enhanced typography system for mobile */
+  .text-heading-1 {
+    @apply text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight;
+  }
+  
+  .text-heading-2 {
+    @apply text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold leading-tight;
+  }
+  
+  .text-heading-3 {
+    @apply text-lg md:text-xl lg:text-2xl font-semibold leading-tight;
+  }
+  
+  .text-body-large {
+    @apply text-base md:text-lg leading-relaxed;
+  }
+  
+  .text-body {
+    @apply text-sm md:text-base leading-relaxed;
+  }
+  
+  .text-caption {
+    @apply text-xs md:text-sm leading-normal;
   }
   
   /* Prevent horizontal overflow */
   .prevent-overflow {
     overflow-x: hidden;
     max-width: 100vw;
+  }
+  
+  /* Accessibility improvements */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* High contrast focus states */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+  }
+  
+  /* Skip link for keyboard navigation */
+  .skip-link {
+    @apply absolute -top-16 left-6 bg-accent text-white px-4 py-2 rounded-lg font-semibold z-50 focus:top-4 transition-all duration-200;
+  }
+  
+  /* Enhanced contrast for better readability */
+  .high-contrast-text {
+    @apply text-gray-900;
+  }
+  
+  /* Better focus indicators for interactive elements */
+  button:focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
   }
 }

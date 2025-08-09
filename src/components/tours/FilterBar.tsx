@@ -99,54 +99,88 @@ export default function FilterBar({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-4 mb-6">
-      {/* Mobile Toggle */}
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-8">
+      {/* Mobile Toggle - Enhanced */}
       <button
-        className="md:hidden w-full flex items-center justify-between p-2 text-left"
+        className="md:hidden w-full flex items-center justify-between min-h-[48px] p-2 text-left rounded-lg hover:bg-gray-50 transition-colors touch-manipulation"
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-controls="filter-content"
       >
-        <span className="font-semibold">Filters</span>
-        <svg className={`w-5 h-5 transform transition ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex items-center gap-3">
+          <svg 
+            className="w-5 h-5 text-gray-600" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+          <span className="font-semibold text-gray-900">Filter Tours</span>
+          {Object.keys(filters).length > 0 && (
+            <span className="bg-accent text-white text-xs px-2 py-1 rounded-full">
+              {Object.keys(filters).length}
+            </span>
+          )}
+        </div>
+        <svg 
+          className={`w-5 h-5 text-gray-400 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
       {/* Filter Controls */}
-      <div className={`${isOpen ? 'block' : 'hidden'} md:block space-y-4 md:space-y-0 md:flex md:items-center md:gap-4`}>
+      <div 
+        id="filter-content"
+        className={`${isOpen ? 'block animate-slide-down' : 'hidden'} md:block space-y-4 md:space-y-0 md:flex md:items-center md:gap-4 pt-4 md:pt-0`}
+      >
         {/* Difficulty */}
-        <select
-          value={filters.difficulty || ''}
-          onChange={(e) => handleFilterChange('difficulty', e.target.value || undefined)}
-          className="w-full md:w-auto px-3 py-2 border rounded-lg"
-        >
-          <option value="">All Difficulties</option>
-          <option value="easy">Easy</option>
-          <option value="moderate">Moderate</option>
-          <option value="challenging">Challenging</option>
-          <option value="difficult">Difficult</option>
-        </select>
+        <div className="space-y-2 md:space-y-0">
+          <label className="block md:hidden text-sm font-medium text-gray-700">Difficulty Level</label>
+          <select
+            value={filters.difficulty || ''}
+            onChange={(e) => handleFilterChange('difficulty', e.target.value || undefined)}
+            className="w-full md:w-auto min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+            aria-label="Filter by difficulty level"
+          >
+            <option value="">All Difficulties</option>
+            <option value="easy">Easy</option>
+            <option value="moderate">Moderate</option>
+            <option value="challenging">Challenging</option>
+            <option value="difficult">Difficult</option>
+          </select>
+        </div>
 
         {/* Duration */}
-        <div className="flex gap-2 items-center">
-          <input
-            type="number"
-            min="1"
-            max="30"
-            placeholder="Min days"
-            value={filters.durationMin || ''}
-            onChange={(e) => handleFilterChange('durationMin', e.target.value ? Number(e.target.value) : undefined)}
-            className="w-24 px-3 py-2 border rounded-lg"
-          />
-          <span>-</span>
-          <input
-            type="number"
-            min="1"
-            max="30"
-            placeholder="Max days"
-            value={filters.durationMax || ''}
-            onChange={(e) => handleFilterChange('durationMax', e.target.value ? Number(e.target.value) : undefined)}
-            className="w-24 px-3 py-2 border rounded-lg"
-          />
+        <div className="space-y-2 md:space-y-0">
+          <label className="block md:hidden text-sm font-medium text-gray-700">Duration (Days)</label>
+          <div className="flex gap-2 items-center">
+            <input
+              type="number"
+              min="1"
+              max="30"
+              placeholder="Min days"
+              value={filters.durationMin || ''}
+              onChange={(e) => handleFilterChange('durationMin', e.target.value ? Number(e.target.value) : undefined)}
+              className="w-20 md:w-24 min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+              aria-label="Minimum duration in days"
+            />
+            <span className="text-gray-400 font-medium">to</span>
+            <input
+              type="number"
+              min="1"
+              max="30"
+              placeholder="Max days"
+              value={filters.durationMax || ''}
+              onChange={(e) => handleFilterChange('durationMax', e.target.value ? Number(e.target.value) : undefined)}
+              className="w-20 md:w-24 min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+              aria-label="Maximum duration in days"
+            />
+          </div>
         </div>
 
         {/* Price Range */}
