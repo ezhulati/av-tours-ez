@@ -1,0 +1,50 @@
+# Security Policy for AlbaniaVisit Tours
+# https://tours.albaniavisit.com/.well-known/security.txt
+
+Contact: security@albaniavisit.com
+Expires: 2026-01-09T00:00:00.000Z
+Encryption: https://albaniavisit.com/pgp-key.txt
+Acknowledgments: https://albaniavisit.com/security/hall-of-fame
+Preferred-Languages: en, sq
+Canonical: https://tours.albaniavisit.com/.well-known/security.txt
+Policy: https://albaniavisit.com/security-policy
+
+# Reporting Security Vulnerabilities
+# We take security seriously at AlbaniaVisit. If you discover a security
+# vulnerability, please report it to us responsibly.
+
+# In Scope:
+# - tours.albaniavisit.com and all subdomains
+# - API endpoints
+# - Authentication and authorization issues
+# - Data exposure or leakage
+# - XSS, CSRF, SQL injection vulnerabilities
+# - Business logic flaws
+
+# Out of Scope:
+# - Third-party services we integrate with
+# - Social engineering attacks
+# - Physical attacks
+# - Denial of Service attacks
+
+# Safe Harbor:
+# We will not pursue legal action against security researchers who:
+# - Report vulnerabilities responsibly
+# - Do not access or modify user data
+# - Do not disrupt our services
+# - Provide sufficient detail to reproduce the issue
+
+# Response Timeline:
+# - Initial response: within 48 hours
+# - Confirmation of issue: within 7 days
+# - Fix deployment: within 30 days for critical issues
+# - Public disclosure: coordinated with researcher
+
+# Rewards:
+# We offer bounties for valid security reports based on severity:
+# - Critical: $500-$1000
+# - High: $200-$500
+# - Medium: $50-$200
+# - Low: Recognition in Hall of Fame
+
+# Thank you for helping keep AlbaniaVisit secure!

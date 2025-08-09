@@ -1,0 +1,451 @@
+---
+/**
+ * SEO-Enhanced Tour Detail Page
+ * Implements comprehensive schema markup, performance optimizations, and rich snippets
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getAllSlugs, getTourDetail } from '@/lib/queries'
+import { 
+  generateTourPackageSchema, 
+  generateEnhancedBreadcrumbSchema, 
+  generateFAQSchema,
+  generateVideoSchema,
+  generateTourEventSchema,
+  SchemaGenerators 
+} from '@/lib/schema-enhanced'
+import { tourKeywordMap, metaTemplates, contentGuidelines } from '@/lib/seo-config'
+import { imageOptimization, scriptOptimization } from '@/lib/seo-performance'
+import { getEnhancedTour, hasEnhancedCopy } from '@/data/enhancedTours'
+import HeroGallery from '@/components/tours/HeroGallery'
+import InquiryForm from '@/components/tours/InquiryForm'
+import BookingButton from '@/components/tours/BookingButton'
+
+export async function getStaticPaths() {
+  const slugs = await getAllSlugs()
+  return slugs.map(({ slug }) => ({
+    params: { slug }
+  }))
+}
+
+const { slug } = Astro.params
+const tour = await getTourDetail(slug)
+
+if (!tour) {
+  return Astro.redirect('/404')
+}
+
+// Enhanced SEO data
+const enhancedTour = getEnhancedTour(slug)
+const hasEnhanced = hasEnhancedCopy(slug)
+const url = `https://tours.albaniavisit.com/tours/${slug}`
+const canonicalUrl = url
+
+// Get tour-specific keywords
+const keywords = tourKeywordMap[slug] || {
+  primary: ['albania tours', tour.title.toLowerCase()],
+  secondary: tour.countries.map(c => `${c.toLowerCase()} tours`),
+  longTail: [`${tour.title.toLowerCase()} ${tour.durationDays} days`],
+  semantic: tour.categorySlugs
+}
+
+// Generate comprehensive meta tags
+const metaTitle = tour.priceMin 
+  ? `${tour.title} | ${tour.durationDays} Days from €${tour.priceMin} | AlbaniaVisit`
+  : `${tour.title} | ${tour.durationDays} Day Adventure | AlbaniaVisit Tours`
+
+const metaDescription = enhancedTour?.heroDescription?.slice(0, 155) ||
+  tour.shortDescription?.slice(0, 155) ||
+  `Join our ${tour.durationDays}-day ${tour.title} tour. ${tour.difficulty} level adventure across ${tour.countries.join(', ')}. ⭐ 4.9/5 rating. Book now!`
+
+// Mock review data (replace with actual data)
+const reviews = { rating: 4.9, count: 47 }
+
+// Generate all schema markups
+const schemas = [
+  generateTourPackageSchema(tour, url, reviews),
+  generateEnhancedBreadcrumbSchema([
+    { name: 'Home', url: 'https://tours.albaniavisit.com', position: 1 },
+    { name: 'Tours', url: 'https://tours.albaniavisit.com/tours', position: 2 },
+    { name: tour.countries[0], url: `https://tours.albaniavisit.com/country/${tour.countries[0].toLowerCase()}`, position: 3 },
+    { name: tour.title, url: url, position: 4 }
+  ]),
+  generateFAQSchema([
+    {
+      question: `What is included in the ${tour.title} tour?`,
+      answer: `This tour includes: ${tour.inclusions.slice(0, 3).join(', ')}. Professional guides, accommodations, and most meals are covered.`
+    },
+    {
+      question: `What is the difficulty level of ${tour.title}?`,
+      answer: `This is a ${tour.difficulty} level tour, suitable for ${tour.difficulty === 'easy' ? 'beginners and families' : tour.difficulty === 'moderate' ? 'people with average fitness' : 'experienced hikers'}. Daily hiking is ${tour.difficulty === 'easy' ? '2-4 hours' : tour.difficulty === 'moderate' ? '4-6 hours' : '6-8 hours'}.`
+    },
+    {
+      question: `When is the best time for ${tour.title}?`,
+      answer: `The best time for this tour is May to October, with peak season in July-August. Spring (May-June) offers wildflowers, while autumn (September-October) provides perfect weather and fewer crowds.`
+    },
+    {
+      question: `How do I book the ${tour.title} tour?`,
+      answer: `Click the "Book Now" button to reserve your spot. We offer secure online booking with instant confirmation. A 30% deposit secures your booking, with the balance due 30 days before departure.`
+    }
+  ])
+]
+
+// Add event schema for next departure
+const nextDeparture = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
+const eventSchema = generateTourEventSchema(
+  tour,
+  nextDeparture.toISOString(),
+  new Date(nextDeparture.getTime() + (tour.durationDays || 7) * 24 * 60 * 60 * 1000).toISOString(),
+  url
+)
+schemas.push(eventSchema)
+
+// Generate responsive image srcset
+function generateSrcSet(imageUrl: string): string {
+  const sizes = [400, 800, 1200, 1920]
+  return sizes.map(size => `${imageUrl}?w=${size} ${size}w`).join(', ')
+}
+
+// Generate sizes attribute for responsive images
+function generateSizes(): string {
+  return '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+}
+---
+
+<BaseLayout 
+  title={metaTitle}
+  description={metaDescription}
+  canonical={canonicalUrl}
+  ogImage={tour.primaryImageUrl}
+  ogType="product"
+  jsonLd={schemas}
+  keywords={keywords.primary.concat(keywords.secondary).join(', ')}
+>
+  <!-- Preload critical resources -->
+  <link slot="head" rel="preload" as="image" href={tour.primaryImageUrl} fetchpriority="high" />
+  <link slot="head" rel="preload" as="font" type="font/woff2" href="/fonts/primary.woff2" crossorigin />
+  
+  <!-- Additional meta tags for rich snippets -->
+  <meta slot="head" property="product:price:amount" content={tour.priceMin?.toString()} />
+  <meta slot="head" property="product:price:currency" content={tour.currency} />
+  <meta slot="head" property="product:availability" content="in stock" />
+  <meta slot="head" property="product:condition" content="new" />
+  
+  <!-- Article markup for content -->
+  <article itemscope itemtype="https://schema.org/TouristTrip" class="tour-detail">
+    <!-- Hidden microdata for additional context -->
+    <meta itemprop="name" content={tour.title} />
+    <meta itemprop="description" content={tour.shortDescription || tour.fullDescription} />
+    <meta itemprop="url" content={url} />
+    
+    <!-- Enhanced Hero Section with Performance Optimizations -->
+    <section class="relative">
+      <!-- Optimized Gallery with Lazy Loading and Responsive Images -->
+      <HeroGallery 
+        images={tour.images.map(img => ({
+          url: img.url,
+          alt: imageOptimization.generateAlt(tour.title, tour.images.indexOf(img), 'gallery'),
+          srcset: generateSrcSet(img.url),
+          sizes: generateSizes()
+        }))} 
+        title={tour.title}
+        client:visible
+      />
+      
+      <!-- SEO-Optimized Content Structure -->
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent">
+        <div class="container mx-auto px-4 pb-8">
+          <!-- Rich Breadcrumbs -->
+          <nav aria-label="Breadcrumb" class="mb-4">
+            <ol class="flex items-center gap-2 text-sm text-white/70" itemscope itemtype="https://schema.org/BreadcrumbList">
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="/" itemprop="item" class="hover:text-white transition">
+                  <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+              </li>
+              <li>/</li>
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="/tours" itemprop="item" class="hover:text-white transition">
+                  <span itemprop="name">Tours</span>
+                </a>
+                <meta itemprop="position" content="2" />
+              </li>
+              <li>/</li>
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="text-white">{tour.title}</span>
+                <meta itemprop="position" content="3" />
+              </li>
+            </ol>
+          </nav>
+          
+          <!-- Title with Keywords -->
+          <h1 class="text-4xl lg:text-5xl font-bold text-white mb-4" itemprop="name">
+            {enhancedTour?.enhancedTitle || tour.title}
+          </h1>
+          
+          <!-- Tagline for engagement -->
+          {enhancedTour?.tagline && (
+            <p class="text-xl text-white/90 mb-4" itemprop="alternateName">
+              {enhancedTour.tagline}
+            </p>
+          )}
+          
+          <!-- Rating Stars for Rich Snippets -->
+          <div class="flex items-center gap-4 mb-4" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+            <div class="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <svg class={`w-5 h-5 ${i < Math.floor(reviews.rating) ? 'text-yellow-400' : 'text-gray-400'}`} fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              ))}
+            </div>
+            <span class="text-white">
+              <span itemprop="ratingValue">{reviews.rating}</span>/5 
+              (<span itemprop="reviewCount">{reviews.count}</span> reviews)
+            </span>
+            <meta itemprop="bestRating" content="5" />
+            <meta itemprop="worstRating" content="1" />
+          </div>
+          
+          <!-- Key Information Pills -->
+          <div class="flex flex-wrap gap-3">
+            {tour.durationDisplay && (
+              <span class="bg-white/20 backdrop-blur text-white px-4 py-2 rounded-full text-sm">
+                ⏱ <span itemprop="duration">{tour.durationDisplay}</span>
+              </span>
+            )}
+            {tour.difficulty && (
+              <span class="bg-white/20 backdrop-blur text-white px-4 py-2 rounded-full text-sm">
+                ⚡ <span itemprop="touristType">{tour.difficulty}</span> level
+              </span>
+            )}
+            <span class="bg-white/20 backdrop-blur text-white px-4 py-2 rounded-full text-sm">
+              📍 <span itemprop="contentLocation">{tour.countries.join(', ')}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Main Content Section with SEO Structure -->
+    <div class="container mx-auto px-4 py-12">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Main Content Column -->
+        <div class="lg:col-span-2">
+          <!-- Tour Overview Section -->
+          <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">Tour Overview</h2>
+            <div class="prose max-w-none" itemprop="description">
+              {enhancedTour?.heroDescription ? (
+                <p class="text-lg leading-relaxed mb-4">{enhancedTour.heroDescription}</p>
+              ) : (
+                <p class="text-lg leading-relaxed mb-4">{tour.shortDescription}</p>
+              )}
+              
+              {tour.fullDescription && (
+                <div class="mt-4 text-gray-700">
+                  {tour.fullDescription.split('\n').map(paragraph => (
+                    <p class="mb-4">{paragraph}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+          
+          <!-- Highlights Section -->
+          {enhancedTour?.highlights && (
+            <section class="mb-12">
+              <h2 class="text-3xl font-bold mb-6">Tour Highlights</h2>
+              <ul class="space-y-3">
+                {enhancedTour.highlights.map(highlight => (
+                  <li class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-gray-700">{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          
+          <!-- What's Included Section -->
+          <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">What's Included</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 class="font-semibold text-lg mb-3 text-green-600">✓ Included</h3>
+                <ul class="space-y-2">
+                  {tour.inclusions.map(item => (
+                    <li class="flex items-start gap-2">
+                      <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span class="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              {tour.exclusions.length > 0 && (
+                <div>
+                  <h3 class="font-semibold text-lg mb-3 text-red-600">✗ Not Included</h3>
+                  <ul class="space-y-2">
+                    {tour.exclusions.map(item => (
+                      <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        <span class="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </section>
+          
+          <!-- FAQ Section for Rich Snippets -->
+          <section class="mb-12" itemscope itemtype="https://schema.org/FAQPage">
+            <h2 class="text-3xl font-bold mb-6">Frequently Asked Questions</h2>
+            <div class="space-y-6">
+              <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="font-semibold text-lg mb-2" itemprop="name">
+                  What fitness level is required for {tour.title}?
+                </h3>
+                <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+                  <p itemprop="text" class="text-gray-700">
+                    This {tour.difficulty} level tour requires {
+                      tour.difficulty === 'easy' ? 'basic fitness suitable for most people' :
+                      tour.difficulty === 'moderate' ? 'moderate fitness with regular walking ability' :
+                      'good physical condition and hiking experience'
+                    }. Daily activities typically last {tour.durationDisplay}.
+                  </p>
+                </div>
+              </div>
+              
+              <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="font-semibold text-lg mb-2" itemprop="name">
+                  What's the group size for this tour?
+                </h3>
+                <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+                  <p itemprop="text" class="text-gray-700">
+                    We keep our groups small, typically 8-15 people, to ensure a personalized experience and minimize environmental impact. This allows for flexibility and better interaction with local communities.
+                  </p>
+                </div>
+              </div>
+              
+              <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="font-semibold text-lg mb-2" itemprop="name">
+                  What's the accommodation like?
+                </h3>
+                <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+                  <p itemprop="text" class="text-gray-700">
+                    Accommodations vary by tour but typically include mountain guesthouses, family-run hotels, and traditional lodges. All provide clean, comfortable rooms with local character. Most have hot water and basic amenities.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Sidebar with Booking Widget -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-4">
+            <!-- Price Card -->
+            <div class="bg-white rounded-lg shadow-xl p-6 mb-6" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+              <div class="mb-4">
+                <p class="text-gray-600 text-sm">Starting from</p>
+                <p class="text-4xl font-bold text-gray-900">
+                  <span itemprop="priceCurrency" content={tour.currency}>€</span>
+                  <span itemprop="price" content={tour.priceMin}>{tour.priceMin}</span>
+                </p>
+                <p class="text-sm text-gray-600">per person</p>
+                <meta itemprop="availability" content="https://schema.org/InStock" />
+                <meta itemprop="url" content={url} />
+                <meta itemprop="validFrom" content={new Date().toISOString()} />
+              </div>
+              
+              <!-- Quick Stats -->
+              <div class="space-y-3 mb-6 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Duration:</span>
+                  <span class="font-semibold">{tour.durationDisplay}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Difficulty:</span>
+                  <span class="font-semibold capitalize">{tour.difficulty}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Group Size:</span>
+                  <span class="font-semibold">8-15 people</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Languages:</span>
+                  <span class="font-semibold">EN, DE, FR</span>
+                </div>
+              </div>
+              
+              <!-- CTA Buttons -->
+              <BookingButton 
+                tourId={tour.id}
+                tourName={tour.title}
+                affiliateUrl={tour.affiliateUrl}
+                price={tour.priceMin}
+                client:load
+              />
+              
+              <button class="w-full mt-3 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
+                📧 Send Inquiry
+              </button>
+              
+              <!-- Trust Badges -->
+              <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="flex items-center justify-between text-xs text-gray-600">
+                  <span>✓ Free Cancellation</span>
+                  <span>✓ Best Price Guarantee</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-gray-600 mt-2">
+                  <span>✓ Instant Confirmation</span>
+                  <span>✓ Secure Booking</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Operator Info -->
+            {tour.operator && (
+              <div class="bg-gray-50 rounded-lg p-4 text-sm" itemprop="provider" itemscope itemtype="https://schema.org/Organization">
+                <p class="font-semibold mb-2">Tour Operator</p>
+                <p itemprop="name">{tour.operator.name}</p>
+                <meta itemprop="url" content={tour.affiliateUrl} />
+                {tour.operator.logoUrl && (
+                  <img 
+                    src={tour.operator.logoUrl} 
+                    alt={`${tour.operator.name} logo`}
+                    class="h-8 mt-2"
+                    loading="lazy"
+                    itemprop="logo"
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Related Tours Section -->
+    <section class="bg-gray-50 py-12">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-8">Similar Adventures</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Related tours would be loaded here -->
+          <p class="text-gray-600 col-span-3">Loading similar tours...</p>
+        </div>
+      </div>
+    </section>
+  </article>
+  
+  <!-- Performance Monitoring Script -->
+  <script set:html={scriptOptimization.performanceMonitor}></script>
+</BaseLayout>

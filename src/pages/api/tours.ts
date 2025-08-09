@@ -27,7 +27,11 @@ export const GET: APIRoute = async ({ url }) => {
     
     const result = await getTourCardPage(filters, pagination)
     
-    return new Response(JSON.stringify(result), {
+    // Wrap the result in a success response format
+    return new Response(JSON.stringify({
+      success: true,
+      data: result
+    }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',

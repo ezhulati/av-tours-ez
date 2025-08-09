@@ -1,0 +1,250 @@
+# Enhanced Security Configuration for Netlify Deployment
+# This configuration implements comprehensive security headers and controls
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Security Headers - Applied to all routes
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Strict Content Security Policy
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'sha256-{INLINE_SCRIPT_HASH}' https://www.googletagmanager.com https://www.google-analytics.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https: blob:;
+      font-src 'self' data:;
+      connect-src 'self' https://*.supabase.co https://www.google-analytics.com;
+      frame-src 'none';
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'none';
+      upgrade-insecure-requests;
+      block-all-mixed-content;
+      report-uri https://albaniavisit.report-uri.com/r/d/csp/enforce;
+    """
+    
+    # Strict Transport Security (2 years, include subdomains, preload)
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    
+    # Prevent MIME type sniffing
+    X-Content-Type-Options = "nosniff"
+    
+    # XSS Protection (legacy but still useful)
+    X-XSS-Protection = "1; mode=block"
+    
+    # Prevent clickjacking
+    X-Frame-Options = "DENY"
+    
+    # Referrer Policy for privacy
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Permissions Policy (restrict features)
+    Permissions-Policy = """
+      accelerometer=(),
+      camera=(),
+      geolocation=(),
+      gyroscope=(),
+      magnetometer=(),
+      microphone=(),
+      payment=(),
+      usb=(),
+      interest-cohort=(),
+      battery=(),
+      ambient-light-sensor=(),
+      autoplay=(),
+      display-capture=(),
+      document-domain=(),
+      encrypted-media=(),
+      fullscreen=(self),
+      gamepad=(),
+      midi=(),
+      notifications=(),
+      push=(),
+      screen-wake-lock=(),
+      speaker=(),
+      sync-xhr=(),
+      vibrate=(),
+      vr=(),
+      wake-lock=(),
+      webauthn=(),
+      xr-spatial-tracking=()
+    """
+    
+    # Additional Security Headers
+    X-Permitted-Cross-Domain-Policies = "none"
+    X-DNS-Prefetch-Control = "off"
+    X-Download-Options = "noopen"
+    
+    # CORS Headers (restrictive by default)
+    Access-Control-Allow-Origin = "https://tours.albaniavisit.com"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, X-CSRF-Token, X-API-Key"
+    Access-Control-Max-Age = "86400"
+    
+    # Cache Control for static assets
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# API endpoints - No caching, strict security
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'none'; frame-ancestors 'none';"
+    X-Robots-Tag = "noindex, nofollow"
+
+# Affiliate redirects - No indexing
+[[headers]]
+  for = "/out/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Referrer-Policy = "no-referrer"
+
+# Static assets with long cache
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+    Content-Security-Policy = "default-src 'none'; style-src 'unsafe-inline';"
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+# Redirects for security
+[[redirects]]
+  from = "/api/*"
+  to = "/api/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/out/*"
+  to = "/api/out-secure/:splat"
+  status = 200
+
+# Block common attack vectors
+[[redirects]]
+  from = "/.env"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.git/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/phpMyAdmin/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.well-known/security.txt"
+  to = "/security.txt"
+  status = 200
+
+# Rate limiting rules (Netlify Functions)
+[[edge_functions]]
+  path = "/api/*"
+  function = "rate-limiter"
+
+[[edge_functions]]
+  path = "/out/*"
+  function = "redirect-validator"
+
+# Environment variable validation
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+# Deploy contexts
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+[context.deploy-preview]
+  environment = { NODE_ENV = "development" }
+
+[context.branch-deploy]
+  environment = { NODE_ENV = "development" }
+
+# Security.txt file location
+[[headers]]
+  for = "/security.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=86400"

@@ -1,0 +1,139 @@
+# AlbaniaVisit Tours - Enhanced Robots.txt
+# Optimized for crawl efficiency and SEO performance
+# Last updated: 2025
+
+# Default crawlers
+User-agent: *
+Allow: /
+Crawl-delay: 0
+
+# Priority directories
+Allow: /tours/
+Allow: /category/
+Allow: /country/
+
+# Static assets with caching
+Allow: *.css$
+Allow: *.js$
+Allow: *.jpg$
+Allow: *.jpeg$
+Allow: *.png$
+Allow: *.webp$
+Allow: *.avif$
+Allow: *.svg$
+Allow: *.woff2$
+
+# API and internal paths
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /account/
+Disallow: /search?
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
+Disallow: /*&
+Disallow: /404
+Disallow: /error
+
+# Allow tracking URLs for analytics
+Allow: /out/
+
+# Googlebot specific (priority crawler)
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+# Request Google to crawl important sections more frequently
+Allow: /tours/
+Allow: /category/
+Allow: /country/
+
+# Googlebot Image
+User-agent: Googlebot-Image
+Allow: /
+Allow: *.jpg$
+Allow: *.jpeg$
+Allow: *.png$
+Allow: *.webp$
+Allow: *.avif$
+Disallow: /api/
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Social media crawlers (for rich previews)
+User-agent: facebookexternalhit
+Allow: /
+Disallow: /api/
+
+User-agent: Twitterbot
+Allow: /
+Disallow: /api/
+
+User-agent: LinkedInBot
+Allow: /
+Disallow: /api/
+
+User-agent: WhatsApp
+Allow: /
+Disallow: /api/
+
+User-agent: Slackbot
+Allow: /
+Disallow: /api/
+
+# SEO tool crawlers
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: SemrushBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: DotBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: MJ12bot
+Crawl-delay: 10
+
+# Bad bots and scrapers
+User-agent: SemrushBot-SA
+Disallow: /
+
+User-agent: SemrushBot-BA
+Disallow: /
+
+User-agent: SemrushBot-SI
+Disallow: /
+
+User-agent: SemrushBot-SWA
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: *GPT*
+Disallow: /
+
+User-agent: *AI*
+Disallow: /
+
+# Sitemaps
+Sitemap: https://tours.albaniavisit.com/sitemap-index.xml
+Sitemap: https://tours.albaniavisit.com/sitemap-tours.xml
+Sitemap: https://tours.albaniavisit.com/sitemap-categories.xml
+Sitemap: https://tours.albaniavisit.com/sitemap-countries.xml
+Sitemap: https://tours.albaniavisit.com/sitemap-images.xml

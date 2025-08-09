@@ -1,0 +1,943 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getAllSlugs, getTourDetail, getSimilarTours } from '@/lib/queries'
+import { generateTouristTripSchema, generateBreadcrumbSchema, generateMetaTags } from '@/lib/seo'
+import { getEnhancedTour, hasEnhancedCopy } from '@/data/enhancedTours'
+import InquiryForm from '@/components/tours/InquiryForm'
+import BookingButton from '@/components/tours/BookingButton'
+
+export async function getStaticPaths() {
+  const slugs = await getAllSlugs()
+  return slugs.map(({ slug }) => ({
+    params: { slug }
+  }))
+}
+
+const { slug } = Astro.params
+const tour = await getTourDetail(slug)
+
+if (!tour) {
+  return Astro.redirect('/404')
+}
+
+// Get enhanced copy if available
+const enhancedTour = getEnhancedTour(slug)
+const hasEnhanced = hasEnhancedCopy(slug)
+
+// Get similar tours based on meaningful criteria
+const similarTours = await getSimilarTours(tour, 4)
+
+const url = `https://tours.albaniavisit.com/tours/${slug}`
+const metaTags = generateMetaTags(tour)
+const touristTripSchema = generateTouristTripSchema(tour, url)
+const breadcrumbSchema = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' },
+  { name: 'Tours', url: 'https://tours.albaniavisit.com/tours' },
+  { name: enhancedTour?.enhancedTitle || tour.title, url }
+])
+---
+
+<BaseLayout 
+  title={metaTags.title}
+  description={metaTags.description}
+  canonical={url}
+  ogImage={metaTags.ogImage}
+  ogType="product"
+  jsonLd={[touristTripSchema, breadcrumbSchema]}
+>
+  <!-- Modern Mobile-First Hero Section -->
+  <section class="relative bg-white">
+    <!-- Main Image Container -->
+    <div class="relative h-[60vh] lg:h-[75vh] min-h-[400px] max-h-[500px] lg:max-h-none bg-gray-900">
+      <img 
+        id="hero-image"
+        src={tour.images[0]?.url || '/placeholder.jpg'} 
+        alt={tour.title}
+        class="w-full h-full object-cover transition-opacity duration-300"
+      />
+      
+      <!-- Gradient Overlay for Text Readability -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+      
+      <!-- Top Bar - Clean -->
+      <div class="absolute top-0 left-0 right-0 z-20 safe-top">
+        <div class="flex items-center justify-end p-4">
+          <button 
+            id="open-lightbox"
+            class="bg-black/30 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2 text-white text-sm font-medium hover:bg-black/50 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+            </svg>
+            <span>{tour.images.length} Photos</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Image Navigation (if multiple images) -->
+      {tour.images.length > 1 && (
+        <>
+          <button id="prev-image" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/50 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <button id="next-image" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/50 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </>
+      )}
+      
+      <!-- Bottom Content Overlay -->
+      <div class="absolute bottom-0 left-0 right-0 z-10">
+        <div class="container mx-auto px-4 pb-6">
+          <!-- Badges -->
+          {hasEnhanced && enhancedTour?.badges && (
+            <div class="flex items-center gap-2 mb-3">
+              {enhancedTour.badges.slice(0, 2).map(badge => (
+                <span class="bg-accent px-3 py-1 rounded-full text-white text-xs font-bold uppercase tracking-wide">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          )}
+          
+          <!-- Title -->
+          <h1 class="text-2xl font-bold text-white mb-2 leading-tight">
+            {hasEnhanced && enhancedTour ? enhancedTour.enhancedTitle : tour.title}
+          </h1>
+          
+          <!-- Tagline -->
+          {hasEnhanced && enhancedTour?.tagline && (
+            <p class="text-white/90 text-sm mb-3">{enhancedTour.tagline}</p>
+          )}
+          
+          <!-- Quick Info Pills -->
+          <div class="flex items-center gap-2 flex-wrap">
+            {tour.durationDisplay && (
+              <div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-white text-xs font-medium">{tour.durationDisplay}</span>
+              </div>
+            )}
+            {tour.difficulty && (
+              <div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7"/>
+                </svg>
+                <span class="text-white text-xs font-medium capitalize">{tour.difficulty}</span>
+              </div>
+            )}
+            <div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+              <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              <span class="text-white text-xs font-medium">{tour.countries.slice(0, 2).join(', ')}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Thumbnail Gallery -->
+    {tour.images.length > 1 && (
+      <div class="bg-white border-b border-gray-100">
+        <div class="container mx-auto px-4">
+          <div class="overflow-x-auto scrollbar-hide py-3">
+            <div class="flex gap-2 min-w-max pl-0.5">
+              {tour.images.slice(0, 8).map((image, index) => (
+                <button 
+                  class={`thumbnail-btn relative flex-shrink-0 rounded-lg overflow-hidden transition-all hover:scale-105 ${index === 0 ? 'ring-2 ring-accent' : ''}`}
+                  style="width: 64px; height: 48px;"
+                  data-index={index}
+                >
+                  <img 
+                    src={image.url} 
+                    alt={`View ${index + 1}`}
+                    class="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+              {tour.images.length > 8 && (
+                <button id="show-all-images" class="flex-shrink-0 w-16 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 text-xs hover:bg-gray-200 transition-colors">
+                  +{tour.images.length - 8}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+    
+    <!-- Sticky Booking Bar (Mobile Only) -->
+    <div class="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+      <div class="flex items-center justify-between px-4 py-3">
+        <div class="flex-1">
+          <div class="text-lg font-bold text-gray-900">
+            {tour.priceMin ? (
+              <>
+                From <span class="text-accent">€{tour.priceMin}</span>
+                <span class="text-sm font-normal text-gray-500 ml-1">/person</span>
+              </>
+            ) : (
+              <span class="text-accent">Price on request</span>
+            )}
+          </div>
+        </div>
+        <BookingButton
+          tour={tour}
+          context="tour-detail"
+          className="px-6 py-3 text-sm font-semibold"
+          client:idle
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black hidden">
+    <!-- Close Button -->
+    <button
+      id="close-lightbox"
+      class="absolute top-4 right-4 z-50 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all text-white"
+      aria-label="Close gallery"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- Image Counter -->
+    <div class="absolute top-4 left-4 z-50 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-lg">
+      <span id="lightbox-counter">1 / {tour.images.length}</span>
+    </div>
+
+    <!-- Main Image Container -->
+    <div class="h-full flex items-center justify-center p-4">
+      <img
+        id="lightbox-image"
+        src={tour.images[0]?.url || '/placeholder.jpg'}
+        alt={tour.title}
+        class="max-w-full max-h-full object-contain"
+      />
+    </div>
+
+    <!-- Navigation -->
+    {tour.images.length > 1 && (
+      <>
+        <button
+          id="lightbox-prev"
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all text-white"
+          aria-label="Previous image"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        
+        <button
+          id="lightbox-next"
+          class="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all text-white"
+          aria-label="Next image"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </>
+    )}
+
+    <!-- Thumbnail Strip at Bottom -->
+    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent px-4 pt-8 pb-4">
+      <div class="flex gap-2 justify-center overflow-x-auto">
+        {tour.images.map((image, index) => (
+          <button
+            class={`lightbox-thumb flex-shrink-0 relative rounded-lg overflow-hidden transition-all ${index === 0 ? 'ring-2 ring-white scale-110' : 'opacity-60 hover:opacity-100'}`}
+            data-index={index}
+          >
+            <img
+              src={image.url}
+              alt={`Thumbnail ${index + 1}`}
+              class="w-16 h-12 object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      
+      <!-- Left Content -->
+      <div class="lg:col-span-2 space-y-12">
+        
+        <!-- Enhanced Overview Section -->
+        <section>
+          <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
+            <span class="block w-1 h-8 bg-accent"></span>
+            Overview
+          </h2>
+          
+          {hasEnhanced && enhancedTour ? (
+            <div class="space-y-6">
+              <!-- Hero Description -->
+              <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                <p class="text-xl font-medium text-gray-900 mb-4">{enhancedTour.heroDescription}</p>
+              </div>
+              
+              <!-- Available Dates -->
+              {enhancedTour.dates && enhancedTour.dates.length > 0 && (
+                <div class="bg-accent/5 border-l-4 border-accent p-6 rounded-r-lg">
+                  <h3 class="font-bold text-gray-900 mb-3 text-lg">2025 Departures:</h3>
+                  <div class="grid gap-2">
+                    {enhancedTour.dates.map(date => (
+                      <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 bg-accent rounded-full"></span>
+                        <span class="font-medium">{date}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <!-- Experience Highlights -->
+              {enhancedTour.highlights && enhancedTour.highlights.length > 0 && (
+                <div>
+                  <h3 class="text-xl font-bold mb-4 text-gray-900">Experience Highlights</h3>
+                  <div class="grid gap-4">
+                    {enhancedTour.highlights.map(highlight => (
+                      <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span class="w-2 h-2 bg-accent rounded-full"></span>
+                        </div>
+                        <span class="text-gray-700 leading-relaxed">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <!-- Unique Features -->
+              {enhancedTour.uniqueFeatures && enhancedTour.uniqueFeatures.length > 0 && (
+                <div class="bg-gray-50 p-6 rounded-xl">
+                  <h3 class="text-lg font-bold mb-4 text-gray-900">What Makes This Special</h3>
+                  <div class="space-y-2">
+                    {enhancedTour.uniqueFeatures.map(feature => (
+                      <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div class="space-y-6">
+              <!-- Basic Description -->
+              <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                <p class="text-xl font-medium text-gray-900 mb-4">{tour.fullDescription || tour.shortDescription}</p>
+              </div>
+              
+              <!-- Enhanced fallback content to help users understand the tour -->
+              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 p-6 rounded-xl">
+                <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  About This Experience
+                </h3>
+                <div class="grid gap-4 text-gray-700">
+                  {tour.durationDisplay && (
+                    <div class="flex items-center gap-3">
+                      <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      <span><strong>Duration:</strong> {tour.durationDisplay} of adventure</span>
+                    </div>
+                  )}
+                  {tour.difficulty && (
+                    <div class="flex items-center gap-3">
+                      <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                      </svg>
+                      <span><strong>Difficulty:</strong> {tour.difficulty} level - suitable for most fitness levels</span>
+                    </div>
+                  )}
+                  {tour.countries.length > 0 && (
+                    <div class="flex items-center gap-3">
+                      <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                      </svg>
+                      <span><strong>Location:</strong> Explore the beauty of {tour.countries.join(', ')}</span>
+                    </div>
+                  )}
+                  <div class="flex items-center gap-3">
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM9 3a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <span><strong>Group Size:</strong> Small groups for personalized attention</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- What to Expect section for tours without enhanced content -->
+              <div>
+                <h3 class="text-xl font-bold mb-4 text-gray-900">What to Expect</h3>
+                <div class="grid gap-4">
+                  <div class="flex items-start gap-3">
+                    <div class="w-6 h-6 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span class="w-2 h-2 bg-accent rounded-full"></span>
+                    </div>
+                    <span class="text-gray-700 leading-relaxed">
+                      {tour.countries.length > 1 
+                        ? `Multi-country adventure through ${tour.countries.join(', ')}, experiencing diverse cultures and landscapes`
+                        : `Authentic local experience in ${tour.countries[0] || 'the region'} with expert guidance`
+                      }
+                    </span>
+                  </div>
+                  {tour.durationDays && tour.durationDays > 1 && (
+                    <div class="flex items-start gap-3">
+                      <div class="w-6 h-6 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="w-2 h-2 bg-accent rounded-full"></span>
+                      </div>
+                      <span class="text-gray-700 leading-relaxed">
+                        Multi-day journey with carefully selected accommodations and authentic local meals
+                      </span>
+                    </div>
+                  )}
+                  <div class="flex items-start gap-3">
+                    <div class="w-6 h-6 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span class="w-2 h-2 bg-accent rounded-full"></span>
+                    </div>
+                    <span class="text-gray-700 leading-relaxed">
+                      Professional local guides with deep knowledge of the area's history and culture
+                    </span>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <div class="w-6 h-6 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span class="w-2 h-2 bg-accent rounded-full"></span>
+                    </div>
+                    <span class="text-gray-700 leading-relaxed">
+                      Small group sizes ensuring personalized attention and flexible itineraries
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Call-to-action for more information -->
+              <div class="bg-gray-50 p-6 rounded-xl">
+                <h3 class="text-lg font-bold mb-3 text-gray-900">Want More Details?</h3>
+                <p class="text-gray-600 mb-4">
+                  Get a personalized itinerary, detailed pricing, and answers to all your questions by contacting us directly.
+                </p>
+                <button 
+                  onclick="document.getElementById('inquiry-btn')?.click()"
+                  class="bg-accent text-white px-6 py-3 rounded-lg hover:bg-accent/90 transition font-medium"
+                >
+                  Get Detailed Information
+                </button>
+              </div>
+            </div>
+          )}
+        </section>
+
+        <!-- Experience Highlights -->
+        {(tour.inclusions.length > 0 || tour.exclusions.length > 0) && (
+          <section class="bg-gray-50 -mx-4 px-4 py-8 lg:rounded-2xl lg:mx-0 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+              <span class="block w-1 h-8 bg-accent"></span>
+              Experience Details
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+              {tour.inclusions.length > 0 && (
+                <div>
+                  <h3 class="text-lg font-bold mb-4 text-gray-900">What's Included</h3>
+                  <ul class="space-y-3">
+                    {tour.inclusions.map(item => (
+                      <li class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 bg-gray-900 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                          ✓
+                        </span>
+                        <span class="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {tour.exclusions.length > 0 && (
+                <div>
+                  <h3 class="text-lg font-bold mb-4 text-gray-900">Not Included</h3>
+                  <ul class="space-y-3">
+                    {tour.exclusions.map(item => (
+                      <li class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                          ×
+                        </span>
+                        <span class="text-gray-600">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        <!-- Departure Information -->
+        {tour.departureNotes && (
+          <section class="border-l-4 border-accent pl-6">
+            <h3 class="text-xl font-bold mb-3">Important Information</h3>
+            <p class="text-gray-700">{tour.departureNotes}</p>
+          </section>
+        )}
+
+        <!-- Trust Section -->
+        <section class="bg-gray-900 text-white -mx-4 px-4 py-12 lg:rounded-2xl lg:mx-0 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold mb-4">Why Book With AlbaniaVisit</h2>
+            <p class="text-gray-300 mb-8">
+              We partner with the most trusted local operators to bring you authentic experiences at the best prices.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                  </svg>
+                </div>
+                <h3 class="font-bold mb-2">Verified Operators</h3>
+                <p class="text-sm text-gray-400">All partners vetted for safety and quality</p>
+              </div>
+              <div>
+                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <h3 class="font-bold mb-2">Best Price Guarantee</h3>
+                <p class="text-sm text-gray-400">Direct operator rates with no hidden fees</p>
+              </div>
+              <div>
+                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  </svg>
+                </div>
+                <h3 class="font-bold mb-2">Local Expertise</h3>
+                <p class="text-sm text-gray-400">Authentic experiences with passionate guides</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Sidebar - Booking Card -->
+      <div class="lg:col-span-1">
+        <div class="sticky top-24">
+          <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Price Header -->
+            <div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-6">
+              {tour.priceMin ? (
+                <>
+                  <div class="text-sm uppercase tracking-wide mb-2 opacity-80">Starting from</div>
+                  <div class="text-4xl font-bold">
+                    €{tour.priceMin}
+                    {tour.priceMax && tour.priceMax !== tour.priceMin && (
+                      <span class="text-lg font-normal opacity-80"> - €{tour.priceMax}</span>
+                    )}
+                  </div>
+                  <div class="text-sm mt-1 opacity-80">per person</div>
+                </>
+              ) : (
+                <>
+                  <div class="text-sm uppercase tracking-wide mb-2 opacity-80">Pricing</div>
+                  <div class="text-3xl font-bold">Price on request</div>
+                  <div class="text-sm mt-1 opacity-80">Contact us for pricing</div>
+                </>
+              )}
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="p-6 space-y-4">
+              <BookingButton
+                tour={tour}
+                context="tour-detail"
+                className="w-full text-lg py-4"
+                client:load
+              >
+                Check Availability
+              </BookingButton>
+              
+              <button 
+                id="inquiry-btn"
+                class="btn-outline w-full min-h-[48px] touch-manipulation"
+                data-tour-id={tour.id}
+                data-tour-slug={tour.slug}
+                aria-label="Send inquiry about this tour"
+              >
+                Have Questions? Send Inquiry
+              </button>
+              
+              <!-- Trust Badges with Better Touch Spacing -->
+              <div class="pt-4 border-t space-y-4">
+                <div class="flex items-center gap-3 text-sm text-gray-600 min-h-[24px]">
+                  <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  <span>Free cancellation up to 24h</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-600 min-h-[24px]">
+                  <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                  </svg>
+                  <span>Secure booking process</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-600 min-h-[24px]">
+                  <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <span>24/7 customer support</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Operator Info -->
+            {tour.operator && (
+              <div class="bg-gray-50 p-6 border-t">
+                <div class="flex items-center gap-4">
+                  {tour.operator.logoUrl && (
+                    <img 
+                      src={tour.operator.logoUrl} 
+                      alt={tour.operator.name}
+                      class="w-12 h-12 object-contain"
+                    />
+                  )}
+                  <div>
+                    <div class="text-xs text-gray-500 uppercase tracking-wide">Operated by</div>
+                    <div class="font-semibold text-gray-900">{tour.operator.name}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Similar Tours Section -->
+  <section class="bg-gray-50 py-2 md:py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center">Similar Adventures</h2>
+      
+      {similarTours.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-2 md:mb-8">
+          {similarTours.map((similarTour) => (
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-1">
+              <div class="aspect-[4/3] relative overflow-hidden">
+                <img 
+                  src={similarTour.primaryImageUrl} 
+                  alt={similarTour.title}
+                  loading="lazy"
+                  class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                />
+                {similarTour.featured && (
+                  <span class="absolute top-3 left-3 bg-accent text-white px-2 py-1 rounded-full text-xs font-bold">
+                    ⭐ Featured
+                  </span>
+                )}
+                <div class="absolute bottom-3 left-3 right-3">
+                  <div class="flex flex-wrap gap-1">
+                    {similarTour.countries.slice(0, 2).map(country => (
+                      <span class="bg-black/70 text-white px-2 py-1 rounded text-xs">
+                        {country}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2 line-clamp-2">
+                  <a href={`/tours/${similarTour.slug}`} class="hover:text-accent transition-colors">
+                    {similarTour.title}
+                  </a>
+                </h3>
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+                  {similarTour.shortDescription}
+                </p>
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex gap-1">
+                    {similarTour.durationDisplay && (
+                      <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded font-medium">
+                        {similarTour.durationDisplay}
+                      </span>
+                    )}
+                    {similarTour.difficulty && (
+                      <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded capitalize font-medium">
+                        {similarTour.difficulty}
+                      </span>
+                    )}
+                  </div>
+                  <span class="font-bold text-sm text-gray-900">
+                    {similarTour.priceMin ? `€${similarTour.priceMin}+` : 'Price on request'}
+                  </span>
+                </div>
+                <a 
+                  href={`/tours/${similarTour.slug}`}
+                  class="flex items-center justify-center w-full bg-accent text-white py-2 px-3 rounded-lg hover:bg-accent/90 transition-all font-medium text-sm transform hover:scale-105 whitespace-nowrap min-h-[40px]"
+                >
+                  View Details
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : null}
+      
+      <div class="text-center">
+        {similarTours.length > 0 ? (
+          <div class="space-y-2">
+            <p class="text-gray-600">
+              {similarTours.length === 1 
+                ? `Found 1 similar adventure in ${tour.countries.join(', ')}`
+                : `Found ${similarTours.length} similar adventures`}
+            </p>
+            <a href="/tours" class="inline-flex items-center gap-2 text-accent hover:underline font-medium">
+              Browse all tours
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+          </div>
+        ) : (
+          <div class="space-y-2">
+            <p class="text-gray-600 text-lg">
+              This is a unique adventure! While we couldn't find similar tours,<br />
+              explore our full collection for more amazing experiences.
+            </p>
+            <a href="/tours" class="inline-flex items-center gap-2 bg-accent text-white px-6 py-3 rounded-lg hover:bg-accent/90 transition-all font-semibold">
+              Browse All Tours
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Inquiry Form Modal -->
+  <InquiryForm 
+    tourId={tour.id} 
+    tourSlug={tour.slug} 
+    tourTitle={tour.title}
+    client:idle 
+  />
+
+  <script define:vars={{ tourImages: tour.images.map(img => img.url) }}>
+    console.log('Tour detail page script loaded');
+    
+    let currentImageIndex = 0;
+    let lightboxIndex = 0;
+    
+    // DOM elements
+    const heroImage = document.getElementById('hero-image');
+    const lightboxModal = document.getElementById('lightbox-modal');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    
+    // Update thumbnail selection
+    function updateThumbnailSelection(index) {
+      document.querySelectorAll('.thumbnail-btn').forEach((btn, i) => {
+        btn.classList.toggle('ring-2', i === index);
+        btn.classList.toggle('ring-accent', i === index);
+      });
+    }
+    
+    // Navigate to specific image in hero
+    function showHeroImage(index) {
+      if (index >= 0 && index < tourImages.length && heroImage) {
+        currentImageIndex = index;
+        heroImage.style.opacity = '0';
+        setTimeout(() => {
+          heroImage.src = tourImages[index];
+          heroImage.style.opacity = '1';
+        }, 150);
+        updateThumbnailSelection(index);
+      }
+    }
+    
+    // Update lightbox
+    function updateLightbox(index) {
+      if (index >= 0 && index < tourImages.length) {
+        lightboxIndex = index;
+        if (lightboxImage) lightboxImage.src = tourImages[index];
+        if (lightboxCounter) lightboxCounter.textContent = `${index + 1} / ${tourImages.length}`;
+        
+        // Update lightbox thumbnails
+        document.querySelectorAll('.lightbox-thumb').forEach((thumb, i) => {
+          thumb.classList.toggle('ring-2', i === index);
+          thumb.classList.toggle('ring-white', i === index);
+          thumb.classList.toggle('scale-110', i === index);
+          thumb.classList.toggle('opacity-60', i !== index);
+        });
+      }
+    }
+    
+    // Hero image navigation
+    const prevBtn = document.getElementById('prev-image');
+    const nextBtn = document.getElementById('next-image');
+    
+    console.log('Prev button:', prevBtn);
+    console.log('Next button:', nextBtn);
+    console.log('Tour images:', tourImages);
+    
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        console.log('Prev clicked');
+        const newIndex = currentImageIndex === 0 ? tourImages.length - 1 : currentImageIndex - 1;
+        showHeroImage(newIndex);
+      });
+    }
+    
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        console.log('Next clicked');
+        const newIndex = currentImageIndex === tourImages.length - 1 ? 0 : currentImageIndex + 1;
+        showHeroImage(newIndex);
+      });
+    }
+    
+    // Thumbnail clicks
+    const thumbnails = document.querySelectorAll('.thumbnail-btn');
+    console.log('Thumbnails found:', thumbnails.length);
+    
+    thumbnails.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        console.log('Thumbnail clicked:', index);
+        showHeroImage(index);
+      });
+    });
+    
+    // Open lightbox
+    const openLightboxBtn = document.getElementById('open-lightbox');
+    const showAllBtn = document.getElementById('show-all-images');
+    
+    console.log('Open lightbox button:', openLightboxBtn);
+    console.log('Show all button:', showAllBtn);
+    
+    if (openLightboxBtn) {
+      openLightboxBtn.addEventListener('click', () => {
+        console.log('Open lightbox clicked');
+        if (lightboxModal) {
+          lightboxModal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          updateLightbox(currentImageIndex);
+        }
+      });
+    }
+    
+    if (showAllBtn) {
+      showAllBtn.addEventListener('click', () => {
+        console.log('Show all images clicked');
+        if (lightboxModal) {
+          lightboxModal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          updateLightbox(0);
+        }
+      });
+    }
+    
+    // Close lightbox
+    const closeLightbox = () => {
+      lightboxModal?.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    };
+    
+    document.getElementById('close-lightbox')?.addEventListener('click', closeLightbox);
+    
+    // Lightbox navigation
+    document.getElementById('lightbox-prev')?.addEventListener('click', () => {
+      const newIndex = lightboxIndex === 0 ? tourImages.length - 1 : lightboxIndex - 1;
+      updateLightbox(newIndex);
+    });
+    
+    document.getElementById('lightbox-next')?.addEventListener('click', () => {
+      const newIndex = lightboxIndex === tourImages.length - 1 ? 0 : lightboxIndex + 1;
+      updateLightbox(newIndex);
+    });
+    
+    // Lightbox thumbnail clicks
+    document.querySelectorAll('.lightbox-thumb').forEach((thumb, index) => {
+      thumb.addEventListener('click', () => updateLightbox(index));
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (lightboxModal?.classList.contains('hidden')) {
+        // Hero navigation
+        if (e.key === 'ArrowLeft') {
+          document.getElementById('prev-image')?.click();
+        } else if (e.key === 'ArrowRight') {
+          document.getElementById('next-image')?.click();
+        }
+      } else {
+        // Lightbox navigation
+        if (e.key === 'ArrowLeft') {
+          document.getElementById('lightbox-prev')?.click();
+        } else if (e.key === 'ArrowRight') {
+          document.getElementById('lightbox-next')?.click();
+        } else if (e.key === 'Escape') {
+          closeLightbox();
+        }
+      }
+    });
+    
+    // Close lightbox when clicking outside image
+    lightboxModal?.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) {
+        closeLightbox();
+      }
+    });
+    
+    // Handle inquiry button
+    document.getElementById('inquiry-btn')?.addEventListener('click', () => {
+      if ('vibrate' in navigator) {
+        navigator.vibrate(10);
+      }
+      const event = new CustomEvent('open-inquiry-form');
+      window.dispatchEvent(event);
+    });
+    
+    // Performance optimizations
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
+      }
+      
+      scrollTimeout = window.requestAnimationFrame(() => {
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        images.forEach(img => {
+          const rect = img.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 1.5) {
+            img.loading = 'eager';
+          }
+        });
+      });
+    }, { passive: true });
+  </script>
+</BaseLayout>

@@ -61,15 +61,13 @@ export default function TourCard({ tour, loading = false }: TourCardProps) {
               </span>
             )}
           </div>
-          {tour.priceMin && (
-            <span className="font-bold text-lg">
-              From €{tour.priceMin}
-            </span>
-          )}
+          <span className="font-bold text-lg">
+            {tour.priceMin ? `From €${tour.priceMin}` : 'Price on request'}
+          </span>
         </div>
         <a 
           href={`/tours/${tour.slug}`}
-          className="block w-full bg-accent text-white text-center py-2 rounded-lg hover:bg-accent-600 transition"
+          className="flex items-center justify-center w-full bg-accent text-white py-2.5 px-4 rounded-lg hover:bg-accent-600 transition font-medium min-h-[40px]"
         >
           View Details
         </a>

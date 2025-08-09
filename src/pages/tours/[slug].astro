@@ -1,9 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import { getAllSlugs, getTourDetail } from '@/lib/queries'
+import { getAllSlugs, getTourDetail, getSimilarTours } from '@/lib/queries'
 import { generateTouristTripSchema, generateBreadcrumbSchema, generateMetaTags } from '@/lib/seo'
-import { getEnhancedTour, hasEnhancedCopy } from '@/data/enhancedTours'
-import HeroGallery from '@/components/tours/HeroGallery'
+import { getEnhancedTour, hasEnhancedCopy, getBadgeEmoji } from '@/data/enhancedTours'
 import InquiryForm from '@/components/tours/InquiryForm'
 import BookingButton from '@/components/tours/BookingButton'
 
@@ -25,6 +24,9 @@ if (!tour) {
 const enhancedTour = getEnhancedTour(slug)
 const hasEnhanced = hasEnhancedCopy(slug)
 
+// Get similar tours based on meaningful criteria
+const similarTours = await getSimilarTours(tour, 4)
+
 const url = `https://tours.albaniavisit.com/tours/${slug}`
 const metaTags = generateMetaTags(tour)
 const touristTripSchema = generateTouristTripSchema(tour, url)
@@ -43,182 +45,209 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   ogType="product"
   jsonLd={[touristTripSchema, breadcrumbSchema]}
 >
-  <!-- Premium Hero Section -->
-  <section class="relative">
-    <!-- Gallery -->
-    <HeroGallery 
-      images={tour.images.map(img => img.url)} 
-      title={tour.title}
-      client:load 
-    />
+  <style>
+    .hero-gradient {
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.1) 40%,
+        rgba(0, 0, 0, 0.4) 70%,
+        rgba(0, 0, 0, 0.7) 100%
+      );
+    }
     
-    <!-- Mobile-Optimized Floating Title Card - Minimal overlay for better image visibility -->
-    <div class="absolute bottom-24 md:bottom-28 left-0 right-0 pointer-events-none z-10">
-      <!-- Mobile: Minimal gradient, Desktop: Full gradient -->
-      <div class="bg-gradient-to-t from-black/80 via-black/40 to-transparent md:from-black/95 md:via-black/70 md:to-transparent">
-        <div class="container mx-auto px-4 md:px-6 pb-3 md:pb-8 pointer-events-auto">
-          <div class="max-w-5xl">
-            <!-- Breadcrumbs - Hide on mobile for cleaner look -->
-            <nav class="hidden md:block mb-4">
-              <ol class="flex items-center gap-2 text-sm text-white/70">
-                <li><a href="/" class="hover:text-white transition">Home</a></li>
-                <li>/</li>
-                <li><a href="/tours" class="hover:text-white transition">Tours</a></li>
-                <li>/</li>
-                <li class="text-white truncate">{tour.title}</li>
-              </ol>
-            </nav>
-            
-            <!-- Enhanced Title & Tagline - Mobile optimized -->
-            {hasEnhanced && enhancedTour ? (
-              <div class="mb-2 md:mb-6">
-                <!-- Mobile: Compact badges only, Desktop: Full emoji + badges -->
-                <div class="flex items-center justify-between gap-2 mb-2">
-                  <div class="flex items-center gap-2 md:gap-3">
-                    <span class="hidden md:block text-4xl">{enhancedTour.emoji}</span>
-                    {enhancedTour.badges && enhancedTour.badges.slice(0, 1).map(badge => (
-                      <span class="bg-accent/90 text-white px-2 py-1 rounded text-xs font-bold uppercase tracking-wide whitespace-nowrap">
-                        {badge}
-                      </span>
-                    ))}
-                  </div>
-                  <!-- Mobile: Show "View All Photos" prominently -->
-                  <button 
-                    onclick="document.querySelector('[onclick*=openModal]')?.click()"
-                    class="md:hidden bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap"
-                  >
-                    📸 {tour.images?.length || '+'} Photos
-                  </button>
-                </div>
-                <h1 class="text-xl md:text-4xl lg:text-5xl font-bold text-white mb-1 md:mb-3 leading-tight">
-                  {enhancedTour.enhancedTitle}
-                </h1>
-                <p class="text-sm md:text-2xl text-white/90 font-medium mb-2 md:mb-4 line-clamp-2">
-                  {enhancedTour.tagline}
-                </p>
-                {enhancedTour.pricing && (
-                  <div class="hidden md:inline-flex items-center gap-3 bg-accent/20 backdrop-blur-md text-white px-4 py-2 rounded-lg">
-                    <span class="text-2xl font-bold">{enhancedTour.pricing.amount}</span>
-                    {enhancedTour.pricing.note && (
-                      <span class="text-sm opacity-90">• {enhancedTour.pricing.note}</span>
-                    )}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <h1 class="text-xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                  {tour.title}
-                </h1>
-                <!-- Mobile: Show "View All Photos" prominently -->
-                <button 
-                  onclick="document.querySelector('[onclick*=openModal]')?.click()"
-                  class="md:hidden bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap"
-                >
-                  📸 {tour.images?.length || '+'} Photos
-                </button>
-              </div>
-            )}
+    .content-section {
+      @apply py-12 md:py-16;
+    }
+    
+    .section-title {
+      @apply text-3xl md:text-4xl font-bold mb-8 text-gray-900;
+    }
+    
+    .info-card {
+      @apply bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow;
+    }
+    
+    .badge-pill {
+      @apply inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold;
+    }
+  </style>
+
+  <!-- Hero Section - Full Screen Impact -->
+  <section class="relative h-screen max-h-[900px] min-h-[600px]">
+    <!-- Hero Image Container -->
+    <div class="absolute inset-0">
+      <img 
+        id="hero-image"
+        src={tour.images[0]?.url || '/placeholder.jpg'} 
+        alt={tour.title}
+        class="w-full h-full object-cover"
+      />
+      <div class="hero-gradient absolute inset-0"></div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    {tour.images.length > 1 && (
+      <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20">
+        <div class="container mx-auto px-4">
+          <div class="flex justify-between">
+            <button id="prev-image" class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all transform hover:scale-110">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <button id="next-image" class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all transform hover:scale-110">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    <!-- Hero Content -->
+    <div class="absolute bottom-0 left-0 right-0 z-10 pb-12">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl">
+          <!-- Badges -->
+          {hasEnhanced && enhancedTour?.badges && (
+            <div class="flex flex-wrap gap-3 mb-6">
+              {enhancedTour.badges.map(badge => (
+                <span class="badge-pill bg-accent text-white shadow-lg">
+                  <span class="text-lg">{getBadgeEmoji(badge)}</span>
+                  {badge}
+                </span>
+              ))}
+            </div>
+          )}
           
-          <!-- Key Info Pills - Compact on mobile -->
-          <div class="flex flex-wrap gap-1 md:gap-3">
+          <!-- Title & Tagline -->
+          <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+            {hasEnhanced && enhancedTour ? enhancedTour.enhancedTitle : tour.title}
+          </h1>
+          
+          {hasEnhanced && enhancedTour?.tagline && (
+            <p class="text-xl md:text-2xl text-white/90 mb-8 font-light">{enhancedTour.tagline}</p>
+          )}
+          
+          <!-- Quick Info -->
+          <div class="flex flex-wrap gap-4">
             {tour.durationDisplay && (
-              <div class="inline-flex items-center gap-1 md:gap-2 bg-white/25 backdrop-blur-md text-white px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-medium shadow-lg">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                <span class="font-medium whitespace-nowrap">{tour.durationDisplay}</span>
+                {tour.durationDisplay}
               </div>
             )}
             {tour.difficulty && (
-              <div class="inline-flex items-center gap-1 md:gap-2 bg-white/25 backdrop-blur-md text-white px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-medium shadow-lg">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7"/>
                 </svg>
-                <span class="font-medium capitalize whitespace-nowrap">{tour.difficulty}</span>
+                {tour.difficulty} Level
               </div>
             )}
-            <div class="inline-flex items-center gap-1 md:gap-2 bg-white/25 backdrop-blur-md text-white px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-medium shadow-lg">
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
               </svg>
-              <span class="font-medium whitespace-nowrap">{tour.countries.slice(0, 2).join(', ')}{tour.countries.length > 2 ? ` +${tour.countries.length - 2}` : ''}</span>
+              {tour.countries.join(' • ')}
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Image Counter -->
+    <button 
+      id="open-lightbox"
+      class="absolute top-8 right-8 bg-white/10 backdrop-blur-md rounded-full px-6 py-3 flex items-center gap-3 text-white hover:bg-white/20 transition-all"
+    >
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+      </svg>
+      <span class="font-medium">{tour.images.length} Photos</span>
+    </button>
   </section>
 
-  <!-- Sticky Booking Bar (Mobile) -->
-  <div class="lg:hidden sticky top-16 z-40 bg-white border-b shadow-lg">
-    <div class="container mx-auto px-4 py-3">
-      <div class="flex items-center justify-between">
-        <div class="min-w-0 flex-1">
-          {tour.priceMin && (
-            <div class="text-xl sm:text-2xl font-bold">
-              From €{tour.priceMin}
-              <span class="text-sm font-normal text-gray-500 whitespace-nowrap">/person</span>
-            </div>
+  <!-- Thumbnail Gallery - Clean Grid -->
+  {tour.images.length > 1 && (
+    <section class="bg-gray-50 py-4 border-y">
+      <div class="container mx-auto px-4">
+        <div class="flex gap-3 overflow-x-auto scrollbar-hide py-2 px-2">
+          {tour.images.slice(0, 10).map((image, index) => (
+            <button 
+              class={`thumbnail-btn flex-shrink-0 rounded-lg overflow-hidden transition-all hover:scale-105 ${index === 0 ? 'ring-2 ring-offset-2 ring-accent' : ''}`}
+              style="width: 100px; height: 75px;"
+              data-index={index}
+            >
+              <img 
+                src={image.url} 
+                alt={`View ${index + 1}`}
+                class="w-full h-full object-cover"
+              />
+            </button>
+          ))}
+          {tour.images.length > 10 && (
+            <button id="show-all-images" class="flex-shrink-0 w-[100px] h-[75px] bg-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-600 hover:bg-gray-300 transition-colors">
+              <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <span class="text-xs font-medium">+{tour.images.length - 10} more</span>
+            </button>
           )}
         </div>
-        <BookingButton
-          tour={tour}
-          context="tour-detail"
-          className="px-6"
-          client:load
-        />
       </div>
-    </div>
-  </div>
+    </section>
+  )}
 
-  <!-- Main Content -->
+  <!-- Main Content Area -->
   <div class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
       
-      <!-- Left Content -->
-      <div class="lg:col-span-2 space-y-12">
+      <!-- Left Content - 2 Columns -->
+      <div class="lg:col-span-2">
         
-        <!-- Enhanced Overview Section -->
-        <section>
-          <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
-            <span class="block w-1 h-8 bg-accent"></span>
-            Overview
-          </h2>
+        <!-- Overview Section -->
+        <section class="content-section">
+          <h2 class="section-title">Tour Overview</h2>
           
           {hasEnhanced && enhancedTour ? (
-            <div class="space-y-6">
+            <div class="space-y-8">
               <!-- Hero Description -->
-              <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                <p class="text-xl font-medium text-gray-900 mb-4">{enhancedTour.heroDescription}</p>
+              <div class="text-lg text-gray-700 leading-relaxed">
+                <p class="text-xl mb-6">{enhancedTour.heroDescription}</p>
               </div>
               
-              <!-- Available Dates -->
-              {enhancedTour.dates && enhancedTour.dates.length > 0 && (
-                <div class="bg-accent/5 border-l-4 border-accent p-6 rounded-r-lg">
-                  <h3 class="font-bold text-gray-900 mb-3 text-lg">2025 Departures:</h3>
-                  <div class="grid gap-2">
-                    {enhancedTour.dates.map(date => (
-                      <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 bg-accent rounded-full"></span>
-                        <span class="font-medium">{date}</span>
+              <!-- Highlights Grid -->
+              {enhancedTour.highlights && enhancedTour.highlights.length > 0 && (
+                <div class="info-card">
+                  <h3 class="text-2xl font-bold mb-6 text-gray-900">Experience Highlights</h3>
+                  <div class="grid md:grid-cols-2 gap-6">
+                    {enhancedTour.highlights.map(highlight => (
+                      <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                          <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">{highlight}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
               
-              <!-- Experience Highlights -->
-              {enhancedTour.highlights && enhancedTour.highlights.length > 0 && (
-                <div>
-                  <h3 class="text-xl font-bold mb-4 text-gray-900">Experience Highlights</h3>
-                  <div class="grid gap-4">
-                    {enhancedTour.highlights.map(highlight => (
-                      <div class="flex items-start gap-3">
-                        <div class="w-6 h-6 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span class="w-2 h-2 bg-accent rounded-full"></span>
-                        </div>
-                        <span class="text-gray-700 leading-relaxed">{highlight}</span>
+              <!-- Available Dates -->
+              {enhancedTour.dates && enhancedTour.dates.length > 0 && (
+                <div class="info-card bg-accent/5 border-2 border-accent/20">
+                  <h3 class="text-2xl font-bold mb-6 text-gray-900">2025 Departure Dates</h3>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {enhancedTour.dates.map(date => (
+                      <div class="bg-white rounded-lg p-4 text-center shadow-sm">
+                        <p class="font-semibold text-gray-900">{date}</p>
                       </div>
                     ))}
                   </div>
@@ -227,15 +256,13 @@ const breadcrumbSchema = generateBreadcrumbSchema([
               
               <!-- Unique Features -->
               {enhancedTour.uniqueFeatures && enhancedTour.uniqueFeatures.length > 0 && (
-                <div class="bg-gray-50 p-6 rounded-xl">
-                  <h3 class="text-lg font-bold mb-4 text-gray-900">What Makes This Special</h3>
-                  <div class="space-y-2">
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8">
+                  <h3 class="text-2xl font-bold mb-6 text-gray-900">What Makes This Special</h3>
+                  <div class="grid gap-4">
                     {enhancedTour.uniqueFeatures.map(feature => (
-                      <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span class="text-gray-700">{feature}</span>
+                      <div class="flex items-center gap-4 bg-white rounded-lg p-4 shadow-sm">
+                        <div class="w-2 h-2 bg-accent rounded-full"></div>
+                        <p class="text-gray-700">{feature}</p>
                       </div>
                     ))}
                   </div>
@@ -243,181 +270,190 @@ const breadcrumbSchema = generateBreadcrumbSchema([
               )}
             </div>
           ) : (
-            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-              <p>{tour.fullDescription || tour.shortDescription}</p>
+            <div class="space-y-8">
+              <div class="text-lg text-gray-700 leading-relaxed">
+                <p class="text-xl mb-6">{tour.fullDescription || tour.shortDescription}</p>
+              </div>
+              
+              <div class="info-card">
+                <h3 class="text-2xl font-bold mb-6 text-gray-900">What You'll Experience</h3>
+                <div class="grid gap-6">
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span class="text-accent font-bold">1</span>
+                    </div>
+                    <p class="text-gray-700">
+                      {tour.countries.length > 1 
+                        ? `Multi-country adventure through ${tour.countries.join(', ')}, experiencing diverse cultures and landscapes`
+                        : `Authentic local experience in ${tour.countries[0] || 'the region'} with expert guidance`
+                      }
+                    </p>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span class="text-accent font-bold">2</span>
+                    </div>
+                    <p class="text-gray-700">Professional local guides with deep knowledge of the area's history and culture</p>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span class="text-accent font-bold">3</span>
+                    </div>
+                    <p class="text-gray-700">Small group sizes ensuring personalized attention and flexible itineraries</p>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </section>
 
-        <!-- Experience Highlights -->
+        <!-- What's Included Section -->
         {(tour.inclusions.length > 0 || tour.exclusions.length > 0) && (
-          <section class="bg-gray-50 -mx-4 px-4 py-8 lg:rounded-2xl lg:mx-0 lg:px-8">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
-              <span class="block w-1 h-8 bg-accent"></span>
-              Experience Details
-            </h2>
+          <section class="content-section">
+            <h2 class="section-title">What's Included</h2>
             
             <div class="grid md:grid-cols-2 gap-8">
               {tour.inclusions.length > 0 && (
-                <div>
-                  <h3 class="text-lg font-bold mb-4 text-gray-900">What's Included</h3>
-                  <ul class="space-y-3">
+                <div class="info-card">
+                  <h3 class="text-xl font-bold mb-6 text-green-700">Included</h3>
+                  <div class="space-y-4">
                     {tour.inclusions.map(item => (
-                      <li class="flex items-start gap-3">
-                        <span class="flex-shrink-0 w-6 h-6 bg-gray-900 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
-                          ✓
-                        </span>
-                        <span class="text-gray-700">{item}</span>
-                      </li>
+                      <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-gray-700">{item}</p>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
               
               {tour.exclusions.length > 0 && (
-                <div>
-                  <h3 class="text-lg font-bold mb-4 text-gray-900">Not Included</h3>
-                  <ul class="space-y-3">
+                <div class="info-card bg-gray-50">
+                  <h3 class="text-xl font-bold mb-6 text-gray-700">Not Included</h3>
+                  <div class="space-y-4">
                     {tour.exclusions.map(item => (
-                      <li class="flex items-start gap-3">
-                        <span class="flex-shrink-0 w-6 h-6 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
-                          ×
-                        </span>
-                        <span class="text-gray-600">{item}</span>
-                      </li>
+                      <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-gray-600">{item}</p>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
             </div>
           </section>
         )}
 
-        <!-- Departure Information -->
+        <!-- Important Information -->
         {tour.departureNotes && (
-          <section class="border-l-4 border-accent pl-6">
-            <h3 class="text-xl font-bold mb-3">Important Information</h3>
-            <p class="text-gray-700">{tour.departureNotes}</p>
-          </section>
-        )}
-
-        <!-- Trust Section -->
-        <section class="bg-gray-900 text-white -mx-4 px-4 py-12 lg:rounded-2xl lg:mx-0 lg:px-8">
-          <div class="text-center max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold mb-4">Why Book With AlbaniaVisit</h2>
-            <p class="text-gray-300 mb-8">
-              We partner with the most trusted local operators to bring you authentic experiences at the best prices.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                  </svg>
+          <section class="content-section">
+            <div class="info-card bg-amber-50 border-2 border-amber-200">
+              <div class="flex items-start gap-4">
+                <svg class="w-8 h-8 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                  <h3 class="text-xl font-bold mb-3 text-gray-900">Important Information</h3>
+                  <p class="text-gray-700">{tour.departureNotes}</p>
                 </div>
-                <h3 class="font-bold mb-2">Verified Operators</h3>
-                <p class="text-sm text-gray-400">All partners vetted for safety and quality</p>
-              </div>
-              <div>
-                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </div>
-                <h3 class="font-bold mb-2">Best Price Guarantee</h3>
-                <p class="text-sm text-gray-400">Direct operator rates with no hidden fees</p>
-              </div>
-              <div>
-                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                  </svg>
-                </div>
-                <h3 class="font-bold mb-2">Local Expertise</h3>
-                <p class="text-sm text-gray-400">Authentic experiences with passionate guides</p>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
 
-      <!-- Right Sidebar - Booking Card -->
+      <!-- Right Sidebar - Sticky Booking Card -->
       <div class="lg:col-span-1">
         <div class="sticky top-24">
-          <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <!-- Price Header -->
-            {tour.priceMin && (
-              <div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-6">
-                <div class="text-sm uppercase tracking-wide mb-2 opacity-80">Starting from</div>
-                <div class="text-4xl font-bold">
-                  €{tour.priceMin}
+          <div class="info-card border-2 border-accent/20">
+            <!-- Price Section -->
+            <div class="text-center pb-6 border-b">
+              {tour.priceMin ? (
+                <>
+                  <p class="text-sm text-gray-500 uppercase tracking-wide mb-2">Starting from</p>
+                  <div class="text-5xl font-bold text-gray-900 mb-2">
+                    €{tour.priceMin}
+                  </div>
+                  <p class="text-gray-500">per person</p>
                   {tour.priceMax && tour.priceMax !== tour.priceMin && (
-                    <span class="text-lg font-normal opacity-80"> - €{tour.priceMax}</span>
+                    <p class="text-sm text-gray-400 mt-2">Up to €{tour.priceMax}</p>
                   )}
-                </div>
-                <div class="text-sm mt-1 opacity-80">per person</div>
-              </div>
-            )}
+                </>
+              ) : (
+                <>
+                  <p class="text-sm text-gray-500 uppercase tracking-wide mb-2">Pricing</p>
+                  <div class="text-3xl font-bold text-gray-900 mb-2">Price on Request</div>
+                  <p class="text-gray-500">Contact for details</p>
+                </>
+              )}
+            </div>
             
-            <!-- CTA Section -->
-            <div class="p-6 space-y-4">
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 gap-4 py-6 border-b">
+              {tour.durationDisplay && (
+                <div class="text-center">
+                  <p class="text-2xl font-bold text-gray-900">{tour.durationDays || '1'}</p>
+                  <p class="text-sm text-gray-500">Days</p>
+                </div>
+              )}
+              <div class="text-center">
+                <p class="text-2xl font-bold text-gray-900">{tour.countries.length}</p>
+                <p class="text-sm text-gray-500">Countries</p>
+              </div>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="space-y-4 pt-6">
               <BookingButton
                 tour={tour}
                 context="tour-detail"
-                className="w-full text-lg py-4"
+                className="w-full text-lg py-4 font-semibold"
                 client:load
               >
-                Check Availability
+                Book This Tour
               </BookingButton>
               
               <button 
                 id="inquiry-btn"
-                class="btn-outline w-full"
+                class="w-full bg-gray-100 text-gray-900 px-6 py-4 rounded-lg hover:bg-gray-200 transition-all font-semibold"
                 data-tour-id={tour.id}
                 data-tour-slug={tour.slug}
               >
-                Have Questions? Send Inquiry
+                Ask a Question
               </button>
-              
-              <!-- Trust Badges -->
-              <div class="pt-4 border-t space-y-3">
-                <div class="flex items-center gap-3 text-sm text-gray-600">
-                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  <span>Free cancellation up to 24h</span>
-                </div>
-                <div class="flex items-center gap-3 text-sm text-gray-600">
-                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                  </svg>
-                  <span>Secure booking process</span>
-                </div>
-                <div class="flex items-center gap-3 text-sm text-gray-600">
-                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                  <span>24/7 customer support</span>
-                </div>
+            </div>
+            
+            <!-- Trust Badges -->
+            <div class="mt-6 pt-6 border-t space-y-3">
+              <div class="flex items-center gap-3 text-sm text-gray-600">
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Free cancellation up to 24h</span>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-gray-600">
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Instant confirmation</span>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-gray-600">
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Best price guarantee</span>
               </div>
             </div>
             
             <!-- Operator Info -->
             {tour.operator && (
-              <div class="bg-gray-50 p-6 border-t">
-                <div class="flex items-center gap-4">
-                  {tour.operator.logoUrl && (
-                    <img 
-                      src={tour.operator.logoUrl} 
-                      alt={tour.operator.name}
-                      class="w-12 h-12 object-contain"
-                    />
-                  )}
-                  <div>
-                    <div class="text-xs text-gray-500 uppercase tracking-wide">Operated by</div>
-                    <div class="font-semibold text-gray-900">{tour.operator.name}</div>
-                  </div>
-                </div>
+              <div class="mt-6 pt-6 border-t">
+                <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Tour Operator</p>
+                <p class="font-semibold text-gray-900">{tour.operator.name}</p>
               </div>
             )}
           </div>
@@ -426,20 +462,202 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     </div>
   </div>
 
-  <!-- Related Tours Section -->
-  <section class="bg-gray-50 py-16">
+  <!-- Why Book With Us - Full Width -->
+  <section class="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-20">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-8 text-center">Similar Adventures</h2>
-      <div class="text-center text-gray-600">
-        <a href="/tours" class="inline-flex items-center gap-2 text-accent hover:underline">
-          Browse all tours
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </a>
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-4xl font-bold mb-6">Why Use AlbaniaVisit</h2>
+        <p class="text-xl text-gray-300">
+          We connect you with trusted local tour operators for authentic experiences at the best prices
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="text-center">
+          <div class="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3">Verified Operators</h3>
+          <p class="text-gray-300">We only feature vetted tour operators for your safety and peace of mind</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3">Direct Booking</h3>
+          <p class="text-gray-300">Book directly with operators at their best available rates</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3">Local Expertise</h3>
+          <p class="text-gray-300">Connect with passionate local guides for authentic experiences</p>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Similar Tours -->
+  {similarTours.length > 0 && (
+    <section class="content-section bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="section-title text-center">You Might Also Like</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {similarTours.map((similarTour) => (
+            <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-2">
+              <div class="aspect-[4/3] relative overflow-hidden">
+                <img 
+                  src={similarTour.primaryImageUrl} 
+                  alt={similarTour.title}
+                  loading="lazy"
+                  class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                />
+                {similarTour.featured && (
+                  <span class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-xs font-bold">
+                    Featured
+                  </span>
+                )}
+              </div>
+              <div class="p-5">
+                <h3 class="text-lg font-bold mb-2 line-clamp-2">
+                  <a href={`/tours/${similarTour.slug}`} class="hover:text-accent transition-colors">
+                    {similarTour.title}
+                  </a>
+                </h3>
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex gap-2">
+                    {similarTour.durationDisplay && (
+                      <span class="text-xs bg-gray-100 px-2 py-1 rounded">
+                        {similarTour.durationDisplay}
+                      </span>
+                    )}
+                  </div>
+                  <span class="font-bold text-accent">
+                    {similarTour.priceMin ? `€${similarTour.priceMin}` : 'Price on request'}
+                  </span>
+                </div>
+                <a 
+                  href={`/tours/${similarTour.slug}`}
+                  class="block w-full text-center bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition-all font-medium"
+                >
+                  View Tour
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+        
+        <div class="text-center mt-12">
+          <a href="/tours" class="inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-lg hover:bg-accent/90 transition-all font-semibold text-lg">
+            Explore All Tours
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Mobile Sticky Booking Bar -->
+  <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t shadow-lg">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <div class="text-2xl font-bold text-gray-900">
+            {tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
+          </div>
+          <p class="text-sm text-gray-500">per person</p>
+        </div>
+        <BookingButton
+          tour={tour}
+          context="tour-detail"
+          className="px-8 py-3 text-sm font-semibold"
+          client:idle
+        >
+          Check Availability
+        </BookingButton>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black hidden">
+    <!-- Close Button -->
+    <button
+      id="close-lightbox"
+      class="absolute top-4 right-4 z-50 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all text-white"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- Image Counter -->
+    <div class="absolute top-4 left-4 z-50 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-lg">
+      <span id="lightbox-counter">1 / {tour.images.length}</span>
+    </div>
+
+    <!-- Main Image -->
+    <div class="h-full flex items-center justify-center p-4">
+      <img
+        id="lightbox-image"
+        src={tour.images[0]?.url || '/placeholder.jpg'}
+        alt={tour.title}
+        class="max-w-full max-h-full object-contain"
+      />
+    </div>
+
+    <!-- Navigation -->
+    {tour.images.length > 1 && (
+      <>
+        <button
+          id="lightbox-prev"
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all text-white"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button
+          id="lightbox-next"
+          class="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all text-white"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </>
+    )}
+
+    <!-- Thumbnail Strip -->
+    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent px-4 pt-8 pb-4">
+      <div class="flex gap-2 justify-center overflow-x-auto">
+        {tour.images.map((image, index) => (
+          <button
+            class={`lightbox-thumb flex-shrink-0 relative rounded-lg overflow-hidden transition-all ${index === 0 ? 'ring-2 ring-white scale-110' : 'opacity-60 hover:opacity-100'}`}
+            data-index={index}
+          >
+            <img
+              src={image.url}
+              alt={`Thumbnail ${index + 1}`}
+              class="w-16 h-12 object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
 
   <!-- Inquiry Form Modal -->
   <InquiryForm 
@@ -449,14 +667,114 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     client:idle 
   />
 
-  <script>
-    console.log('Tour detail page script loaded');
+  <script define:vars={{ tourImages: tour.images.map(img => img.url) }}>
+    let currentImageIndex = 0;
+    let lightboxIndex = 0;
     
-    // Handle inquiry button
-    document.getElementById('inquiry-btn')?.addEventListener('click', (e) => {
-      console.log('=== INQUIRY BUTTON CLICKED ===');
-      const event = new CustomEvent('open-inquiry-form');
-      window.dispatchEvent(event);
+    const heroImage = document.getElementById('hero-image');
+    const lightboxModal = document.getElementById('lightbox-modal');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    
+    function updateThumbnailSelection(index) {
+      document.querySelectorAll('.thumbnail-btn').forEach((btn, i) => {
+        btn.classList.toggle('ring-2', i === index);
+        btn.classList.toggle('ring-offset-2', i === index);
+        btn.classList.toggle('ring-accent', i === index);
+      });
+    }
+    
+    function showHeroImage(index) {
+      if (index >= 0 && index < tourImages.length && heroImage) {
+        currentImageIndex = index;
+        heroImage.style.opacity = '0';
+        setTimeout(() => {
+          heroImage.src = tourImages[index];
+          heroImage.style.opacity = '1';
+        }, 150);
+        updateThumbnailSelection(index);
+      }
+    }
+    
+    function updateLightbox(index) {
+      if (index >= 0 && index < tourImages.length) {
+        lightboxIndex = index;
+        if (lightboxImage) lightboxImage.src = tourImages[index];
+        if (lightboxCounter) lightboxCounter.textContent = `${index + 1} / ${tourImages.length}`;
+        
+        document.querySelectorAll('.lightbox-thumb').forEach((thumb, i) => {
+          thumb.classList.toggle('ring-2', i === index);
+          thumb.classList.toggle('ring-white', i === index);
+          thumb.classList.toggle('scale-110', i === index);
+          thumb.classList.toggle('opacity-60', i !== index);
+        });
+      }
+    }
+    
+    // Hero navigation
+    document.getElementById('prev-image')?.addEventListener('click', () => {
+      const newIndex = currentImageIndex === 0 ? tourImages.length - 1 : currentImageIndex - 1;
+      showHeroImage(newIndex);
+    });
+    
+    document.getElementById('next-image')?.addEventListener('click', () => {
+      const newIndex = currentImageIndex === tourImages.length - 1 ? 0 : currentImageIndex + 1;
+      showHeroImage(newIndex);
+    });
+    
+    // Thumbnail clicks
+    document.querySelectorAll('.thumbnail-btn').forEach((btn, index) => {
+      btn.addEventListener('click', () => showHeroImage(index));
+    });
+    
+    // Lightbox
+    const openLightbox = () => {
+      if (lightboxModal) {
+        lightboxModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        updateLightbox(currentImageIndex);
+      }
+    };
+    
+    const closeLightbox = () => {
+      lightboxModal?.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    };
+    
+    document.getElementById('open-lightbox')?.addEventListener('click', openLightbox);
+    document.getElementById('show-all-images')?.addEventListener('click', openLightbox);
+    document.getElementById('close-lightbox')?.addEventListener('click', closeLightbox);
+    
+    document.getElementById('lightbox-prev')?.addEventListener('click', () => {
+      const newIndex = lightboxIndex === 0 ? tourImages.length - 1 : lightboxIndex - 1;
+      updateLightbox(newIndex);
+    });
+    
+    document.getElementById('lightbox-next')?.addEventListener('click', () => {
+      const newIndex = lightboxIndex === tourImages.length - 1 ? 0 : lightboxIndex + 1;
+      updateLightbox(newIndex);
+    });
+    
+    document.querySelectorAll('.lightbox-thumb').forEach((thumb, index) => {
+      thumb.addEventListener('click', () => updateLightbox(index));
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightboxModal?.classList.contains('hidden')) {
+        if (e.key === 'ArrowLeft') document.getElementById('lightbox-prev')?.click();
+        else if (e.key === 'ArrowRight') document.getElementById('lightbox-next')?.click();
+        else if (e.key === 'Escape') closeLightbox();
+      }
+    });
+    
+    lightboxModal?.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) closeLightbox();
+    });
+    
+    // Inquiry button
+    document.getElementById('inquiry-btn')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('open-inquiry-form'));
     });
   </script>
 </BaseLayout>

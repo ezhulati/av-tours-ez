@@ -170,3 +170,87 @@ export async function getTotalTourCount(): Promise<number> {
   if (error) throw error
   return count || 0
 }
+
+export async function getSimilarTours(currentTour: TourDetailDTO, limit: number = 4): Promise<TourCardDTO[]> {
+  // Build similarity query based on multiple factors
+  let query = supabaseServer
+    .from(TABLES.tours)
+    .select('*')
+    .eq('is_active', true)
+    .neq('id', currentTour.id) // Exclude current tour
+
+  // Strategy 1: Find tours in same countries
+  if (currentTour.countries.length > 0) {
+    // For each country, find tours that include it
+    const countryFilters = currentTour.countries.map(country => 
+      `locations.cs.["${country}"]`
+    ).join(',')
+    
+    const { data: sameCountryTours, error: countryError } = await query
+      .or(countryFilters)
+      .limit(limit)
+    
+    if (!countryError && sameCountryTours && sameCountryTours.length >= limit) {
+      return sameCountryTours.map(mapToTourCard)
+    }
+  }
+
+  // Strategy 2: Find tours with same activity type
+  const { data: tours, error } = await supabaseServer
+    .from(TABLES.tours)
+    .select('*')
+    .eq('is_active', true)
+    .neq('id', currentTour.id)
+    .limit(20) // Get more to filter from
+
+  if (error) return []
+
+  const allTours = (tours || []).map(mapToTourCard)
+  const similarTours: TourCardDTO[] = []
+
+  // Score tours by similarity
+  for (const tour of allTours) {
+    let score = 0
+
+    // Same countries (high priority)
+    const sharedCountries = currentTour.countries.filter(country => 
+      tour.countries.includes(country)
+    ).length
+    score += sharedCountries * 3
+
+    // Similar difficulty (medium priority)
+    if (tour.difficulty === currentTour.difficulty) {
+      score += 2
+    }
+
+    // Similar duration (medium priority)
+    if (tour.durationDays && currentTour.durationDays) {
+      const durationDiff = Math.abs(tour.durationDays - currentTour.durationDays)
+      if (durationDiff <= 1) score += 2
+      else if (durationDiff <= 3) score += 1
+    }
+
+    // Similar price range (low priority)
+    if (tour.priceMin && currentTour.priceMin) {
+      const priceDiff = Math.abs(tour.priceMin - currentTour.priceMin)
+      if (priceDiff <= 50) score += 1
+    }
+
+    // Same category slugs (medium priority)
+    const sharedCategories = currentTour.categorySlugs.filter(cat => 
+      tour.categorySlugs.includes(cat)
+    ).length
+    score += sharedCategories * 2
+
+    // Add tour with score
+    if (score > 0) {
+      similarTours.push({ ...tour, score })
+    }
+  }
+
+  // Sort by score and return top results
+  return similarTours
+    .sort((a, b) => (b as any).score - (a as any).score)
+    .slice(0, limit)
+    .map(({ score, ...tour }) => tour) // Remove score from final result
+}

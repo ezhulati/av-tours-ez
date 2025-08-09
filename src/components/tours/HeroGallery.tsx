@@ -1,25 +1,117 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 
 interface HeroGalleryProps {
   images: string[]
   title: string
 }
 
+// Generate srcset for responsive images
+const generateSrcSet = (url: string): string => {
+  // If it's already a full URL, use it directly
+  if (url.startsWith('http')) {
+    return `${url} 1x, ${url} 2x`
+  }
+  // For local images, just return the original
+  return url
+}
+
+// Lazy load observer
+const useLazyLoad = () => {
+  const [isIntersecting, setIsIntersecting] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsIntersecting(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    )
+
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return { ref, isIntersecting }
+}
+
 export default function HeroGallery({ images, title }: HeroGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set([0])) // Preload first image
+  const touchStartX = useRef<number | null>(null)
+  const touchEndX = useRef<number | null>(null)
   
   // Ensure we have at least one image
   const allImages = images.length > 0 ? images : ['/placeholder.jpg']
   const currentImage = allImages[selectedIndex]
   
-  const handlePrevious = () => {
-    setSelectedIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1))
-  }
+  const handlePrevious = useCallback(() => {
+    setSelectedIndex((prev) => {
+      const newIndex = prev === 0 ? allImages.length - 1 : prev - 1
+      // Preload adjacent images
+      setImagesLoaded(loaded => new Set([...loaded, newIndex]))
+      return newIndex
+    })
+  }, [allImages.length])
   
-  const handleNext = () => {
-    setSelectedIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1))
+  const handleNext = useCallback(() => {
+    setSelectedIndex((prev) => {
+      const newIndex = prev === allImages.length - 1 ? 0 : prev + 1
+      // Preload adjacent images
+      setImagesLoaded(loaded => new Set([...loaded, newIndex]))
+      return newIndex
+    })
+  }, [allImages.length])
+
+  // Touch swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
   }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return
+    
+    const distance = touchStartX.current - touchEndX.current
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe && allImages.length > 1) {
+      handleNext()
+    }
+    if (isRightSwipe && allImages.length > 1) {
+      handlePrevious()
+    }
+  }
+
+  // Preload adjacent images
+  useEffect(() => {
+    const preloadIndices = [
+      selectedIndex - 1 < 0 ? allImages.length - 1 : selectedIndex - 1,
+      selectedIndex,
+      selectedIndex + 1 >= allImages.length ? 0 : selectedIndex + 1
+    ]
+    
+    preloadIndices.forEach(index => {
+      if (!imagesLoaded.has(index)) {
+        const img = new Image()
+        img.src = allImages[index]
+        img.onload = () => {
+          setImagesLoaded(loaded => new Set([...loaded, index]))
+        }
+      }
+    })
+  }, [selectedIndex, allImages, imagesLoaded])
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -33,19 +125,34 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
 
   return (
     <>
-      {/* Hero Gallery Container - Full Width with overflow control */}
-      <div className="relative w-screen -ml-[50vw] left-1/2 mb-8 prevent-overflow">
-        {/* Main Display - Full width with height control */}
-        <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] max-h-[800px]">
-          {/* Main Image */}
+      {/* Hero Gallery Container */}
+      <div className="relative w-full mb-0">
+        {/* Main Display */}
+        <div 
+          className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] max-h-[800px] overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Main Image with loading state */}
+          {!imagesLoaded.has(selectedIndex) && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+              <svg className="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          )}
           <img
             src={currentImage}
+            srcSet={generateSrcSet(currentImage)}
             alt={`${title} - Image ${selectedIndex + 1}`}
-            className="w-full h-full object-cover"
-            fetchPriority="high"
+            className={`w-full h-full object-cover transition-opacity duration-300 ${imagesLoaded.has(selectedIndex) ? 'opacity-100' : 'opacity-0'}`}
+            fetchPriority={selectedIndex === 0 ? "high" : "low"}
+            loading={selectedIndex === 0 ? "eager" : "lazy"}
           />
           
-          {/* Gradient Overlay for better text visibility */}
+          {/* Gradient Overlay - Exact same size as image */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           
           {/* Navigation Arrows - Enhanced for mobile touch */}
@@ -53,7 +160,7 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
             <>
               <button
                 onClick={handlePrevious}
-                className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-xl group z-10 touch-manipulation"
+                className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-xl group z-10 touch-manipulation"
                 aria-label="Previous image"
               >
                 <svg 
@@ -68,7 +175,7 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
               
               <button
                 onClick={handleNext}
-                className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-xl group z-10 touch-manipulation"
+                className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-white/95 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-xl group z-10 touch-manipulation"
                 aria-label="Next image"
               >
                 <svg 
@@ -83,10 +190,10 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
             </>
           )}
           
-          {/* View All Photos Button - Enhanced for mobile */}
+          {/* View All Photos Button */}
           <button
             onClick={openModal}
-            className="absolute top-4 right-4 min-h-[44px] bg-white/95 backdrop-blur-sm text-gray-900 px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold text-sm hover:bg-white hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center gap-2 whitespace-nowrap z-30 touch-manipulation"
+            className="absolute top-4 right-4 min-h-[48px] bg-white/95 backdrop-blur-sm text-gray-900 px-4 py-3 md:px-4 md:py-2 rounded-lg font-semibold text-sm hover:bg-white hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center gap-2 whitespace-nowrap z-30 touch-manipulation"
             aria-label={`View all ${allImages.length} photos`}
           >
             <svg 
@@ -101,20 +208,6 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
             <span className="font-bold">{allImages.length}</span>
           </button>
           
-          {/* Mobile: Additional floating "View All Photos" button */}
-          {allImages.length > 1 && (
-            <button
-              onClick={openModal}
-              className="md:hidden absolute bottom-4 right-4 bg-accent text-white px-4 py-2 rounded-full font-semibold text-sm shadow-xl flex items-center gap-2 whitespace-nowrap z-30 animate-pulse"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-              View All Photos
-            </button>
-          )}
-          
           {/* Image Counter - Less intrusive on mobile */}
           {allImages.length > 1 && (
             <div className="absolute top-4 left-4 bg-gray-900/60 backdrop-blur-sm text-white px-2 py-1 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-semibold z-20 shadow-lg">
@@ -125,36 +218,44 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
         
         {/* Thumbnail Strip - Only show if more than 1 image */}
         {allImages.length > 1 && (
-          <div className="bg-white border-t border-gray-200 shadow-lg">
-            <div className="pt-8 pb-6">
-              <div className="container mx-auto px-4">
-                <div className="overflow-x-auto scrollbar-hide">
-                  <div className="flex gap-3 justify-center">
-                    {allImages.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedIndex(index)}
-                        className={`flex-shrink-0 relative rounded-xl overflow-hidden transition-all duration-300 group ${
-                          index === selectedIndex 
-                            ? 'ring-3 ring-accent ring-offset-2 scale-105 shadow-lg' 
-                            : 'opacity-75 hover:opacity-100 hover:scale-102 hover:shadow-md'
-                        }`}
-                      >
-                        <img
-                          src={image}
-                          alt={`Thumbnail ${index + 1}`}
-                          className="w-24 h-16 object-cover group-hover:brightness-110 transition-all duration-300"
-                          loading="lazy"
-                        />
-                        {index === selectedIndex && (
-                          <div className="absolute inset-0 bg-accent/15 backdrop-blur-[1px]" />
-                        )}
-                        {index !== selectedIndex && (
-                          <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all duration-300" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
+          <div className="bg-white border-t border-gray-200">
+            <div className="py-4">
+              <div className="overflow-x-auto scrollbar-hide">
+                <div className="flex gap-2 px-4" style={{ justifyContent: 'flex-start' }}>
+                  {allImages.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSelectedIndex(index)
+                        // Preload the selected image
+                        setImagesLoaded(loaded => new Set([...loaded, index]))
+                      }}
+                      className={`flex-shrink-0 relative rounded-lg overflow-hidden transition-all duration-300 group touch-manipulation ${
+                        index === selectedIndex 
+                          ? 'scale-105 shadow-lg' 
+                          : 'opacity-75 hover:opacity-100 hover:scale-102 hover:shadow-md'
+                      }`}
+                      style={index === selectedIndex ? {
+                        outline: '3px solid #dc2626',
+                        outlineOffset: '2px',
+                        borderRadius: '8px'
+                      } : {}}
+                    >
+                      <img
+                        src={image}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-16 h-12 md:w-20 md:h-14 object-cover group-hover:brightness-110 transition-all duration-300"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      {index === selectedIndex && (
+                        <div className="absolute inset-0 bg-accent/15 backdrop-blur-[1px]" />
+                      )}
+                      {index !== selectedIndex && (
+                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all duration-300" />
+                      )}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -202,7 +303,7 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
             <>
               <button
                 onClick={handlePrevious}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all text-white"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all text-white touch-manipulation"
                 aria-label="Previous image"
               >
                 <svg 
@@ -217,7 +318,7 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
               
               <button
                 onClick={handleNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all text-white"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all text-white touch-manipulation"
                 aria-label="Next image"
               >
                 <svg 

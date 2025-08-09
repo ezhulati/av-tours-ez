@@ -65,10 +65,10 @@ export default function RedirectModal({
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900">
-                You're leaving AlbaniaVisit
+                Continue to Tour Operator
               </h3>
               <p className="text-sm text-gray-600 mt-1">
-                Redirecting to our trusted partner
+                You'll be redirected to book directly with the tour operator
               </p>
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function RedirectModal({
                 />
               </svg>
               <p>
-                <strong className="text-gray-700">Secure & Trusted:</strong> We only partner with verified tour operators
+                <strong className="text-gray-700">Secure & Trusted:</strong> We only feature verified tour operators
               </p>
             </div>
             
@@ -140,7 +140,7 @@ export default function RedirectModal({
                 />
               </svg>
               <p>
-                <strong className="text-gray-700">Best Price:</strong> Book directly with the operator for their best rates
+                <strong className="text-gray-700">Direct Booking:</strong> You'll book directly with the operator at their best available rates
               </p>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function RedirectModal({
           </div>
           
           <p className="text-xs text-center text-gray-500 mt-3">
-            AlbaniaVisit partners with trusted operators to bring you the best tours
+            AlbaniaVisit helps you find and connect with trusted tour operators
           </p>
         </div>
       </div>

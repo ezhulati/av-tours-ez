@@ -80,7 +80,14 @@ export default function FilterBar({
     [onFiltersChange]
   )
 
+  // Skip initial fetch on mount since tours are server-rendered
+  const [isInitialMount, setIsInitialMount] = useState(true)
+  
   useEffect(() => {
+    if (isInitialMount) {
+      setIsInitialMount(false)
+      return
+    }
     fetchTours(filters, pagination)
   }, [filters, pagination])
 
@@ -99,10 +106,10 @@ export default function FilterBar({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-8">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
       {/* Mobile Toggle - Enhanced */}
       <button
-        className="md:hidden w-full flex items-center justify-between min-h-[48px] p-2 text-left rounded-lg hover:bg-gray-50 transition-colors touch-manipulation"
+        className="md:hidden w-full flex items-center justify-between min-h-[56px] pl-4 pr-6 py-3 text-left rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors touch-manipulation"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls="filter-content"
@@ -118,13 +125,13 @@ export default function FilterBar({
           </svg>
           <span className="font-semibold text-gray-900">Filter Tours</span>
           {Object.keys(filters).length > 0 && (
-            <span className="bg-accent text-white text-xs px-2 py-1 rounded-full">
-              {Object.keys(filters).length}
+            <span className="bg-accent text-white text-xs font-bold px-2.5 py-1 rounded-full ml-2">
+              {Object.keys(filters).length} active
             </span>
           )}
         </div>
         <svg 
-          className={`w-5 h-5 text-gray-400 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+          className={`w-5 h-5 text-gray-400 transform transition-transform duration-200 mr-2 ${isOpen ? 'rotate-180' : ''}`} 
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
@@ -136,15 +143,15 @@ export default function FilterBar({
       {/* Filter Controls */}
       <div 
         id="filter-content"
-        className={`${isOpen ? 'block animate-slide-down' : 'hidden'} md:block space-y-4 md:space-y-0 md:flex md:items-center md:gap-4 pt-4 md:pt-0`}
+        className={`${isOpen ? 'block animate-slide-down mt-6' : 'hidden'} md:block md:mt-6 space-y-4 md:space-y-0 md:flex md:items-center md:gap-4 md:flex-wrap`}
       >
         {/* Difficulty */}
-        <div className="space-y-2 md:space-y-0">
-          <label className="block md:hidden text-sm font-medium text-gray-700">Difficulty Level</label>
+        <div className="flex-1 md:flex-initial">
+          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Difficulty Level</label>
           <select
             value={filters.difficulty || ''}
             onChange={(e) => handleFilterChange('difficulty', e.target.value || undefined)}
-            className="w-full md:w-auto min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+            className="w-full md:w-auto min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all cursor-pointer"
             aria-label="Filter by difficulty level"
           >
             <option value="">All Difficulties</option>
@@ -156,82 +163,102 @@ export default function FilterBar({
         </div>
 
         {/* Duration */}
-        <div className="space-y-2 md:space-y-0">
-          <label className="block md:hidden text-sm font-medium text-gray-700">Duration (Days)</label>
+        <div className="flex-1 md:flex-initial">
+          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Duration (Days)</label>
           <div className="flex gap-2 items-center">
             <input
               type="number"
               min="1"
               max="30"
-              placeholder="Min days"
+              placeholder="Min"
               value={filters.durationMin || ''}
               onChange={(e) => handleFilterChange('durationMin', e.target.value ? Number(e.target.value) : undefined)}
-              className="w-20 md:w-24 min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+              className="w-full md:w-20 min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
               aria-label="Minimum duration in days"
             />
-            <span className="text-gray-400 font-medium">to</span>
+            <span className="text-gray-400 font-medium px-1">–</span>
             <input
               type="number"
               min="1"
               max="30"
-              placeholder="Max days"
+              placeholder="Max"
               value={filters.durationMax || ''}
               onChange={(e) => handleFilterChange('durationMax', e.target.value ? Number(e.target.value) : undefined)}
-              className="w-20 md:w-24 min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+              className="w-full md:w-20 min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
               aria-label="Maximum duration in days"
             />
+            <span className="hidden md:inline text-sm text-gray-600 ml-1">days</span>
           </div>
         </div>
 
         {/* Price Range */}
-        <div className="flex gap-2 items-center">
-          <input
-            type="number"
-            min="0"
-            step="50"
-            placeholder="Min €"
-            value={filters.priceMin || ''}
-            onChange={(e) => handleFilterChange('priceMin', e.target.value ? Number(e.target.value) : undefined)}
-            className="w-24 px-3 py-2 border rounded-lg"
-          />
-          <span>-</span>
-          <input
-            type="number"
-            min="0"
-            step="50"
-            placeholder="Max €"
-            value={filters.priceMax || ''}
-            onChange={(e) => handleFilterChange('priceMax', e.target.value ? Number(e.target.value) : undefined)}
-            className="w-24 px-3 py-2 border rounded-lg"
-          />
+        <div className="flex-1 md:flex-initial">
+          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Price Range</label>
+          <div className="flex gap-2 items-center">
+            <input
+              type="number"
+              min="0"
+              step="50"
+              placeholder="Min €"
+              value={filters.priceMin || ''}
+              onChange={(e) => handleFilterChange('priceMin', e.target.value ? Number(e.target.value) : undefined)}
+              className="w-full md:w-24 min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
+              aria-label="Minimum price"
+            />
+            <span className="text-gray-400 font-medium px-1">–</span>
+            <input
+              type="number"
+              min="0"
+              step="50"
+              placeholder="Max €"
+              value={filters.priceMax || ''}
+              onChange={(e) => handleFilterChange('priceMax', e.target.value ? Number(e.target.value) : undefined)}
+              className="w-full md:w-24 min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
+              aria-label="Maximum price"
+            />
+          </div>
         </div>
 
         {/* Sort */}
-        <select
-          value={pagination.sort || 'newest'}
-          onChange={(e) => handleSortChange(e.target.value as any)}
-          className="w-full md:w-auto px-3 py-2 border rounded-lg"
-        >
-          <option value="newest">Newest</option>
-          <option value="popular">Most Popular</option>
-          <option value="price">Price: Low to High</option>
-          <option value="duration">Duration: Short to Long</option>
-        </select>
+        <div className="flex-1 md:flex-initial">
+          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Sort By</label>
+          <select
+            value={pagination.sort || 'newest'}
+            onChange={(e) => handleSortChange(e.target.value as any)}
+            className="w-full md:w-auto min-h-[48px] px-4 py-2.5 pr-10 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all cursor-pointer"
+            aria-label="Sort tours"
+          >
+            <option value="newest">Newest First</option>
+            <option value="popular">Most Popular</option>
+            <option value="price">Price: Low to High</option>
+            <option value="duration">Duration: Short to Long</option>
+          </select>
+        </div>
 
-        {/* Clear Button */}
-        <button
-          onClick={clearFilters}
-          className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
-        >
-          Clear All
-        </button>
+        {/* Action Buttons */}
+        <div className="flex gap-2 md:ml-auto">
+          {Object.keys(filters).length > 0 && (
+            <button
+              onClick={clearFilters}
+              className="min-h-[48px] px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all flex items-center gap-2"
+              aria-label="Clear all filters"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Clear Filters
+            </button>
+          )}
+        </div>
 
+        {/* Loading Indicator */}
         {loading && (
-          <div className="flex items-center">
+          <div className="flex items-center justify-center md:ml-4">
             <svg className="animate-spin h-5 w-5 text-accent" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
+            <span className="ml-2 text-sm text-gray-600">Updating...</span>
           </div>
         )}
       </div>

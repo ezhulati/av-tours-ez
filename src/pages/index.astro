@@ -10,40 +10,57 @@ const organizationSchema = generateOrganizationSchema()
 ---
 
 <BaseLayout 
-  title="AlbaniaVisit - Real Mountain Tours | Authentic Balkan Adventures"
+  title="AlbaniaVisit - Discover the Unexpected | Authentic Balkan Adventures"
   jsonLd={organizationSchema}
 >
   <!-- Hero Section with Brand Design -->
-  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-    <!-- Background with gradient and texture -->
+  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <!-- Background with subtle overlay -->
     <div class="absolute inset-0">
-      <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 opacity-90"></div>
-      <div class="absolute inset-0 bg-gradient-to-tr from-gray-800/30 via-transparent to-gray-700/20 opacity-40"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
     </div>
     
     <!-- Animated mountain icon -->
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce-slow">
+    <div class="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce-slow">
       <svg class="w-12 h-12 text-white opacity-50" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14 6l-4.22 5.63 1.25 1.67L14 9.33 19 16h-8.46l-4.01-5.37L1 18h22L14 6zM5 16l1.52-2.03L8.04 16H5z"/>
       </svg>
     </div>
 
-    <div class="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
-      <!-- Brand Name with Highlight -->
-      <h1 class="responsive-hero-text font-bold mb-4 font-serif animate-fade-in">
-        <span class="text-white drop-shadow-2xl">Elevate</span><span class="text-accent drop-shadow-2xl">Your Experience</span>
-      </h1>
-      <p class="responsive-hero-subtitle mb-2 font-light">No tourist traps. Just raw terrain and local guides.</p>
-      <p class="text-body-large mb-8 opacity-90 max-w-2xl mx-auto">
-        {totalTourCount} authentic adventures without the tourist traps
-      </p>
+    <div class="relative z-10 text-center text-white px-4 max-w-7xl mx-auto">
+      <!-- Hero Typography Stack - 2025 Design -->
+      <div class="space-y-6 md:space-y-8">
+        <!-- Main Headline - Fluid Typography with Perfect Scaling -->
+        <h1 class="font-serif font-bold leading-[0.9] tracking-tight animate-fade-in">
+          <span class="block text-[clamp(3rem,8vw,7rem)] text-white drop-shadow-2xl">
+            Elevate Your
+          </span>
+          <span class="block text-[clamp(3.5rem,10vw,8rem)] text-accent drop-shadow-2xl mt-1 md:mt-0">
+            Experience
+          </span>
+        </h1>
+        
+        <!-- Subheadline - Balanced Visual Weight -->
+        <p class="text-[clamp(0.875rem,2.2vw,1.75rem)] font-light leading-tight max-w-4xl mx-auto text-gray-100 whitespace-nowrap">
+          No tourist traps. Just raw terrain and local guides.
+        </p>
+        
+        <!-- Supporting Text - Subtle but Clear -->
+        <p class="text-[clamp(0.875rem,2vw,1.125rem)] opacity-80 max-w-2xl mx-auto">
+          <span class="font-medium">{totalTourCount}</span> authentic adventures across the untamed Balkans
+        </p>
+      </div>
       
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
-        <a href="/tours" class="bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all transform hover:scale-105 shadow-xl whitespace-nowrap">
-          Explore All Tours
+      <!-- Modern CTA Design - 2025 Style -->
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mt-10 md:mt-12">
+        <a href="/tours" class="group relative inline-flex items-center justify-center bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-full font-medium text-[clamp(0.938rem,2vw,1.125rem)] transition-all transform hover:scale-105 shadow-2xl shadow-accent/20 hover:shadow-accent/30 min-h-[52px]">
+          <span>Explore All Tours</span>
+          <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
         </a>
-        <a href="#featured" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all backdrop-blur-sm whitespace-nowrap">
-          View Featured
+        <a href="#featured" class="relative inline-flex items-center justify-center bg-white/5 backdrop-blur-lg hover:bg-white/10 text-white px-8 py-4 rounded-full font-medium text-[clamp(0.938rem,2vw,1.125rem)] transition-all border border-white/20 hover:border-white/30 min-h-[52px]">
+          <span>View Featured</span>
         </a>
       </div>
 
@@ -119,15 +136,13 @@ const organizationSchema = generateOrganizationSchema()
                   </span>
                 )}
               </div>
-              {tour.priceMin && (
-                <span class="font-bold text-lg text-gray-900">
-                  From €{tour.priceMin}
-                </span>
-              )}
+              <span class="font-bold text-lg text-gray-900">
+                {tour.priceMin ? `From €${tour.priceMin}` : 'Price on request'}
+              </span>
             </div>
             <a 
               href={`/tours/${tour.slug}`}
-              class="block w-full bg-accent text-white text-center py-3 rounded-full hover:bg-accent-600 transition-all font-semibold transform hover:scale-105 whitespace-nowrap"
+              class="flex items-center justify-center w-full bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-all font-semibold transform hover:scale-105 whitespace-nowrap min-h-[48px]"
             >
               View Details
             </a>
@@ -137,7 +152,7 @@ const organizationSchema = generateOrganizationSchema()
     </div>
     
     <div class="text-center mt-12">
-      <a href="/tours" class="inline-block bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-all font-semibold text-lg whitespace-nowrap">
+      <a href="/tours" class="inline-flex items-center justify-center bg-gray-900 text-white p-4 rounded-full hover:bg-gray-800 transition-all font-semibold text-lg whitespace-nowrap min-h-[56px] min-w-[200px]">
         View All Tours →
       </a>
     </div>
@@ -205,8 +220,8 @@ const organizationSchema = generateOrganizationSchema()
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1609951277973-eae0ca26d71e?w=800" 
-              alt="Albania"
+              src="/Assets/Albania/Accursed_Mountains.jpeg" 
+              alt="Albania - Accursed Mountains"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
             />
@@ -226,8 +241,8 @@ const organizationSchema = generateOrganizationSchema()
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1568707126882-6d8c5b3c3f0c?w=800" 
-              alt="Kosovo"
+              src="/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg" 
+              alt="Kosovo - Gjeravica Peak"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
             />
@@ -247,7 +262,7 @@ const organizationSchema = generateOrganizationSchema()
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1608460627820-5e3862c0c3b3?w=800" 
+              src="/Assets/North Macedonia/North Macedonia_456949808.jpeg" 
               alt="North Macedonia"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
@@ -268,8 +283,8 @@ const organizationSchema = generateOrganizationSchema()
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1565951727117-67469f924e48?w=800" 
-              alt="Montenegro"
+              src="/Assets/Montenegro/Kotor Montenegro_123711552.jpeg" 
+              alt="Montenegro - Bay of Kotor"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
             />
@@ -298,7 +313,7 @@ const organizationSchema = generateOrganizationSchema()
       <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
         Join thousands of adventurers who have discovered the authentic beauty of the Balkans with AlbaniaVisit.
       </p>
-      <a href="/tours" class="bg-accent hover:bg-accent-600 text-white px-10 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-xl inline-block whitespace-nowrap">
+      <a href="/tours" class="inline-flex items-center justify-center bg-accent hover:bg-accent-600 text-white p-5 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-xl whitespace-nowrap min-h-[64px] min-w-[240px]">
         Start Your Journey
       </a>
     </div>

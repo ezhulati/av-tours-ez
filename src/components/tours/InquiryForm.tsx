@@ -178,18 +178,18 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
 
             <div className="flex gap-3">
               <Button
-                type="submit"
-                disabled={loading}
-                className="flex-1"
-              >
-                {loading ? 'Sending...' : 'Send Inquiry'}
-              </Button>
-              <Button
                 type="button"
                 variant="outline"
                 onClick={() => setIsOpen(false)}
               >
                 Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="flex-1"
+              >
+                {loading ? 'Sending...' : 'Send Inquiry'}
               </Button>
             </div>
           </form>
