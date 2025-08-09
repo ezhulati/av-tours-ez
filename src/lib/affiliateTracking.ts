@@ -61,13 +61,14 @@ export function buildAffiliateUrl(
   let baseUrl = tour.affiliateUrl || ''
   
   if (!baseUrl && tour.operator) {
-    // Fallback URL construction if needed
-    baseUrl = `https://partner.example.com/tours/${tour.slug}`
+    // All tours should redirect to BNAdventure as per PRD
+    baseUrl = `https://www.bnadventure.com/tours/${tour.slug}`
   }
   
   if (!baseUrl) {
-    console.error('No affiliate URL available for tour:', tour.slug)
-    return '#'
+    // Final fallback - use BNAdventure as specified in PRD
+    console.warn('No affiliate URL available for tour, using BNAdventure fallback:', tour.slug)
+    baseUrl = `https://www.bnadventure.com/tours/${tour.slug}`
   }
   
   try {
@@ -153,4 +154,3 @@ export async function trackBookingClick(tour: Tour, context: string = 'tour-deta
     console.error('Failed to track click server-side:', error)
   }
 }
-

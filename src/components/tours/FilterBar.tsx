@@ -29,6 +29,7 @@ export default function FilterBar({
   const [pagination, setPagination] = useState<PaginationParams>(initialPagination)
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // Debounced fetch function
   const fetchTours = useCallback(
@@ -52,6 +53,11 @@ export default function FilterBar({
 
       try {
         const response = await fetch(`/api/tours?${params.toString()}`)
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        
         const data: PaginatedResponse<TourCardDTO> = await response.json()
         
         if (onFiltersChange) {
@@ -61,8 +67,12 @@ export default function FilterBar({
         // Update tours grid (you might want to emit an event or use a state management solution)
         const event = new CustomEvent('tours-updated', { detail: data })
         window.dispatchEvent(event)
+        
+        // Clear any previous errors
+        setError(null)
       } catch (error) {
         console.error('Failed to fetch tours:', error)
+        setError('Failed to load tours. Please try again.')
       } finally {
         setLoading(false)
       }
@@ -191,6 +201,13 @@ export default function FilterBar({
           </div>
         )}
       </div>
+      
+      {/* Error Display */}
+      {error && (
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+          {error}
+        </div>
+      )}
     </div>
   )
 }

@@ -19,23 +19,10 @@ export default function RedirectModal({
   
   useEffect(() => {
     if (isOpen) {
-      // Start countdown when modal opens
-      setCountdown(5)
-      const timer = setInterval(() => {
-        setCountdown(prev => {
-          if (prev === null || prev <= 1) {
-            clearInterval(timer)
-            // Auto-redirect when countdown reaches 0
-            onContinue()
-            return null
-          }
-          return prev - 1
-        })
-      }, 1000)
-      
-      return () => clearInterval(timer)
+      // Reset countdown when modal opens (no auto-redirect)
+      setCountdown(null)
     }
-  }, [isOpen, onContinue])
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -49,7 +36,7 @@ export default function RedirectModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -57,7 +44,7 @@ export default function RedirectModal({
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
         {/* Header with icon */}
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 pt-6 pb-4">
           <div className="flex items-start gap-4">
@@ -170,24 +157,22 @@ export default function RedirectModal({
             </button>
             <button
               onClick={onContinue}
-              className="btn-primary w-full sm:flex-1 flex items-center justify-center gap-1"
+              className="btn-primary w-full sm:flex-1 flex items-center justify-center gap-1 text-sm px-3"
             >
-              <span>{countdown ? `Auto-redirecting in ${countdown}s` : 'Continue Now'}</span>
-              {!countdown && (
-                <svg 
-                  className="w-4 h-4 flex-shrink-0" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth="2" 
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              )}
+              <span>Continue</span>
+              <svg 
+                className="w-4 h-4 flex-shrink-0" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2" 
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
             </button>
           </div>
           

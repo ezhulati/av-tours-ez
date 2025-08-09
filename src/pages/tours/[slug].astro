@@ -52,80 +52,97 @@ const breadcrumbSchema = generateBreadcrumbSchema([
       client:load 
     />
     
-    <!-- Floating Title Card - Positioned to not overlap thumbnail strip -->
-    <div class="absolute bottom-24 md:bottom-28 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent pointer-events-none z-10">
-      <div class="container mx-auto px-4 md:px-6 pb-6 md:pb-8 pointer-events-auto">
-        <div class="max-w-5xl">
-          <!-- Breadcrumbs -->
-          <nav class="mb-3 md:mb-4">
-            <ol class="flex items-center gap-2 text-xs md:text-sm text-white/70">
-              <li><a href="/" class="hover:text-white transition">Home</a></li>
-              <li>/</li>
-              <li><a href="/tours" class="hover:text-white transition">Tours</a></li>
-              <li>/</li>
-              <li class="text-white truncate">{tour.title}</li>
-            </ol>
-          </nav>
-          
-          <!-- Enhanced Title & Tagline -->
-          {hasEnhanced && enhancedTour ? (
-            <div class="mb-4 md:mb-6">
-              <div class="flex items-center gap-3 mb-2">
-                <span class="text-4xl">{enhancedTour.emoji}</span>
-                {enhancedTour.badges && (
-                  <div class="flex gap-2">
-                    {enhancedTour.badges.map(badge => (
-                      <span class="bg-accent/90 text-white px-2 py-1 rounded text-xs font-bold uppercase tracking-wide">
+    <!-- Mobile-Optimized Floating Title Card - Minimal overlay for better image visibility -->
+    <div class="absolute bottom-24 md:bottom-28 left-0 right-0 pointer-events-none z-10">
+      <!-- Mobile: Minimal gradient, Desktop: Full gradient -->
+      <div class="bg-gradient-to-t from-black/80 via-black/40 to-transparent md:from-black/95 md:via-black/70 md:to-transparent">
+        <div class="container mx-auto px-4 md:px-6 pb-3 md:pb-8 pointer-events-auto">
+          <div class="max-w-5xl">
+            <!-- Breadcrumbs - Hide on mobile for cleaner look -->
+            <nav class="hidden md:block mb-4">
+              <ol class="flex items-center gap-2 text-sm text-white/70">
+                <li><a href="/" class="hover:text-white transition">Home</a></li>
+                <li>/</li>
+                <li><a href="/tours" class="hover:text-white transition">Tours</a></li>
+                <li>/</li>
+                <li class="text-white truncate">{tour.title}</li>
+              </ol>
+            </nav>
+            
+            <!-- Enhanced Title & Tagline - Mobile optimized -->
+            {hasEnhanced && enhancedTour ? (
+              <div class="mb-2 md:mb-6">
+                <!-- Mobile: Compact badges only, Desktop: Full emoji + badges -->
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <div class="flex items-center gap-2 md:gap-3">
+                    <span class="hidden md:block text-4xl">{enhancedTour.emoji}</span>
+                    {enhancedTour.badges && enhancedTour.badges.slice(0, 1).map(badge => (
+                      <span class="bg-accent/90 text-white px-2 py-1 rounded text-xs font-bold uppercase tracking-wide whitespace-nowrap">
                         {badge}
                       </span>
                     ))}
                   </div>
+                  <!-- Mobile: Show "View All Photos" prominently -->
+                  <button 
+                    onclick="document.querySelector('[onclick*=openModal]')?.click()"
+                    class="md:hidden bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap"
+                  >
+                    📸 {tour.images?.length || '+'} Photos
+                  </button>
+                </div>
+                <h1 class="text-xl md:text-4xl lg:text-5xl font-bold text-white mb-1 md:mb-3 leading-tight">
+                  {enhancedTour.enhancedTitle}
+                </h1>
+                <p class="text-sm md:text-2xl text-white/90 font-medium mb-2 md:mb-4 line-clamp-2">
+                  {enhancedTour.tagline}
+                </p>
+                {enhancedTour.pricing && (
+                  <div class="hidden md:inline-flex items-center gap-3 bg-accent/20 backdrop-blur-md text-white px-4 py-2 rounded-lg">
+                    <span class="text-2xl font-bold">{enhancedTour.pricing.amount}</span>
+                    {enhancedTour.pricing.note && (
+                      <span class="text-sm opacity-90">• {enhancedTour.pricing.note}</span>
+                    )}
+                  </div>
                 )}
               </div>
-              <h1 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 md:mb-3 leading-tight">
-                {enhancedTour.enhancedTitle}
-              </h1>
-              <p class="text-xl md:text-2xl text-white/90 font-medium mb-4">
-                {enhancedTour.tagline}
-              </p>
-              {enhancedTour.pricing && (
-                <div class="inline-flex items-center gap-3 bg-accent/20 backdrop-blur-md text-white px-4 py-2 rounded-lg">
-                  <span class="text-2xl font-bold">{enhancedTour.pricing.amount}</span>
-                  {enhancedTour.pricing.note && (
-                    <span class="text-sm opacity-90">• {enhancedTour.pricing.note}</span>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <h1 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 md:mb-4 leading-tight">
-              {tour.title}
-            </h1>
-          )}
+            ) : (
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <h1 class="text-xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                  {tour.title}
+                </h1>
+                <!-- Mobile: Show "View All Photos" prominently -->
+                <button 
+                  onclick="document.querySelector('[onclick*=openModal]')?.click()"
+                  class="md:hidden bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap"
+                >
+                  📸 {tour.images?.length || '+'} Photos
+                </button>
+              </div>
+            )}
           
-          <!-- Key Info Pills -->
-          <div class="flex flex-wrap gap-2 md:gap-3">
+          <!-- Key Info Pills - Compact on mobile -->
+          <div class="flex flex-wrap gap-1 md:gap-3">
             {tour.durationDisplay && (
-              <div class="inline-flex items-center gap-2 bg-white/25 backdrop-blur-md text-white px-3 md:px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-                <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="inline-flex items-center gap-1 md:gap-2 bg-white/25 backdrop-blur-md text-white px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-medium shadow-lg">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <span class="font-medium whitespace-nowrap">{tour.durationDisplay}</span>
               </div>
             )}
             {tour.difficulty && (
-              <div class="inline-flex items-center gap-2 bg-white/25 backdrop-blur-md text-white px-3 md:px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-                <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="inline-flex items-center gap-1 md:gap-2 bg-white/25 backdrop-blur-md text-white px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-medium shadow-lg">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
                 <span class="font-medium capitalize whitespace-nowrap">{tour.difficulty}</span>
               </div>
             )}
-            <div class="inline-flex items-center gap-2 bg-white/25 backdrop-blur-md text-white px-3 md:px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-              <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="inline-flex items-center gap-1 md:gap-2 bg-white/25 backdrop-blur-md text-white px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-medium shadow-lg">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
               </svg>
-              <span class="font-medium whitespace-nowrap">{tour.countries.join(', ')}</span>
+              <span class="font-medium whitespace-nowrap">{tour.countries.slice(0, 2).join(', ')}{tour.countries.length > 2 ? ` +${tour.countries.length - 2}` : ''}</span>
             </div>
           </div>
         </div>
@@ -137,11 +154,11 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   <div class="lg:hidden sticky top-16 z-40 bg-white border-b shadow-lg">
     <div class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
-        <div>
+        <div class="min-w-0 flex-1">
           {tour.priceMin && (
-            <div class="text-2xl font-bold">
+            <div class="text-xl sm:text-2xl font-bold">
               From €{tour.priceMin}
-              <span class="text-sm font-normal text-gray-500">/person</span>
+              <span class="text-sm font-normal text-gray-500 whitespace-nowrap">/person</span>
             </div>
           )}
         </div>
@@ -349,7 +366,9 @@ const breadcrumbSchema = generateBreadcrumbSchema([
                 context="tour-detail"
                 className="w-full text-lg py-4"
                 client:load
-              />
+              >
+                Check Availability
+              </BookingButton>
               
               <button 
                 id="inquiry-btn"
@@ -431,8 +450,11 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   />
 
   <script>
+    console.log('Tour detail page script loaded');
+    
     // Handle inquiry button
-    document.getElementById('inquiry-btn')?.addEventListener('click', () => {
+    document.getElementById('inquiry-btn')?.addEventListener('click', (e) => {
+      console.log('=== INQUIRY BUTTON CLICKED ===');
       const event = new CustomEvent('open-inquiry-form');
       window.dispatchEvent(event);
     });

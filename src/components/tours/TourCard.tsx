@@ -81,7 +81,7 @@ export default function TourCard({ tour, loading = false }: TourCardProps) {
             }
           }}
         >
-          Book Now
+          Check Availability
         </a>
       </div>
     </article>

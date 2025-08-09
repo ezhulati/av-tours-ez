@@ -88,7 +88,7 @@ export const enhancedTourCopy: Record<string, EnhancedTour> = {
       note: 'Featured in Financial Times'
     },
     dates: ['May 17-24 (wildflower season)', 'September 20-27 (perfect weather)', 'October 18-25 (autumn colors)'],
-    callToAction: 'Book Your Spot',
+    callToAction: 'Check Availability',
     uniqueFeatures: [
       'Featured in Financial Times',
       'WWII battle sites and 19th-century bridges',

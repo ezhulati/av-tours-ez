@@ -1,65 +1,69 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import { getTourCardPage } from '@/lib/queries'
-import { generateBreadcrumbSchema } from '@/lib/seo'
-import { getEnhancedTour } from '@/data/enhancedTours'
-import FilterBar from '@/components/tours/FilterBar'
 import BookingButton from '@/components/tours/BookingButton'
+import { getEnhancedTour } from '@/data/enhancedTours'
 
-// Get initial tours (SSG)
-const initialData = await getTourCardPage({}, { page: 1, limit: 12 })
-
-
-const breadcrumbs = generateBreadcrumbSchema([
-  { name: 'Home', url: 'https://tours.albaniavisit.com' },
-  { name: 'All Tours', url: 'https://tours.albaniavisit.com/tours' }
-])
+// Mock tour data for testing
+const mockTours = [
+  {
+    id: '1',
+    slug: 'e-biking-peaks-balkans',
+    title: 'E-Biking the Peaks of the Balkans',
+    shortDescription: 'Ready to tackle the legendary Peaks of the Balkans but want to save your legs for the views?',
+    primaryImageUrl: '/placeholder.jpg',
+    countries: ['Albania', 'Montenegro', 'Kosovo'],
+    durationDisplay: '7 days',
+    difficulty: 'moderate',
+    priceMin: 1200,
+    featured: true,
+    operator: {
+      id: 'mountain-guides',
+      name: 'Mountain Guides Albania'
+    },
+    affiliateUrl: 'https://www.bnadventure.com/tours/e-biking-peaks-balkans'
+  },
+  {
+    id: '2',
+    slug: '6-day-guided-peaks-balkans-2025',
+    title: '6-Day Guided Peaks of the Balkans 2025',
+    shortDescription: 'Not everyone has two weeks for the full trail – we get it.',
+    primaryImageUrl: '/placeholder.jpg',
+    countries: ['Albania', 'Montenegro'],
+    durationDisplay: '6 days',
+    difficulty: 'challenging',
+    priceMin: 765,
+    featured: false,
+    operator: {
+      id: 'balkan-adventures',
+      name: 'Balkan Adventures'
+    },
+    affiliateUrl: 'https://www.bnadventure.com/tours/6-day-guided-peaks-balkans-2025'
+  }
+]
 ---
 
 <BaseLayout 
-  title="Premium Mountain Tours in Albania & Balkans | AlbaniaVisit"
-  description="Discover authentic adventures in Albania, Kosovo, Montenegro & Macedonia. Expert local guides, best prices, instant booking."
-  jsonLd={breadcrumbs}
+  title="Test Tours Page - Booking Button Testing"
+  description="Testing page for booking button functionality"
 >
   <!-- Hero Section -->
   <section class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto text-center">
         <h1 class="text-5xl md:text-6xl font-bold mb-6">
-          Explore the <span class="text-accent">Untamed Balkans</span>
+          Test <span class="text-accent">Booking Buttons</span>
         </h1>
         <p class="text-xl text-gray-300 mb-8">
-          {initialData.pagination.total} handpicked adventures across Albania's peaks, Kosovo's valleys, and Montenegro's wild coastlines
+          Testing page to debug booking button functionality
         </p>
-        
-        <!-- Quick Stats -->
-        <div class="flex justify-center gap-8 text-center">
-          <div>
-            <div class="text-3xl font-bold text-accent">{initialData.pagination.total}</div>
-            <div class="text-sm text-gray-400">Active Tours</div>
-          </div>
-          <div>
-            <div class="text-3xl font-bold text-accent">4.9</div>
-            <div class="text-sm text-gray-400">Average Rating</div>
-          </div>
-          <div>
-            <div class="text-3xl font-bold text-accent">2000+</div>
-            <div class="text-sm text-gray-400">Happy Travelers</div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
 
   <div class="container mx-auto px-4 py-12">
-    <!-- Filter Bar -->
-    <div class="mb-12">
-      <FilterBar client:load />
-    </div>
-
     <!-- Tours Grid -->
-    <div id="tours-grid" class="tours-grid grid mb-12">
-      {initialData.items.map((tour) => {
+    <div class="tours-grid grid gap-8 mb-12">
+      {mockTours.map((tour) => {
         const enhancedTour = getEnhancedTour(tour.slug);
         return (
           <article class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -71,9 +75,6 @@ const breadcrumbs = generateBreadcrumbSchema([
                 loading="lazy"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              
-              {/* Overlay Gradient */}
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               {/* Enhanced Badges */}
               {enhancedTour && enhancedTour.badges ? (
@@ -88,16 +89,6 @@ const breadcrumbs = generateBreadcrumbSchema([
                   Featured
                 </div>
               )}
-              
-              {/* Quick View Button */}
-              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <a 
-                  href={`/tours/${tour.slug}`}
-                  class="bg-white text-gray-900 px-6 py-3 rounded-full font-semibold transform -translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl"
-                >
-                  Quick View
-                </a>
-              </div>
             </div>
             
             {/* Content */}
@@ -164,7 +155,7 @@ const breadcrumbs = generateBreadcrumbSchema([
                 )}
               </div>
               
-              {/* Price & CTA */}
+              {/* Price & Booking Button */}
               <div class="flex items-center justify-between pt-4 border-t">
                 {tour.priceMin && (
                   <div>
@@ -172,66 +163,29 @@ const breadcrumbs = generateBreadcrumbSchema([
                     <span class="text-sm text-gray-500 ml-1">per person</span>
                   </div>
                 )}
-                <a 
-                  href={`/tours/${tour.slug}`}
-                  class="text-accent font-semibold hover:underline"
-                >
-                  View Details →
-                </a>
+                
+                {/* Test Booking Button */}
+                <BookingButton 
+                  tour={tour}
+                  context="tour-card"
+                  variant="compact"
+                  client:load
+                />
+              </div>
+              
+              {/* Full Size Booking Button */}
+              <div class="mt-4">
+                <BookingButton 
+                  tour={tour}
+                  context="tour-detail"
+                  className="w-full"
+                  client:load
+                />
               </div>
             </div>
           </article>
         );
       })}
     </div>
-
-    <!-- Pagination -->
-    {initialData.pagination.totalPages > 1 && (
-      <div class="flex justify-center items-center gap-2">
-        <button 
-          class="px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition disabled:opacity-50"
-          disabled
-        >
-          Previous
-        </button>
-        
-        <div class="flex gap-1">
-          {Array.from({ length: Math.min(5, initialData.pagination.totalPages) }, (_, i) => i + 1).map(page => (
-            <button 
-              data-page={page}
-              class={`w-10 h-10 rounded-lg font-semibold transition ${
-                page === 1 
-                  ? 'bg-accent text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-        
-        <button 
-          class="px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
-        >
-          Next
-        </button>
-      </div>
-    )}
   </div>
-
-  <!-- Bottom CTA -->
-  <section class="bg-gray-50 py-16">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-4">Can't Find What You're Looking For?</h2>
-      <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
-        Our team of local experts can help you plan the perfect custom adventure tailored to your interests and budget.
-      </p>
-      <button 
-        class="btn-primary btn-lg transform hover:scale-105"
-        onclick="window.dispatchEvent(new CustomEvent('open-inquiry-form'))"
-      >
-        Get Custom Recommendations
-      </button>
-    </div>
-  </section>
 </BaseLayout>
