@@ -85,6 +85,9 @@ jobs:
       
       - name: Build application
         run: pnpm build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Run E2E tests - ${{ matrix.browser }}
         run: pnpm test:e2e -- --project=${{ matrix.browser }}
@@ -127,6 +130,9 @@ jobs:
       
       - name: Build application
         run: pnpm build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Run mobile tests
         run: pnpm exec playwright test tests/e2e/mobile.spec.ts
@@ -167,6 +173,9 @@ jobs:
       
       - name: Build application
         run: pnpm build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Run accessibility tests
         run: pnpm exec playwright test tests/accessibility/
@@ -218,6 +227,8 @@ jobs:
         run: pnpm build
         env:
           NODE_ENV: production
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Run performance tests
         run: pnpm exec playwright test tests/performance/
@@ -268,6 +279,9 @@ jobs:
       
       - name: Build application
         run: pnpm build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Run SEO tests
         run: pnpm exec playwright test tests/seo/
