@@ -7,6 +7,8 @@ import netlify from '@astrojs/netlify'
 export default defineConfig({
   site: 'https://tours.albaniavisit.com',
   output: 'server',
-  adapter: netlify(),
+  adapter: netlify({
+    edgeMiddleware: false
+  }),
   integrations: [react(), tailwind(), sitemap()]
 })

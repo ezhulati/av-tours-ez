@@ -49,7 +49,7 @@ export function mapToTourCard(row: any): TourCardDTO {
     durationDays,
     durationDisplay,
     difficulty: mapDifficulty(row.difficulty_level),
-    primaryImageUrl: row.primary_image || '/placeholder.jpg',
+    primaryImageUrl: getImageUrl(row.primary_image),
     countries: parseLocations(row.locations),
     categorySlugs: [row.activity_type?.toLowerCase().replace(/\s+/g, '-')].filter(Boolean),
     featured: row.is_featured || false
@@ -61,7 +61,7 @@ export function mapToTourDetail(row: any, images: any[], operator: any): TourDet
   
   // Parse image gallery
   const galleryImages = parseJsonArray(row.image_gallery).map((url: string) => ({
-    url,
+    url: getImageUrl(url),
     alt: row.title,
     width: undefined,
     height: undefined
@@ -69,7 +69,7 @@ export function mapToTourDetail(row: any, images: any[], operator: any): TourDet
 
   // Combine primary image with gallery
   const allImages = row.primary_image ? 
-    [{ url: row.primary_image, alt: row.title }].concat(galleryImages) : 
+    [{ url: getImageUrl(row.primary_image), alt: row.title }].concat(galleryImages) : 
     galleryImages
 
   return {
@@ -92,6 +92,8 @@ export function mapToTourDetail(row: any, images: any[], operator: any): TourDet
 function getImageUrl(path: string | null): string {
   if (!path) return '/placeholder.jpg'
   if (path.startsWith('http')) return path
+  if (path.startsWith('/')) return path
+  // For Supabase storage paths
   return `https://mioqyazjthmrmgsbsvfg.supabase.co/storage/v1/object/public/tour-images/${path}`
 }
 

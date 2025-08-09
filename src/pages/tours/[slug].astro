@@ -2,7 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getAllSlugs, getTourDetail } from '@/lib/queries'
 import { generateTouristTripSchema, generateBreadcrumbSchema, generateMetaTags } from '@/lib/seo'
-import TourGallery from '@/components/tours/TourGallery'
+import { getEnhancedTour, hasEnhancedCopy } from '@/data/enhancedTours'
+import HeroGallery from '@/components/tours/HeroGallery'
 import InquiryForm from '@/components/tours/InquiryForm'
 import BookingButton from '@/components/tours/BookingButton'
 
@@ -20,13 +21,17 @@ if (!tour) {
   return Astro.redirect('/404')
 }
 
+// Get enhanced copy if available
+const enhancedTour = getEnhancedTour(slug)
+const hasEnhanced = hasEnhancedCopy(slug)
+
 const url = `https://tours.albaniavisit.com/tours/${slug}`
 const metaTags = generateMetaTags(tour)
 const touristTripSchema = generateTouristTripSchema(tour, url)
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: 'Home', url: 'https://tours.albaniavisit.com' },
   { name: 'Tours', url: 'https://tours.albaniavisit.com/tours' },
-  { name: tour.title, url }
+  { name: enhancedTour?.enhancedTitle || tour.title, url }
 ])
 ---
 
@@ -38,199 +43,386 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   ogType="product"
   jsonLd={[touristTripSchema, breadcrumbSchema]}
 >
-  <div class="container mx-auto px-4 py-8">
-    <!-- Breadcrumbs -->
-    <nav class="mb-6">
-      <ol class="flex items-center space-x-2 text-sm">
-        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
-        <li class="text-gray-400">/</li>
-        <li><a href="/tours" class="text-gray-600 hover:text-gray-900">Tours</a></li>
-        <li class="text-gray-400">/</li>
-        <li class="text-gray-900">{tour.title}</li>
-      </ol>
-    </nav>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Main Content -->
-      <div class="lg:col-span-2">
-        <!-- Hero Image -->
-        <div class="aspect-[16/9] relative mb-8 rounded-lg overflow-hidden">
-          <img 
-            src={tour.primaryImageUrl} 
-            alt={tour.title}
-            class="w-full h-full object-cover"
-            fetchpriority="high"
-          />
-        </div>
-
-        <!-- Title and Quick Info -->
-        <h1 class="text-4xl font-bold mb-4">{tour.title}</h1>
-        
-        <div class="flex flex-wrap gap-4 mb-6">
-          {tour.durationDisplay && (
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              <span>{tour.durationDisplay}</span>
-            </div>
-          )}
-          {tour.difficulty && (
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
-              <span class="capitalize">{tour.difficulty}</span>
-            </div>
-          )}
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-            <span>{tour.countries.join(', ')}</span>
-          </div>
-        </div>
-
-        <!-- Description -->
-        <div class="prose prose-lg max-w-none mb-8">
-          <h2 class="text-2xl font-bold mb-4">Overview</h2>
-          <p class="text-gray-700 whitespace-pre-line">{tour.fullDescription || tour.shortDescription}</p>
-        </div>
-
-        <!-- Gallery (React Island) -->
-        {tour.images.length > 1 && (
-          <TourGallery images={tour.images} client:load />
-        )}
-
-        <!-- Inclusions/Exclusions -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {tour.inclusions.length > 0 && (
-            <div>
-              <h3 class="text-xl font-bold mb-4">What's Included</h3>
-              <ul class="space-y-2">
-                {tour.inclusions.map(item => (
-                  <li class="flex items-start gap-2">
-                    <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+  <!-- Premium Hero Section -->
+  <section class="relative">
+    <!-- Gallery -->
+    <HeroGallery 
+      images={tour.images.map(img => img.url)} 
+      title={tour.title}
+      client:load 
+    />
+    
+    <!-- Floating Title Card - Positioned to not overlap thumbnail strip -->
+    <div class="absolute bottom-24 md:bottom-28 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent pointer-events-none z-10">
+      <div class="container mx-auto px-4 md:px-6 pb-6 md:pb-8 pointer-events-auto">
+        <div class="max-w-5xl">
+          <!-- Breadcrumbs -->
+          <nav class="mb-3 md:mb-4">
+            <ol class="flex items-center gap-2 text-xs md:text-sm text-white/70">
+              <li><a href="/" class="hover:text-white transition">Home</a></li>
+              <li>/</li>
+              <li><a href="/tours" class="hover:text-white transition">Tours</a></li>
+              <li>/</li>
+              <li class="text-white truncate">{tour.title}</li>
+            </ol>
+          </nav>
           
-          {tour.exclusions.length > 0 && (
-            <div>
-              <h3 class="text-xl font-bold mb-4">What's Not Included</h3>
-              <ul class="space-y-2">
-                {tour.exclusions.map(item => (
-                  <li class="flex items-start gap-2">
-                    <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {tour.departureNotes && (
-          <div class="mb-8 p-4 bg-gray-100 rounded-lg">
-            <h3 class="text-lg font-bold mb-2">Departure Notes</h3>
-            <p class="text-gray-700">{tour.departureNotes}</p>
-          </div>
-        )}
-      </div>
-
-      <!-- Sidebar -->
-      <div class="lg:col-span-1">
-        <div class="sticky top-4 space-y-6">
-          <!-- Booking Card -->
-          <div class="bg-white rounded-lg shadow-lg p-6">
-            {tour.priceMin && (
-              <div class="mb-6">
-                <div class="text-3xl font-bold">
-                  From €{tour.priceMin}
-                  {tour.priceMax && tour.priceMax !== tour.priceMin && (
-                    <span class="text-lg text-gray-500"> - €{tour.priceMax}</span>
+          <!-- Enhanced Title & Tagline -->
+          {hasEnhanced && enhancedTour ? (
+            <div class="mb-4 md:mb-6">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-4xl">{enhancedTour.emoji}</span>
+                {enhancedTour.badges && (
+                  <div class="flex gap-2">
+                    {enhancedTour.badges.map(badge => (
+                      <span class="bg-accent/90 text-white px-2 py-1 rounded text-xs font-bold uppercase tracking-wide">
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <h1 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 md:mb-3 leading-tight">
+                {enhancedTour.enhancedTitle}
+              </h1>
+              <p class="text-xl md:text-2xl text-white/90 font-medium mb-4">
+                {enhancedTour.tagline}
+              </p>
+              {enhancedTour.pricing && (
+                <div class="inline-flex items-center gap-3 bg-accent/20 backdrop-blur-md text-white px-4 py-2 rounded-lg">
+                  <span class="text-2xl font-bold">{enhancedTour.pricing.amount}</span>
+                  {enhancedTour.pricing.note && (
+                    <span class="text-sm opacity-90">• {enhancedTour.pricing.note}</span>
                   )}
                 </div>
-                <div class="text-sm text-gray-600">per person</div>
+              )}
+            </div>
+          ) : (
+            <h1 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 md:mb-4 leading-tight">
+              {tour.title}
+            </h1>
+          )}
+          
+          <!-- Key Info Pills -->
+          <div class="flex flex-wrap gap-2 md:gap-3">
+            {tour.durationDisplay && (
+              <div class="inline-flex items-center gap-2 bg-white/25 backdrop-blur-md text-white px-3 md:px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="font-medium whitespace-nowrap">{tour.durationDisplay}</span>
+              </div>
+            )}
+            {tour.difficulty && (
+              <div class="inline-flex items-center gap-2 bg-white/25 backdrop-blur-md text-white px-3 md:px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span class="font-medium capitalize whitespace-nowrap">{tour.difficulty}</span>
+              </div>
+            )}
+            <div class="inline-flex items-center gap-2 bg-white/25 backdrop-blur-md text-white px-3 md:px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+              <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              </svg>
+              <span class="font-medium whitespace-nowrap">{tour.countries.join(', ')}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Booking Bar (Mobile) -->
+  <div class="lg:hidden sticky top-16 z-40 bg-white border-b shadow-lg">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex items-center justify-between">
+        <div>
+          {tour.priceMin && (
+            <div class="text-2xl font-bold">
+              From €{tour.priceMin}
+              <span class="text-sm font-normal text-gray-500">/person</span>
+            </div>
+          )}
+        </div>
+        <BookingButton
+          tour={tour}
+          context="tour-detail"
+          className="px-6"
+          client:load
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      
+      <!-- Left Content -->
+      <div class="lg:col-span-2 space-y-12">
+        
+        <!-- Enhanced Overview Section -->
+        <section>
+          <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
+            <span class="block w-1 h-8 bg-accent"></span>
+            Overview
+          </h2>
+          
+          {hasEnhanced && enhancedTour ? (
+            <div class="space-y-6">
+              <!-- Hero Description -->
+              <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                <p class="text-xl font-medium text-gray-900 mb-4">{enhancedTour.heroDescription}</p>
+              </div>
+              
+              <!-- Available Dates -->
+              {enhancedTour.dates && enhancedTour.dates.length > 0 && (
+                <div class="bg-accent/5 border-l-4 border-accent p-6 rounded-r-lg">
+                  <h3 class="font-bold text-gray-900 mb-3 text-lg">2025 Departures:</h3>
+                  <div class="grid gap-2">
+                    {enhancedTour.dates.map(date => (
+                      <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 bg-accent rounded-full"></span>
+                        <span class="font-medium">{date}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <!-- Experience Highlights -->
+              {enhancedTour.highlights && enhancedTour.highlights.length > 0 && (
+                <div>
+                  <h3 class="text-xl font-bold mb-4 text-gray-900">Experience Highlights</h3>
+                  <div class="grid gap-4">
+                    {enhancedTour.highlights.map(highlight => (
+                      <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span class="w-2 h-2 bg-accent rounded-full"></span>
+                        </div>
+                        <span class="text-gray-700 leading-relaxed">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <!-- Unique Features -->
+              {enhancedTour.uniqueFeatures && enhancedTour.uniqueFeatures.length > 0 && (
+                <div class="bg-gray-50 p-6 rounded-xl">
+                  <h3 class="text-lg font-bold mb-4 text-gray-900">What Makes This Special</h3>
+                  <div class="space-y-2">
+                    {enhancedTour.uniqueFeatures.map(feature => (
+                      <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+              <p>{tour.fullDescription || tour.shortDescription}</p>
+            </div>
+          )}
+        </section>
+
+        <!-- Experience Highlights -->
+        {(tour.inclusions.length > 0 || tour.exclusions.length > 0) && (
+          <section class="bg-gray-50 -mx-4 px-4 py-8 lg:rounded-2xl lg:mx-0 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+              <span class="block w-1 h-8 bg-accent"></span>
+              Experience Details
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+              {tour.inclusions.length > 0 && (
+                <div>
+                  <h3 class="text-lg font-bold mb-4 text-gray-900">What's Included</h3>
+                  <ul class="space-y-3">
+                    {tour.inclusions.map(item => (
+                      <li class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 bg-gray-900 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                          ✓
+                        </span>
+                        <span class="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {tour.exclusions.length > 0 && (
+                <div>
+                  <h3 class="text-lg font-bold mb-4 text-gray-900">Not Included</h3>
+                  <ul class="space-y-3">
+                    {tour.exclusions.map(item => (
+                      <li class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                          ×
+                        </span>
+                        <span class="text-gray-600">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        <!-- Departure Information -->
+        {tour.departureNotes && (
+          <section class="border-l-4 border-accent pl-6">
+            <h3 class="text-xl font-bold mb-3">Important Information</h3>
+            <p class="text-gray-700">{tour.departureNotes}</p>
+          </section>
+        )}
+
+        <!-- Trust Section -->
+        <section class="bg-gray-900 text-white -mx-4 px-4 py-12 lg:rounded-2xl lg:mx-0 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold mb-4">Why Book With AlbaniaVisit</h2>
+            <p class="text-gray-300 mb-8">
+              We partner with the most trusted local operators to bring you authentic experiences at the best prices.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                  </svg>
+                </div>
+                <h3 class="font-bold mb-2">Verified Operators</h3>
+                <p class="text-sm text-gray-400">All partners vetted for safety and quality</p>
+              </div>
+              <div>
+                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <h3 class="font-bold mb-2">Best Price Guarantee</h3>
+                <p class="text-sm text-gray-400">Direct operator rates with no hidden fees</p>
+              </div>
+              <div>
+                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  </svg>
+                </div>
+                <h3 class="font-bold mb-2">Local Expertise</h3>
+                <p class="text-sm text-gray-400">Authentic experiences with passionate guides</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Sidebar - Booking Card -->
+      <div class="lg:col-span-1">
+        <div class="sticky top-24">
+          <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Price Header -->
+            {tour.priceMin && (
+              <div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-6">
+                <div class="text-sm uppercase tracking-wide mb-2 opacity-80">Starting from</div>
+                <div class="text-4xl font-bold">
+                  €{tour.priceMin}
+                  {tour.priceMax && tour.priceMax !== tour.priceMin && (
+                    <span class="text-lg font-normal opacity-80"> - €{tour.priceMax}</span>
+                  )}
+                </div>
+                <div class="text-sm mt-1 opacity-80">per person</div>
               </div>
             )}
             
-            <a 
-              href={`/out/${tour.slug}`}
-              rel="sponsored nofollow noopener"
-              class="block w-full bg-accent text-white text-center py-3 rounded-lg font-semibold hover:bg-accent-600 transition mb-4"
-              id="book-now-btn"
-              data-tour-slug={tour.slug}
-            >
-              Book Now on Partner Site
-            </a>
-
-            <button 
-              id="inquiry-btn"
-              class="block w-full border-2 border-gray-900 text-gray-900 text-center py-3 rounded-lg font-semibold hover:bg-gray-50 transition"
-              data-tour-id={tour.id}
-              data-tour-slug={tour.slug}
-            >
-              Send Inquiry
-            </button>
-          </div>
-
-          <!-- Operator Info -->
-          {tour.operator && (
-            <div class="bg-white rounded-lg shadow-lg p-6">
-              <h3 class="font-bold mb-4">Tour Operator</h3>
-              <div class="flex items-center gap-4">
-                {tour.operator.logoUrl && (
-                  <img 
-                    src={tour.operator.logoUrl} 
-                    alt={tour.operator.name}
-                    class="w-16 h-16 object-contain"
-                  />
-                )}
-                <div>
-                  <div class="font-semibold">{tour.operator.name}</div>
-                  <a 
-                    href={`/out/${tour.slug}`}
-                    rel="sponsored nofollow noopener"
-                    class="text-sm text-blue-600 hover:underline"
-                  >
-                    View on operator site
-                  </a>
+            <!-- CTA Section -->
+            <div class="p-6 space-y-4">
+              <BookingButton
+                tour={tour}
+                context="tour-detail"
+                className="w-full text-lg py-4"
+                client:load
+              />
+              
+              <button 
+                id="inquiry-btn"
+                class="btn-outline w-full"
+                data-tour-id={tour.id}
+                data-tour-slug={tour.slug}
+              >
+                Have Questions? Send Inquiry
+              </button>
+              
+              <!-- Trust Badges -->
+              <div class="pt-4 border-t space-y-3">
+                <div class="flex items-center gap-3 text-sm text-gray-600">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  <span>Free cancellation up to 24h</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-600">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                  </svg>
+                  <span>Secure booking process</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-600">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <span>24/7 customer support</span>
                 </div>
               </div>
             </div>
-          )}
-
-          <!-- Categories -->
-          {tour.categorySlugs.length > 0 && (
-            <div class="bg-white rounded-lg shadow-lg p-6">
-              <h3 class="font-bold mb-4">Categories</h3>
-              <div class="flex flex-wrap gap-2">
-                {tour.categorySlugs.map(cat => (
-                  <a 
-                    href={`/category/${cat}`}
-                    class="bg-gray-100 px-3 py-1 rounded-full text-sm hover:bg-gray-200"
-                  >
-                    {cat}
-                  </a>
-                ))}
+            
+            <!-- Operator Info -->
+            {tour.operator && (
+              <div class="bg-gray-50 p-6 border-t">
+                <div class="flex items-center gap-4">
+                  {tour.operator.logoUrl && (
+                    <img 
+                      src={tour.operator.logoUrl} 
+                      alt={tour.operator.name}
+                      class="w-12 h-12 object-contain"
+                    />
+                  )}
+                  <div>
+                    <div class="text-xs text-gray-500 uppercase tracking-wide">Operated by</div>
+                    <div class="font-semibold text-gray-900">{tour.operator.name}</div>
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Inquiry Form Modal (React Island) -->
+  <!-- Related Tours Section -->
+  <section class="bg-gray-50 py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-8 text-center">Similar Adventures</h2>
+      <div class="text-center text-gray-600">
+        <a href="/tours" class="inline-flex items-center gap-2 text-accent hover:underline">
+          Browse all tours
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inquiry Form Modal -->
   <InquiryForm 
     tourId={tour.id} 
     tourSlug={tour.slug} 
@@ -239,21 +431,8 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   />
 
   <script>
-    // Handle booking button GA event
-    document.getElementById('book-now-btn')?.addEventListener('click', (e) => {
-      const slug = e.currentTarget.dataset.tourSlug;
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'affiliate_click', {
-          tour_slug: slug,
-          event_category: 'engagement',
-          event_label: slug
-        });
-      }
-    });
-
     // Handle inquiry button
     document.getElementById('inquiry-btn')?.addEventListener('click', () => {
-      // This will be handled by the React inquiry form island
       const event = new CustomEvent('open-inquiry-form');
       window.dispatchEvent(event);
     });

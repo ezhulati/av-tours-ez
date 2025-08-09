@@ -97,7 +97,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
         )}
 
         {success ? (
-          <div className="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
+          <div className="bg-gray-50 border border-gray-200 text-gray-800 p-4 rounded-lg">
             <p className="font-semibold">Thank you for your inquiry!</p>
             <p className="text-sm mt-1">We'll get back to you within 24 hours.</p>
           </div>

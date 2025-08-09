@@ -18,40 +18,43 @@ module.exports = {
           900: '#0d0d0d',
         },
         secondary: {
-          DEFAULT: '#4F7942', // Mountain green
-          50: '#EDF2EC',
-          100: '#DBE5D8',
-          200: '#B7CBB1',
-          300: '#93B18A',
-          400: '#6F9763',
-          500: '#4F7942',
-          600: '#3F6135',
-          700: '#2F4928',
-          800: '#20301A',
-          900: '#10180D',
+          DEFAULT: '#f5f5f5', // Light grey
+          50: '#ffffff',
+          100: '#fafafa',
+          200: '#f5f5f5',
+          300: '#e8e8e8',
+          400: '#d6d6d6',
+          500: '#a3a3a3',
+          600: '#737373',
+          700: '#525252',
+          800: '#404040',
+          900: '#262626',
         },
         accent: {
-          DEFAULT: '#FF0000', // Bright red
-          50: '#FFE6E6',
-          100: '#FFCCCC',
-          200: '#FF9999',
-          300: '#FF6666',
-          400: '#FF3333',
-          500: '#FF0000',
-          600: '#CC0000',
-          700: '#990000',
-          800: '#660000',
-          900: '#330000',
+          DEFAULT: '#DC2626', // Professional red
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#DC2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
         },
-        earth: {
-          DEFAULT: '#8B7355',
-          light: '#A08975',
-          dark: '#6B5940',
+        // Status colors using shades of grey/red
+        success: {
+          DEFAULT: '#1a1a1a',
+          light: '#404040',
         },
-        gold: {
-          DEFAULT: '#FFD700',
-          light: '#FFF4CC',
-          dark: '#B39700',
+        warning: {
+          DEFAULT: '#737373',
+          light: '#a3a3a3',
+        },
+        error: {
+          DEFAULT: '#DC2626',
+          light: '#fca5a5',
         },
         // Override default grays with brand-appropriate tones
         gray: {

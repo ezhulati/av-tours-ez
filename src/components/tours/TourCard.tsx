@@ -34,14 +34,14 @@ export default function TourCard({ tour, loading = false }: TourCardProps) {
           className="w-full h-full object-cover"
         />
         {tour.featured && (
-          <span className="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <span className="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-semibold">
             Featured
           </span>
         )}
       </div>
       <div className="p-6">
         <h3 className="text-xl font-bold mb-2">
-          <a href={`/tours/${tour.slug}`} className="hover:text-blue-600">
+          <a href={`/tours/${tour.slug}`} className="hover:text-accent">
             {tour.title}
           </a>
         </h3>

@@ -160,3 +160,13 @@ export async function getCountries() {
   if (error) throw error
   return data || []
 }
+
+export async function getTotalTourCount(): Promise<number> {
+  const { count, error } = await supabaseServer
+    .from(TABLES.tours)
+    .select('*', { count: 'exact', head: true })
+    .eq('is_active', true)
+
+  if (error) throw error
+  return count || 0
+}

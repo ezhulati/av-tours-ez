@@ -17,8 +17,25 @@ export const GET: APIRoute = async ({ params, request, cookies }) => {
       return new Response('Tour not found', { status: 404 })
     }
     
-    // Inject affiliate parameters
-    const redirectUrl = injectAffiliateParams(tour.affiliateUrl, slug)
+    // Extract UTM parameters from request URL
+    const url = new URL(request.url)
+    const utmParams: Record<string, string> = {}
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']
+    utmKeys.forEach(key => {
+      const value = url.searchParams.get(key)
+      if (value) {
+        utmParams[key] = value
+      }
+    })
+    
+    // Set defaults if not provided
+    if (!utmParams.utm_source) utmParams.utm_source = 'albaniavisit'
+    if (!utmParams.utm_medium) utmParams.utm_medium = 'affiliate'
+    if (!utmParams.utm_campaign) utmParams.utm_campaign = 'tour-redirect'
+    if (!utmParams.utm_content) utmParams.utm_content = slug
+    
+    // Inject affiliate parameters with UTM
+    const redirectUrl = injectAffiliateParams(tour.affiliateUrl, slug, utmParams)
     
     // Get or create affiliate cookie
     let cookieId = cookies.get('_aff')?.value

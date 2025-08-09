@@ -1,0 +1,108 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import BookingButton from '@/components/tours/BookingButton'
+
+// Test tour object
+const testTour = {
+  id: 'test-123',
+  slug: 'test-tour',
+  title: 'Test Tour for Affiliate Tracking',
+  affiliateUrl: 'https://example-operator.com/tours/test',
+  operator: {
+    id: 'op-1',
+    name: 'Test Operator'
+  }
+}
+---
+
+<BaseLayout title="Test Affiliate Tracking">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Test Affiliate Tracking</h1>
+    
+    <div class="max-w-xl mx-auto space-y-8">
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Tour Detail Context</h2>
+        <p class="text-gray-600 mb-4">
+          This button simulates a booking from a tour detail page. It will show a redirect modal before taking you to the partner site.
+        </p>
+        <BookingButton
+          tour={testTour}
+          context="tour-detail"
+          className="w-full"
+          client:load
+        />
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Tour Card Context</h2>
+        <p class="text-gray-600 mb-4">
+          This button simulates a booking from a tour card in a listing.
+        </p>
+        <BookingButton
+          tour={testTour}
+          context="tour-card"
+          className="w-full"
+          client:load
+        />
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Featured Context</h2>
+        <p class="text-gray-600 mb-4">
+          This button simulates a booking from a featured tour section.
+        </p>
+        <BookingButton
+          tour={testTour}
+          context="featured"
+          className="w-full"
+          client:load
+        />
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Compact Variant</h2>
+        <p class="text-gray-600 mb-4">
+          This shows the compact button variant.
+        </p>
+        <BookingButton
+          tour={testTour}
+          context="tour-card"
+          variant="compact"
+          client:load
+        >
+          Compact Book Button
+        </BookingButton>
+      </div>
+
+      <div class="bg-gray-100 rounded-lg p-6">
+        <h3 class="font-semibold mb-2">How to Test:</h3>
+        <ol class="list-decimal list-inside space-y-2 text-sm">
+          <li>Open browser DevTools Network tab</li>
+          <li>Click any booking button above</li>
+          <li>Check for /api/track-click POST request</li>
+          <li>Verify the new tab opens with affiliate URL including:
+            <ul class="list-disc list-inside ml-4 mt-1">
+              <li>partner_id=9</li>
+              <li>tid=albaniavisit</li>
+              <li>utm_source=albaniavisit</li>
+              <li>utm_medium=affiliate</li>
+              <li>click_id (unique)</li>
+              <li>ref_time (timestamp)</li>
+            </ul>
+          </li>
+          <li>Check browser console for GA4 tracking events</li>
+        </ol>
+      </div>
+
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <h3 class="font-semibold mb-2">Test with UTM Parameters:</h3>
+        <p class="text-sm mb-2">
+          Add these to the URL to test UTM forwarding:
+        </p>
+        <code class="text-xs bg-white p-2 rounded block">
+          ?utm_source=test&utm_medium=social&utm_campaign=winter2024
+        </code>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

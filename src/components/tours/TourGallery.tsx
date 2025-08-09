@@ -67,7 +67,7 @@ export default function TourGallery({ images }: TourGalleryProps) {
                 key={index}
                 onClick={() => setSelectedIndex(index)}
                 className={`aspect-square rounded overflow-hidden border-2 transition ${
-                  index === selectedIndex ? 'border-blue-600' : 'border-transparent'
+                  index === selectedIndex ? 'border-gray-900' : 'border-transparent'
                 }`}
               >
                 <img 

@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import { getFeaturedTours } from '@/lib/queries'
+import { getFeaturedTours, getTotalTourCount } from '@/lib/queries'
 import { generateOrganizationSchema } from '@/lib/seo'
+import BookingButton from '@/components/tours/BookingButton'
 
 const featuredTours = await getFeaturedTours(6)
+const totalTourCount = await getTotalTourCount()
 const organizationSchema = generateOrganizationSchema()
 ---
 
@@ -15,7 +17,7 @@ const organizationSchema = generateOrganizationSchema()
   <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
     <!-- Background with gradient and texture -->
     <div class="absolute inset-0">
-      <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-secondary opacity-90"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 opacity-90"></div>
       <div class="absolute inset-0 bg-[url('/texture.png')] opacity-10"></div>
     </div>
     
@@ -29,19 +31,18 @@ const organizationSchema = generateOrganizationSchema()
     <div class="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
       <!-- Brand Name with Highlight -->
       <h1 class="text-6xl md:text-8xl font-bold mb-4 font-serif animate-fade-in">
-        <span class="text-white drop-shadow-2xl">Albania</span><span class="text-accent drop-shadow-2xl">Visit</span>
+        <span class="text-white drop-shadow-2xl">Elevate</span><span class="text-accent drop-shadow-2xl">Your Experience</span>
       </h1>
-      <p class="text-2xl md:text-3xl mb-2 font-light">Real Mountain Tours</p>
+      <p class="text-2xl md:text-3xl mb-2 font-light">No tourist traps. Just raw terrain and local guides.</p>
       <p class="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-        Discover authentic adventures in the Albanian Alps, Kosovo's peaks, and Montenegro's wild beauty. 
-        Expert local guides, genuine experiences.
+        {totalTourCount} authentic adventures without the tourist traps
       </p>
       
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/tours" class="bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all transform hover:scale-105 shadow-xl">
+        <a href="/tours" class="bg-accent hover:bg-accent-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all transform hover:scale-105 shadow-xl whitespace-nowrap">
           Explore All Tours
         </a>
-        <a href="#featured" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all backdrop-blur-sm">
+        <a href="#featured" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all backdrop-blur-sm whitespace-nowrap">
           View Featured
         </a>
       </div>
@@ -90,7 +91,7 @@ const organizationSchema = generateOrganizationSchema()
               class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
             />
             {tour.featured && (
-              <span class="absolute top-4 left-4 bg-gold text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
+              <span class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-bold">
                 ⭐ Featured
               </span>
             )}
@@ -113,7 +114,7 @@ const organizationSchema = generateOrganizationSchema()
                   </span>
                 )}
                 {tour.difficulty && (
-                  <span class="text-sm bg-secondary-50 text-secondary-700 px-3 py-1 rounded-full capitalize font-medium">
+                  <span class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full capitalize font-medium">
                     {tour.difficulty}
                   </span>
                 )}
@@ -125,11 +126,10 @@ const organizationSchema = generateOrganizationSchema()
               )}
             </div>
             <a 
-              href={`/out/${tour.slug}`}
-              rel="sponsored nofollow noopener"
-              class="block w-full bg-accent text-white text-center py-3 rounded-full hover:bg-accent-600 transition-all font-semibold transform hover:scale-105"
+              href={`/tours/${tour.slug}`}
+              class="block w-full bg-accent text-white text-center py-3 rounded-full hover:bg-accent-600 transition-all font-semibold transform hover:scale-105 whitespace-nowrap"
             >
-              Book This Adventure
+              View Details
             </a>
           </div>
         </article>
@@ -137,7 +137,7 @@ const organizationSchema = generateOrganizationSchema()
     </div>
     
     <div class="text-center mt-12">
-      <a href="/tours" class="inline-block bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-all font-semibold text-lg">
+      <a href="/tours" class="inline-block bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-all font-semibold text-lg whitespace-nowrap">
         View All Tours →
       </a>
     </div>
@@ -152,7 +152,7 @@ const organizationSchema = generateOrganizationSchema()
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         <a href="/category/adventure" class="group">
           <div class="bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all transform hover:-translate-y-1 border-2 border-transparent hover:border-accent">
-            <div class="w-16 h-16 mx-auto mb-4 bg-accent-50 rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
+            <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
               <svg class="w-8 h-8 text-accent group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
               </svg>
@@ -162,8 +162,8 @@ const organizationSchema = generateOrganizationSchema()
         </a>
         <a href="/category/hiking" class="group">
           <div class="bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all transform hover:-translate-y-1 border-2 border-transparent hover:border-accent">
-            <div class="w-16 h-16 mx-auto mb-4 bg-secondary-50 rounded-full flex items-center justify-center group-hover:bg-secondary transition-colors">
-              <svg class="w-8 h-8 text-secondary group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-900 transition-colors">
+              <svg class="w-8 h-8 text-gray-700 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
               </svg>
             </div>
@@ -182,9 +182,9 @@ const organizationSchema = generateOrganizationSchema()
         </a>
         <a href="/category/beach" class="group">
           <div class="bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all transform hover:-translate-y-1 border-2 border-transparent hover:border-accent">
-            <div class="w-16 h-16 mx-auto mb-4 bg-earth-light rounded-full flex items-center justify-center group-hover:bg-earth transition-colors">
-              <svg class="w-8 h-8 text-earth-dark group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-900 transition-colors">
+              <svg class="w-8 h-8 text-gray-700 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.5 18c3.5-3 7-3 10.5 0s7 3 10.5 0M2.5 12c3.5-3 7-3 10.5 0s7 3 10.5 0"></path>
               </svg>
             </div>
             <h3 class="font-semibold text-gray-900 group-hover:text-accent">Beach & Coast</h3>
@@ -290,7 +290,7 @@ const organizationSchema = generateOrganizationSchema()
   </section>
 
   <!-- CTA Section -->
-  <section class="bg-gradient-to-r from-gray-900 to-secondary py-20">
+  <section class="bg-gradient-to-r from-gray-900 to-gray-800 py-20">
     <div class="container mx-auto px-4 text-center text-white">
       <h2 class="text-4xl md:text-5xl font-bold mb-6 font-serif">
         Ready for Your Next Adventure?
@@ -298,7 +298,7 @@ const organizationSchema = generateOrganizationSchema()
       <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
         Join thousands of adventurers who have discovered the authentic beauty of the Balkans with AlbaniaVisit.
       </p>
-      <a href="/tours" class="bg-accent hover:bg-accent-600 text-white px-10 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-xl inline-block">
+      <a href="/tours" class="bg-accent hover:bg-accent-600 text-white px-10 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-xl inline-block whitespace-nowrap">
         Start Your Journey
       </a>
     </div>
