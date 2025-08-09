@@ -70,7 +70,7 @@ export default function TourCard({ tour, loading = false }: TourCardProps) {
         <a 
           href={`/out/${tour.slug}`}
           rel="sponsored nofollow noopener"
-          className="block w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition"
+          className="block w-full bg-accent text-white text-center py-2 rounded-lg hover:bg-accent-600 transition"
           onClick={() => {
             if (typeof gtag !== 'undefined') {
               ;(window as any).gtag('event', 'affiliate_click', {

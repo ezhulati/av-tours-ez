@@ -110,7 +110,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
 
@@ -121,7 +121,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
 
@@ -131,7 +131,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
 
@@ -142,7 +142,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
                   type="date"
                   value={formData.travelDate}
                   onChange={(e) => setFormData({...formData, travelDate: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                 />
               </div>
               <div>
@@ -153,7 +153,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
                   max="50"
                   value={formData.groupSize}
                   onChange={(e) => setFormData({...formData, groupSize: parseInt(e.target.value)})}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                 />
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle }: InquiryForm
                 rows={4}
                 value={formData.message}
                 onChange={(e) => setFormData({...formData, message: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                 placeholder="Tell us about your travel plans, special requirements, or questions..."
               />
             </div>

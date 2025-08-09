@@ -5,17 +5,17 @@ module.exports = {
       colors: {
         // Brand colors
         primary: {
-          DEFAULT: '#1A5F7A', // Deep sea blue
-          50: '#E6F2F6',
-          100: '#CCE5ED',
-          200: '#99CBDB',
-          300: '#66B1C9',
-          400: '#3397B7',
-          500: '#1A5F7A',
-          600: '#154C62',
-          700: '#103949',
-          800: '#0B2631',
-          900: '#051318',
+          DEFAULT: '#1a1a1a', // Matte black
+          50: '#f5f5f5',
+          100: '#e5e5e5',
+          200: '#cccccc',
+          300: '#a3a3a3',
+          400: '#737373',
+          500: '#525252',
+          600: '#404040',
+          700: '#262626',
+          800: '#1a1a1a',
+          900: '#0d0d0d',
         },
         secondary: {
           DEFAULT: '#4F7942', // Mountain green
