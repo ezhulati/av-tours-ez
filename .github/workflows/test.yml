@@ -93,6 +93,8 @@ jobs:
         run: pnpm test:e2e -- --project=${{ matrix.browser }}
         env:
           E2E_BASE_URL: http://localhost:4321
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Upload test results
         if: always()
@@ -136,6 +138,9 @@ jobs:
       
       - name: Run mobile tests
         run: pnpm exec playwright test tests/e2e/mobile.spec.ts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Upload test results
         if: always()
@@ -179,6 +184,9 @@ jobs:
       
       - name: Run accessibility tests
         run: pnpm exec playwright test tests/accessibility/
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Generate accessibility report
         if: always()
@@ -232,6 +240,9 @@ jobs:
       
       - name: Run performance tests
         run: pnpm exec playwright test tests/performance/
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Analyze bundle size
         run: |
@@ -285,6 +296,9 @@ jobs:
       
       - name: Run SEO tests
         run: pnpm exec playwright test tests/seo/
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       
       - name: Validate sitemap
         run: |
