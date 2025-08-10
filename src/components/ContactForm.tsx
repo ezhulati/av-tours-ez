@@ -31,22 +31,24 @@ export default function ContactForm({ subject }: ContactFormProps) {
     setError('')
 
     try {
-      // Submit directly to Netlify Forms (general contact only goes to AlbaniaVisit)
-      const netlifyFormData = new FormData()
-      netlifyFormData.append('form-name', 'general-contact')
-      netlifyFormData.append('name', formData.name)
-      netlifyFormData.append('email', formData.email)
-      netlifyFormData.append('phone', formData.phone || '')
-      netlifyFormData.append('message', formData.message)
-      netlifyFormData.append('subject', formData.subject)
-      netlifyFormData.append('created-at', new Date().toISOString())
-
-      const netlifyResponse = await fetch('/', {
+      // Submit to Netlify Function
+      const response = await fetch('/.netlify/functions/general-contact', {
         method: 'POST',
-        body: netlifyFormData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || '',
+          message: formData.message,
+          subject: formData.subject
+        })
       })
 
-      if (netlifyResponse.ok || netlifyResponse.status === 200) {
+      const result = await response.json()
+
+      if (response.ok && result.success) {
         setSuccess(true)
         setFormData({
           name: '',
@@ -60,7 +62,7 @@ export default function ContactForm({ subject }: ContactFormProps) {
           setSuccess(false)
         }, 3000)
       } else {
-        throw new Error('Failed to send message')
+        throw new Error(result.error || 'Failed to send message')
       }
     } catch (err) {
       console.error('Contact form error:', err)

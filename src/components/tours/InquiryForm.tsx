@@ -41,30 +41,32 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
     // CSRF validation removed - not needed for Netlify Forms
 
     try {
-      // Submit directly to Netlify Forms
-      const netlifyFormData = new FormData()
-      netlifyFormData.append('form-name', 'tour-inquiry')
-      netlifyFormData.append('name', formData.name)
-      netlifyFormData.append('email', formData.email)
-      netlifyFormData.append('phone', formData.phone || '')
-      netlifyFormData.append('message', formData.message)
-      netlifyFormData.append('tour_title', tourTitle || '')
-      netlifyFormData.append('tour_slug', tourSlug || '')
-      netlifyFormData.append('travelDate', formData.travelDate || '')
-      netlifyFormData.append('groupSize', formData.groupSize.toString())
-      
-      // Add UTM parameters if present
+      // Submit to Netlify Function
       const urlParams = new URLSearchParams(window.location.search)
-      netlifyFormData.append('utm_source', urlParams.get('utm_source') || '')
-      netlifyFormData.append('utm_medium', urlParams.get('utm_medium') || '')
-      netlifyFormData.append('utm_campaign', urlParams.get('utm_campaign') || '')
-
-      const netlifyResponse = await fetch('/', {
+      
+      const response = await fetch('/.netlify/functions/tour-inquiry', {
         method: 'POST',
-        body: netlifyFormData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || '',
+          message: formData.message,
+          tour_title: tourTitle || '',
+          tour_slug: tourSlug || '',
+          travelDate: formData.travelDate || '',
+          groupSize: formData.groupSize,
+          utm_source: urlParams.get('utm_source') || '',
+          utm_medium: urlParams.get('utm_medium') || '',
+          utm_campaign: urlParams.get('utm_campaign') || ''
+        })
       })
 
-      if (netlifyResponse.ok || netlifyResponse.status === 200) {
+      const result = await response.json()
+
+      if (response.ok && result.success) {
         setSuccess(true)
         setFormData({
           name: '',
@@ -79,7 +81,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
           setSuccess(false)
         }, 3000)
       } else {
-        throw new Error('Failed to send inquiry')
+        throw new Error(result.error || 'Failed to send inquiry')
       }
     } catch (err) {
       console.error('Inquiry submission error:', err)

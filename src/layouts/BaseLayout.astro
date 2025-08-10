@@ -211,33 +211,6 @@ const GA4_ID = import.meta.env.GA4_ID
     <slot />
   </main>
   
-  <!-- Hidden Netlify Forms for Detection -->
-  <!-- These forms are hidden but allow Netlify to detect them during build -->
-  <form name="tour-inquiry" netlify netlify-honeypot="bot-field" hidden>
-    <input type="text" name="bot-field" />
-    <input type="text" name="name" />
-    <input type="email" name="email" />
-    <input type="tel" name="phone" />
-    <input type="text" name="tour_title" />
-    <input type="text" name="tour_slug" />
-    <input type="text" name="travelDate" />
-    <input type="number" name="groupSize" />
-    <textarea name="message"></textarea>
-    <input type="text" name="utm_source" />
-    <input type="text" name="utm_medium" />
-    <input type="text" name="utm_campaign" />
-  </form>
-    
-  <form name="general-contact" netlify netlify-honeypot="bot-field" hidden>
-    <input type="text" name="bot-field" />
-    <input type="text" name="name" />
-    <input type="email" name="email" />
-    <input type="tel" name="phone" />
-    <input type="text" name="subject" />
-    <textarea name="message"></textarea>
-    <input type="text" name="created-at" />
-  </form>
-  
   <!-- Mobile Bottom Navigation Bar -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40">
     <div class="grid grid-cols-4 h-16">
