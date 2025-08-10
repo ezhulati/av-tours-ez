@@ -75,20 +75,20 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
     <>
       {/* Full screen backdrop with blur */}
       <div 
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9998]"
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9998] animate-fadeIn"
         onClick={() => setIsOpen(false)}
       />
       
       {/* Centered Modal - Compact Version */}
       <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl">
+        <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl animate-slideUp">
           
           {/* Compact Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b">
             <h2 className="text-base font-semibold text-gray-900">Tour Inquiry</h2>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100"
+              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
               aria-label="Close"
             >
               <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       name="name"
                       required
                       autoComplete="name"
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                       placeholder="Your name"
                     />
                   </div>
@@ -148,7 +148,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       name="email"
                       required
                       autoComplete="email"
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -164,7 +164,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       type="tel"
                       name="phone"
                       autoComplete="tel"
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                       placeholder="Optional"
                     />
                   </div>
@@ -177,7 +177,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       type="date"
                       name="travel_date"
                       min={new Date().toISOString().split('T')[0]}
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent appearance-none"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent appearance-none transition-all"
                       style={{ 
                         WebkitAppearance: 'none', 
                         MozAppearance: 'none',
@@ -196,7 +196,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                   </label>
                   <select
                     name="group_size"
-                    className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                    className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
                   >
                     <option value="1">1 person</option>
                     <option value="2">2 people</option>
@@ -214,7 +214,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                   <textarea
                     name="message"
                     rows={2}
-                    className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent resize-none"
+                    className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none transition-all"
                     placeholder="Any special requests?"
                   />
                 </div>
@@ -229,7 +229,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
@@ -237,7 +237,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                   type="submit"
                   form="tour-inquiry-form"
                   disabled={state.submitting}
-                  className="flex-1 px-3 py-2 text-sm font-medium text-white bg-accent rounded-lg hover:bg-accent-600 disabled:opacity-50"
+                  className="flex-1 px-3 py-2 text-sm font-medium text-white bg-accent rounded-lg hover:bg-accent-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {state.submitting ? 'Sending...' : 'Send Inquiry'}
                 </button>
