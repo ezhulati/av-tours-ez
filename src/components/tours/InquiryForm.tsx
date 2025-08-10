@@ -29,14 +29,41 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
   }, [state.succeeded])
 
   useEffect(() => {
-    // Prevent body scroll when modal is open
+    // Prevent body scroll and viewport changes when modal is open
     if (isOpen) {
+      // Save current viewport height
+      const viewportHeight = window.innerHeight
+      document.documentElement.style.setProperty('--vh', `${viewportHeight * 0.01}px`)
+      
+      // Prevent scrolling
       document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.height = '100%'
+      
+      // Prevent zoom on input focus (mobile)
+      const metaViewport = document.querySelector('meta[name=viewport]')
+      if (metaViewport) {
+        metaViewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0')
+      }
     } else {
+      // Restore normal behavior
       document.body.style.overflow = 'unset'
+      document.body.style.position = 'unset'
+      document.body.style.width = 'unset'
+      document.body.style.height = 'unset'
+      
+      // Restore zoom capability
+      const metaViewport = document.querySelector('meta[name=viewport]')
+      if (metaViewport) {
+        metaViewport.setAttribute('content', 'width=device-width, initial-scale=1')
+      }
     }
     return () => {
       document.body.style.overflow = 'unset'
+      document.body.style.position = 'unset'
+      document.body.style.width = 'unset'
+      document.body.style.height = 'unset'
     }
   }, [isOpen])
 
@@ -53,8 +80,8 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
       />
       
       {/* Centered Modal */}
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl max-h-[80vh] flex flex-col">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ height: '100vh', height: 'calc(var(--vh, 1vh) * 100)' }}>
+        <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl flex flex-col" style={{ maxHeight: 'min(80vh, 600px)' }}>
           
           {/* Fixed Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b">
@@ -108,7 +135,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       name="name"
                       required
                       autoComplete="name"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       placeholder="Your full name"
                     />
                     <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-500 text-xs mt-1" />
@@ -125,7 +152,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       name="email"
                       required
                       autoComplete="email"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       placeholder="your@email.com"
                     />
                     <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-500 text-xs mt-1" />
@@ -141,7 +168,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       type="tel"
                       name="phone"
                       autoComplete="tel"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       placeholder="Optional"
                     />
                     <ValidationError prefix="Phone" field="phone" errors={state.errors} className="text-red-500 text-xs mt-1" />
@@ -157,7 +184,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       type="date"
                       name="travel_date"
                       min={new Date().toISOString().split('T')[0]}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white appearance-none"
+                      className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white appearance-none"
                       style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                     />
                   </div>
@@ -170,7 +197,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                     <select
                       id="form-group"
                       name="group_size"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white appearance-none"
+                      className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white appearance-none"
                       style={{ WebkitAppearance: 'none' }}
                     >
                       <option value="1">1 person</option>
@@ -190,7 +217,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       id="form-message"
                       name="message"
                       rows={3}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent resize-none"
+                      className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent resize-none"
                       placeholder="Any special requests or questions?"
                     />
                     <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-500 text-xs mt-1" />
