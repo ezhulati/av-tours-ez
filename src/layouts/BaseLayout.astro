@@ -242,12 +242,12 @@ const GA4_ID = import.meta.env.GA4_ID
         </svg>
         <span class="text-xs font-medium">Activities</span>
       </a>
-      <button id="mobile-contact-btn" class="flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation">
+      <a href="/country/albania" class="flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        <span class="text-xs font-medium">Contact</span>
-      </button>
+        <span class="text-xs font-medium">Destinations</span>
+      </a>
     </div>
   </nav>
   
@@ -543,19 +543,6 @@ const GA4_ID = import.meta.env.GA4_ID
       }
     });
     
-    // Mobile contact button
-    document.getElementById('mobile-contact-btn')?.addEventListener('click', () => {
-      // Check if we're on a tour page (has inquiry form)
-      const inquiryBtn = document.getElementById('inquiry-btn');
-      if (inquiryBtn) {
-        // On tour pages, open tour-specific inquiry (goes to BNAdventure + AlbaniaVisit)
-        inquiryBtn.click();
-      } else {
-        // On other pages, open general contact (goes to AlbaniaVisit only)
-        const event = new CustomEvent('open-contact-form');
-        window.dispatchEvent(event);
-      }
-    });
     
     // Improve touch responsiveness
     document.addEventListener('touchstart', () => {}, { passive: true });

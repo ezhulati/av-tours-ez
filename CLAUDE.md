@@ -5,30 +5,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ### Development
-- `npm run dev` - Start local development server at localhost:4321
-- `npm run build` - Build production site to ./dist/
-- `npm run preview` - Preview production build locally
-- `npm run lint` - Run ESLint across the codebase
+- `pnpm dev` - Start local development server at localhost:4321
+- `pnpm build` - Build production site to ./dist/
+- `pnpm preview` - Preview production build locally
+- `pnpm lint` - Run ESLint across the codebase
 
 ### Testing (Comprehensive Suite)
 #### Unit Testing (Vitest)
-- `npm run test` - Run Vitest unit tests with watch mode
-- `npm run test:coverage` - Generate coverage report (80% threshold)
-- `npm run test:ui` - Launch Vitest UI for interactive testing
-- `npm run test:watch` - Run tests in watch mode
+- `pnpm test` - Run Vitest unit tests with watch mode
+- `pnpm test:coverage` - Generate coverage report (80% threshold)
+- `pnpm test:ui` - Launch Vitest UI for interactive testing
+- `pnpm test:watch` - Run tests in watch mode
 
 #### End-to-End Testing (Playwright)
-- `npm run test:e2e` - Run all E2E tests across browsers
-- `npm run test:e2e:headed` - Run E2E tests in headed mode
-- `npm run test:e2e:debug` - Debug E2E tests interactively
-- `npm run test:mobile` - Run mobile-specific E2E tests
-- `npm run test:a11y` - Run accessibility compliance tests
-- `npm run test:perf` - Run performance benchmark tests
-- `npm run test:seo` - Run SEO and schema validation tests
+- `pnpm test:e2e` - Run all E2E tests across browsers
+- `pnpm test:e2e:headed` - Run E2E tests in headed mode
+- `pnpm test:e2e:debug` - Debug E2E tests interactively
+- `pnpm test:mobile` - Run mobile-specific E2E tests
+- `pnpm test:a11y` - Run accessibility compliance tests
+- `pnpm test:perf` - Run performance benchmark tests
+- `pnpm test:seo` - Run SEO and schema validation tests
 
 #### Combined Testing
-- `npm run test:all` - Run complete test suite (unit + E2E)
-- `npm run test:ci` - CI-optimized test pipeline
+- `pnpm test:all` - Run complete test suite (unit + E2E)
+- `pnpm test:ci` - CI-optimized test pipeline
 
 ### Testing Individual Components
 - Test specific tour pages: `http://localhost:4321/tours/[slug]`
@@ -145,14 +145,14 @@ Database Mapping -> Transforms affiliate_tours table to app DTOs
 ## Important Development Guidelines
 
 ### Code Quality & Standards
-- **Always run linting**: Use `npm run lint` before committing changes
+- **Always run linting**: Use `pnpm lint` before committing changes
 - **Security priority**: Use secure API handlers and validate all inputs
 - **Performance first**: Optimize for Core Web Vitals and mobile experience
 - **Test everything**: Maintain comprehensive test coverage across all layers
 
 ### Package Management
 - **Use pnpm**: Project uses pnpm for package management, not npm
-- **Node 18 required**: Check `.nvmrc` for exact version requirements
+- **Node 18 required**: Specified in `.nvmrc` (Node v18)
 
 ### Multi-layered Testing Strategy
 - **Component tests**: Focus on user interactions and business logic
@@ -160,3 +160,42 @@ Database Mapping -> Transforms affiliate_tours table to app DTOs
 - **Performance tests**: Monitor Core Web Vitals and loading metrics  
 - **A11y tests**: Ensure WCAG compliance across all components
 - **SEO tests**: Validate schema markup and meta tags
+
+## Form System & Analytics
+
+### Contact Forms
+- **Formspree Integration**: All forms use Formspree for email routing
+- **Tour Inquiries**: Form ID `xvgoogpj` for tour-specific inquiries
+- **General Contact**: Form ID `xanyypoo` for general questions
+- **Cross-Domain Tracking**: Microsoft Clarity configured for albaniavisit.com
+
+### Monitoring & Reporting
+- **Netlify Functions**: Scheduled weekly/monthly analytics reports
+- **Performance Monitoring**: Built-in Core Web Vitals tracking
+- **Affiliate Analytics**: Server-side click tracking in database
+
+## Test Infrastructure
+
+### Vitest Configuration
+- **Test Files**: `tests/component/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`
+- **Coverage Threshold**: 80% for branches, functions, lines, and statements
+- **Test Environment**: happy-dom with React Testing Library
+- **Setup File**: `tests/setup.ts` for global test configuration
+
+### Playwright Configuration  
+- **Browser Support**: Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari
+- **Base URL**: `http://localhost:4321` (override with E2E_BASE_URL env)
+- **Test Reports**: HTML, JSON, and JUnit formats in test-results/
+- **Trace & Video**: Captured on test failure for debugging
+
+## Path Resolution & Aliases
+
+### TypeScript Path Mapping
+- `@/*` → `src/*` - Root source directory
+- `@components/*` → `src/components/*` - React/Astro components
+- `@lib/*` → `src/lib/*` - Utilities and services
+- `@data/*` → `src/data/*` - Static data and enhanced content
+
+### Vite Aliases (for testing)
+- Same path mappings configured in `vitest.config.ts`
+- Ensures consistent imports across runtime and test environments
