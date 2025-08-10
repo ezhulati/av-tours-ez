@@ -200,7 +200,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   )}
 
   <!-- Main Content Area -->
-  <div class="container mx-auto px-4 py-12">
+  <div class="container mx-auto px-4 py-12 pb-32 md:pb-12">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
       
       <!-- Left Content - 2 Columns -->
@@ -565,8 +565,8 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     </section>
   )}
 
-  <!-- Mobile Sticky Booking Bar -->
-  <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t shadow-lg">
+  <!-- Mobile Sticky Booking Bar - Positioned above bottom nav -->
+  <div class="lg:hidden fixed bottom-16 md:bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg">
     <div class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-4">
         <div>
