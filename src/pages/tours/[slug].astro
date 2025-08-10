@@ -1,19 +1,13 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import { getAllSlugs, getTourDetail, getSimilarTours } from '@/lib/queries'
+import { getTourDetail, getSimilarTours } from '@/lib/queries'
 import { generateTouristTripSchema, generateBreadcrumbSchema, generateMetaTags } from '@/lib/seo'
 import { getEnhancedTour, hasEnhancedCopy, getBadgeEmoji } from '@/data/enhancedTours'
 import InquiryForm from '@/components/tours/InquiryForm'
 import BookingButton from '@/components/tours/BookingButton'
 import ContactForm from '@/components/ContactForm'
 
-export async function getStaticPaths() {
-  const slugs = await getAllSlugs()
-  return slugs.map(({ slug }) => ({
-    params: { slug }
-  }))
-}
-
+// Remove getStaticPaths for SSR mode
 const { slug } = Astro.params
 const tour = await getTourDetail(slug)
 
