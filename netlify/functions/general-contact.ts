@@ -54,24 +54,49 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 
     // Send email using Resend API if available
     if (process.env.RESEND_KEY) {
-      const resendResponse = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.RESEND_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          from: 'AlbaniaVisit Contact <tours@albaniavisit.com>',
+      try {
+        const emailData = {
+          from: 'AlbaniaVisit <onboarding@resend.dev>', // Use Resend's test domain for now
           to: ['tours@albaniavisit.com'],
           subject: `Contact Form: ${data.subject || 'General Inquiry'}`,
           text: emailContent,
+          html: emailContent.replace(/\n/g, '<br>'),
           reply_to: data.email
+        }
+        
+        console.log('Sending email with Resend:', {
+          to: emailData.to,
+          subject: emailData.subject,
+          from: emailData.from
         })
-      })
+        
+        const resendResponse = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.RESEND_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(emailData)
+        })
 
-      if (!resendResponse.ok) {
-        console.error('Failed to send email via Resend:', await resendResponse.text())
+        const responseText = await resendResponse.text()
+        
+        if (!resendResponse.ok) {
+          console.error('Resend API error:', {
+            status: resendResponse.status,
+            response: responseText
+          })
+          throw new Error(`Resend API failed: ${responseText}`)
+        } else {
+          console.log('Email sent successfully:', responseText)
+        }
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError)
+        // Continue anyway - don't fail the whole request
       }
+    } else {
+      console.warn('RESEND_KEY not configured - email not sent')
+    }
     }
 
     // Store in database if Supabase is configured
