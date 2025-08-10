@@ -25,6 +25,39 @@
     --ring: 0 74% 42%;
     --radius: 0.5rem;
   }
+  
+  /* Fix date inputs on iOS and mobile browsers */
+  input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: white !important;
+    background-image: none !important;
+    min-height: 2rem;
+    line-height: 1.5;
+    position: relative;
+  }
+  
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    color: transparent;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+  }
 
   .dark {
     --background: 0 0% 5%;

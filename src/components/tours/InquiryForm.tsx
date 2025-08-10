@@ -124,8 +124,8 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                 <input type="hidden" name="inquiry_type" value="tour_operator" />
                 
                 {/* Name & Email Row */}
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
+                <div className="flex gap-2">
+                  <div className="flex-1 min-w-0">
                     <label className="block text-xs font-medium text-gray-700 mb-1">
                       Name *
                     </label>
@@ -139,7 +139,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                     />
                   </div>
                   
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <label className="block text-xs font-medium text-gray-700 mb-1">
                       Email *
                     </label>
@@ -155,8 +155,8 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                 </div>
                 
                 {/* Phone & Date Row */}
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
+                <div className="flex gap-2">
+                  <div className="flex-1 min-w-0">
                     <label className="block text-xs font-medium text-gray-700 mb-1">
                       Phone
                     </label>
@@ -169,7 +169,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                     />
                   </div>
                   
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <label className="block text-xs font-medium text-gray-700 mb-1">
                       Travel Date
                     </label>
@@ -177,7 +177,14 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       type="date"
                       name="travel_date"
                       min={new Date().toISOString().split('T')[0]}
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent appearance-none"
+                      style={{ 
+                        WebkitAppearance: 'none', 
+                        MozAppearance: 'none',
+                        backgroundColor: '#ffffff',
+                        backgroundImage: 'none',
+                        color: '#111827'
+                      }}
                     />
                   </div>
                 </div>
