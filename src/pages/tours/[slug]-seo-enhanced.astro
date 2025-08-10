@@ -4,7 +4,7 @@
  * Implements comprehensive schema markup, performance optimizations, and rich snippets
  */
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import { getAllSlugs, getTourDetail } from '@/lib/queries'
+import { getTourDetail } from '@/lib/queries'
 import { 
   generateTourPackageSchema, 
   generateEnhancedBreadcrumbSchema, 
@@ -20,13 +20,7 @@ import HeroGallery from '@/components/tours/HeroGallery'
 import InquiryForm from '@/components/tours/InquiryForm'
 import BookingButton from '@/components/tours/BookingButton'
 
-export async function getStaticPaths() {
-  const slugs = await getAllSlugs()
-  return slugs.map(({ slug }) => ({
-    params: { slug }
-  }))
-}
-
+// SSR mode - no getStaticPaths needed
 const { slug } = Astro.params
 const tour = await getTourDetail(slug)
 

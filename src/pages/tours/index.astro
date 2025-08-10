@@ -386,7 +386,7 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
         <div class="p-6 space-y-4">
           <div class="space-y-3">
             <h2 class="text-xl font-bold mb-1 line-clamp-2 leading-tight">
-              <a href="/tours/${encodeURIComponent(tour.slug)}" class="hover:text-accent transition-colors group-hover:text-accent">
+              <a href="/tours/${tour.slug}" class="hover:text-accent transition-colors group-hover:text-accent">
                 ${tour.title}
               </a>
             </h2>
@@ -433,7 +433,7 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
               </span>
               ${tour.priceMin ? '<span class="text-sm text-gray-500 ml-1">per person</span>' : ''}
             </div>
-            <a href="/tours/${encodeURIComponent(tour.slug)}" class="text-accent font-semibold hover:underline" onclick="event.stopPropagation(); window.location.href='/tours/${encodeURIComponent(tour.slug)}'; return false;">
+            <a href="/tours/${tour.slug}" class="text-accent font-semibold hover:underline">
               View Details →
             </a>
           </div>
