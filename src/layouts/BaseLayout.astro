@@ -592,7 +592,7 @@ const GA4_ID = import.meta.env.GA4_ID
     </form>
   </div>
   <!-- Netlify Forms Detection - Hidden forms for Netlify to recognize -->
-  <form name="tour-inquiry" netlify netlify-honeypot="bot-field" hidden>
+  <form name="tour-inquiry" data-netlify="true" data-netlify-honeypot="bot-field" style="display:none">
     <input type="text" name="name" />
     <input type="email" name="email" />
     <input type="tel" name="phone" />
@@ -602,16 +602,16 @@ const GA4_ID = import.meta.env.GA4_ID
     <input type="text" name="arrival_date" />
     <input type="text" name="group_size" />
     <textarea name="message"></textarea>
-    <input type="hidden" name="bot-field" />
+    <input type="text" name="bot-field" />
   </form>
   
-  <form name="general-contact" netlify netlify-honeypot="bot-field" hidden>
+  <form name="general-contact" data-netlify="true" data-netlify-honeypot="bot-field" style="display:none">
     <input type="text" name="name" />
     <input type="email" name="email" />
     <input type="tel" name="phone" />
     <input type="text" name="subject" />
     <textarea name="message"></textarea>
-    <input type="hidden" name="bot-field" />
+    <input type="text" name="bot-field" />
   </form>
 </body>
 </html>
