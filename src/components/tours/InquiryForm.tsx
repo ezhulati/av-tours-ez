@@ -1,246 +1,266 @@
 import React, { useState, useEffect } from 'react'
+import { useForm, ValidationError } from '@formspree/react'
 import { Button } from '@/components/ui/button'
 
 interface InquiryFormProps {
   tourId: string
   tourSlug: string
   tourTitle?: string
+  tourOperator?: string
   inquiryType?: 'tour' | 'general'
 }
 
-export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator, inquiryType = 'tour' }: InquiryFormProps & { tourOperator?: string }) {
+export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator, inquiryType = 'tour' }: InquiryFormProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState('')
-  // CSRF token not needed for Netlify Forms
-  // const [csrfToken, setCsrfToken] = useState('')
+  const [state, handleSubmit] = useForm("mvgqdvgr")
   
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-    travelDate: '',
-    groupSize: 1
-  })
-
   useEffect(() => {
     const handleOpenInquiry = () => setIsOpen(true)
     window.addEventListener('open-inquiry-form', handleOpenInquiry)
     return () => window.removeEventListener('open-inquiry-form', handleOpenInquiry)
   }, [])
 
-  // CSRF token fetching removed - not needed for Netlify Forms
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-
-    // CSRF validation removed - not needed for Netlify Forms
-
-    try {
-      // Submit to Netlify Function
-      const urlParams = new URLSearchParams(window.location.search)
-      
-      const response = await fetch('/.netlify/functions/tour-inquiry', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || '',
-          message: formData.message,
-          tour_title: tourTitle || '',
-          tour_slug: tourSlug || '',
-          travelDate: formData.travelDate || '',
-          groupSize: formData.groupSize,
-          utm_source: urlParams.get('utm_source') || '',
-          utm_medium: urlParams.get('utm_medium') || '',
-          utm_campaign: urlParams.get('utm_campaign') || ''
-        })
-      })
-
-      const result = await response.json()
-
-      if (response.ok && result.success) {
-        setSuccess(true)
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: '',
-          travelDate: '',
-          groupSize: 1
-        })
-        setTimeout(() => {
-          setIsOpen(false)
-          setSuccess(false)
-        }, 3000)
-      } else {
-        throw new Error(result.error || 'Failed to send inquiry')
-      }
-    } catch (err) {
-      console.error('Inquiry submission error:', err)
-      setError('Network error. Please try again.')
-    } finally {
-      setLoading(false)
+  useEffect(() => {
+    // Reset form and close modal on successful submission
+    if (state.succeeded) {
+      setTimeout(() => {
+        setIsOpen(false)
+      }, 3000)
     }
+  }, [state.succeeded])
+
+  if (!isOpen) {
+    return (
+      <button
+        id="inquiry-btn"
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-20 right-4 bg-gray-900 text-white rounded-full px-4 py-3 shadow-lg hover:bg-gray-800 transition-all z-30 group flex items-center gap-2"
+        aria-label="Make an inquiry"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+        <span className="text-sm font-medium">Inquire</span>
+      </button>
+    )
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => setIsOpen(false)}>
-      <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h2 className="text-2xl font-bold">Tour Inquiry</h2>
-            <p className="text-xs text-gray-500 mt-1">Direct to tour operator</p>
-          </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        {tourTitle && (
-          <div className="mb-4">
-            <p className="text-sm text-gray-600">
-              Tour: <strong>{tourTitle}</strong>
-            </p>
-            <p className="text-sm text-gray-600 mt-1">
-              You're contacting the <strong>tour operator</strong> directly for availability and booking.
-            </p>
-          </div>
-        )}
-        
-        {/* Option to contact AlbaniaVisit instead */}
-        <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg mb-4">
-          <p className="text-sm text-blue-900">
-            <strong>Need general help?</strong> 
-            <button 
-              type="button"
-              onClick={() => {
-                setIsOpen(false);
-                // Trigger the general contact form
-                setTimeout(() => {
-                  window.dispatchEvent(new CustomEvent('open-contact-form'));
-                }, 100);
-              }}
-              className="text-blue-700 underline hover:text-blue-800 ml-1"
+    <>
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/50 z-40 animate-fadeIn"
+        onClick={() => setIsOpen(false)}
+      />
+      
+      {/* Modal */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+        <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto pointer-events-auto animate-slideUp">
+          {/* Header */}
+          <div className="sticky top-0 bg-white flex items-center justify-between p-6 border-b">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {inquiryType === 'tour' ? 'Tour Inquiry' : 'General Inquiry'}
+              </h2>
+              {tourTitle && (
+                <p className="text-sm text-gray-600 mt-1">{tourTitle}</p>
+              )}
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
             >
-              Contact AlbaniaVisit instead
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
             </button>
-          </p>
-        </div>
-
-        {success ? (
-          <div className="bg-gray-50 border border-gray-200 text-gray-800 p-4 rounded-lg">
-            <p className="font-semibold">Thank you for your inquiry!</p>
-            <p className="text-sm mt-1">The tour operator will respond within 24-48 hours.</p>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Name *</label>
-              <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Email *</label>
-              <input
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Phone</label>
-              <input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Travel Date</label>
-                <input
-                  type="date"
-                  value={formData.travelDate}
-                  onChange={(e) => setFormData({...formData, travelDate: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-                />
+          
+          {/* Form Content */}
+          <div className="p-6">
+            {state.succeeded ? (
+              <div className="text-center py-8">
+                <div className="mb-4">
+                  <svg className="w-16 h-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Inquiry Sent!</h3>
+                <p className="text-gray-600">Thank you for your interest! We'll get back to you within 24 hours.</p>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Group Size</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={formData.groupSize}
-                  onChange={(e) => setFormData({...formData, groupSize: parseInt(e.target.value)})}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Message *</label>
-              <textarea
-                required
-                rows={4}
-                value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
-                placeholder="Tell us about your travel plans, special requirements, or questions..."
-              />
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-800 p-3 rounded-lg text-sm">
-                {error}
-              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Hidden fields for tour information */}
+                {tourTitle && (
+                  <input type="hidden" name="tour_title" value={tourTitle} />
+                )}
+                {tourSlug && (
+                  <input type="hidden" name="tour_slug" value={tourSlug} />
+                )}
+                {tourOperator && (
+                  <input type="hidden" name="tour_operator" value={tourOperator} />
+                )}
+                <input type="hidden" name="_subject" value={`Tour Inquiry: ${tourTitle || 'General'}`} />
+                
+                {/* Name Field */}
+                <div>
+                  <label htmlFor="inquiry-name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Your Name *
+                  </label>
+                  <input
+                    id="inquiry-name"
+                    type="text"
+                    name="name"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                    placeholder="John Doe"
+                  />
+                  <ValidationError 
+                    prefix="Name" 
+                    field="name"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+                
+                {/* Email Field */}
+                <div>
+                  <label htmlFor="inquiry-email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address *
+                  </label>
+                  <input
+                    id="inquiry-email"
+                    type="email"
+                    name="email"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                    placeholder="john@example.com"
+                  />
+                  <ValidationError 
+                    prefix="Email" 
+                    field="email"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+                
+                {/* Phone Field */}
+                <div>
+                  <label htmlFor="inquiry-phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number
+                  </label>
+                  <input
+                    id="inquiry-phone"
+                    type="tel"
+                    name="phone"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                    placeholder="+1 (555) 000-0000"
+                  />
+                  <ValidationError 
+                    prefix="Phone" 
+                    field="phone"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+                
+                {/* Travel Date Field */}
+                <div>
+                  <label htmlFor="travel-date" className="block text-sm font-medium text-gray-700 mb-1">
+                    Preferred Travel Date
+                  </label>
+                  <input
+                    id="travel-date"
+                    type="date"
+                    name="travel_date"
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                  />
+                  <ValidationError 
+                    prefix="Travel Date" 
+                    field="travel_date"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+                
+                {/* Group Size Field */}
+                <div>
+                  <label htmlFor="group-size" className="block text-sm font-medium text-gray-700 mb-1">
+                    Group Size
+                  </label>
+                  <select
+                    id="group-size"
+                    name="group_size"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors"
+                  >
+                    <option value="1">1 person</option>
+                    <option value="2">2 people</option>
+                    <option value="3-4">3-4 people</option>
+                    <option value="5-8">5-8 people</option>
+                    <option value="9+">9+ people</option>
+                  </select>
+                  <ValidationError 
+                    prefix="Group Size" 
+                    field="group_size"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+                
+                {/* Message Field */}
+                <div>
+                  <label htmlFor="inquiry-message" className="block text-sm font-medium text-gray-700 mb-1">
+                    Additional Information
+                  </label>
+                  <textarea
+                    id="inquiry-message"
+                    name="message"
+                    rows={4}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-colors resize-none"
+                    placeholder="Tell us more about your travel plans, preferences, or any questions you have..."
+                  />
+                  <ValidationError 
+                    prefix="Message" 
+                    field="message"
+                    errors={state.errors}
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+                
+                {/* Submit Button */}
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsOpen(false)}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={state.submitting}
+                    className="flex-1 bg-accent hover:bg-accent-600"
+                  >
+                    {state.submitting ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Sending...
+                      </>
+                    ) : (
+                      'Send Inquiry'
+                    )}
+                  </Button>
+                </div>
+              </form>
             )}
-
-            <div className="flex gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="flex-1"
-              >
-                {loading ? 'Sending...' : 'Send Inquiry'}
-              </Button>
-            </div>
-          </form>
-        )}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
