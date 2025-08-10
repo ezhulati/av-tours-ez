@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import RedirectModal from './RedirectModal'
 import { buildAffiliateUrl, trackBookingClick } from '@/lib/affiliateTracking'
-import { trackBookingClick as trackClarityBooking } from '@/lib/clarityTracking'
 import { getEnhancedTour } from '@/data/enhancedTours'
 
 interface Tour {
@@ -60,9 +59,6 @@ export default function BookingButton({
     }
     
     try {
-      // Track booking click in Clarity
-      trackClarityBooking(tour.slug, context, variant || 'default')
-      
       // Always show modal for all booking buttons
       setIsLoading(true)
       setTimeout(() => {

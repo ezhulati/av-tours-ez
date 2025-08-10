@@ -26,7 +26,6 @@
     "@astrojs/react": "^4.3.0",
     "@astrojs/sitemap": "^3.4.2",
     "@astrojs/tailwind": "^6.0.2",
-    "@microsoft/clarity": "^1.0.0",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",

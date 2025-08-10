@@ -20,9 +20,6 @@ importers:
       '@astrojs/tailwind':
         specifier: ^6.0.2
         version: 6.0.2(astro@5.12.9(@netlify/blobs@10.0.8)(@types/node@24.2.1)(jiti@2.5.1)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1))(tailwindcss@3.4.17)
-      '@microsoft/clarity':
-        specifier: ^1.0.0
-        version: 1.0.0
       '@radix-ui/react-dialog':
         specifier: ^1.1.14
         version: 1.1.14(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1054,9 +1051,6 @@ packages:
     resolution: {integrity: sha512-llMXd39jtP0HpQLVI37Bf1m2ADlEb35GYSh1SDSLsBhR+5iCxiNGlT31yqbNtVHygHAtMy6dWFERpU2JgufhPg==}
     engines: {node: '>=18'}
     hasBin: true
-
-  '@microsoft/clarity@1.0.0':
-    resolution: {integrity: sha512-2QY6SmXnqRj6dWhNY8NYCN3e53j4zCFebH4wGnNhdGV1mqAsQwql2fT0w8TISxCvwwfVp8idsWLIdrRHOms1PQ==}
 
   '@mswjs/data@0.16.2':
     resolution: {integrity: sha512-/C0d/PBcJyQJokUhcjO4HiZPc67hzllKlRtD1XELygl2t991/ATAAQJVcStn4YtVALsNodruzOHT0JIvgr0hnA==}
@@ -6870,8 +6864,6 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
-
-  '@microsoft/clarity@1.0.0': {}
 
   '@mswjs/data@0.16.2(@types/node@24.2.1)(typescript@5.9.2)':
     dependencies:
