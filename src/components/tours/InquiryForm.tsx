@@ -177,7 +177,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                       type="date"
                       name="travel_date"
                       min={new Date().toISOString().split('T')[0]}
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                     />
                   </div>
                 </div>
@@ -189,7 +189,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                   </label>
                   <select
                     name="group_size"
-                    className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white"
+                    className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                   >
                     <option value="1">1 person</option>
                     <option value="2">2 people</option>
