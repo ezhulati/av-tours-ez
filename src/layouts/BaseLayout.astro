@@ -545,14 +545,6 @@ const GA4_ID = import.meta.env.GA4_ID
         // On other pages, open general contact (goes to AlbaniaVisit only)
         const event = new CustomEvent('open-contact-form');
         window.dispatchEvent(event);
-        
-        // Fallback to email if no form available
-        setTimeout(() => {
-          const formVisible = document.querySelector('[data-contact-modal]');
-          if (!formVisible) {
-            window.location.href = 'mailto:tours@albaniavisit.com';
-          }
-        }, 100);
       }
     });
     
