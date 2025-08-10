@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import HeroSlideshow from '@/components/HeroSlideshow.astro'
+import ContactForm from '@/components/ContactForm'
 
 // 404 page slideshow - mix of beautiful destinations  
 const notFoundImages = [
@@ -78,4 +79,6 @@ const notFoundImages = [
       </div>
     </div>
   </div>
+  <!-- Contact Form Modal -->
+  <ContactForm client:load />
 </BaseLayout>

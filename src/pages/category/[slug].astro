@@ -4,6 +4,7 @@ import { getTourCardPage } from '@/lib/queries'
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/seo'
 import HeroSlideshow from '@/components/HeroSlideshow.astro'
 import PhotoGallery from '@/components/PhotoGallery'
+import ContactForm from '@/components/ContactForm'
 
 export const prerender = false
 
@@ -305,4 +306,6 @@ const ogImage = categoryImages[slug] || '/Assets/Albania/Albanian_Alps.jpg'
       />
     )}
   </div>
+  <!-- Contact Form Modal -->
+  <ContactForm client:load />
 </BaseLayout>

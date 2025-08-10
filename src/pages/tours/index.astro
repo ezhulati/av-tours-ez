@@ -8,6 +8,7 @@ import BookingButton from '@/components/tours/BookingButton'
 import InquiryForm from '@/components/tours/InquiryForm'
 import HeroSlideshow from '@/components/HeroSlideshow.astro'
 import PhotoGallery from '@/components/PhotoGallery'
+import ContactForm from '@/components/ContactForm'
 
 // Get initial tours (SSG)
 const initialData = await getTourCardPage({}, { page: 1, limit: 12 })
@@ -514,4 +515,6 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
   
   <!-- Inquiry Form Modal -->
   <InquiryForm client:load />
+  <!-- Contact Form Modal -->
+  <ContactForm client:load />
 </BaseLayout>
