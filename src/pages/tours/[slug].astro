@@ -5,6 +5,7 @@ import { generateTouristTripSchema, generateBreadcrumbSchema, generateMetaTags }
 import { getEnhancedTour, hasEnhancedCopy, getBadgeEmoji } from '@/data/enhancedTours'
 import InquiryForm from '@/components/tours/InquiryForm'
 import BookingButton from '@/components/tours/BookingButton'
+import ContactForm from '@/components/ContactForm'
 
 export async function getStaticPaths() {
   const slugs = await getAllSlugs()
@@ -660,6 +661,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     tourId={tour.id} 
     tourSlug={tour.slug} 
     tourTitle={tour.title}
+    tourOperator={tour.operator?.name || 'the tour operator'}
     client:idle 
   />
 
@@ -842,4 +844,6 @@ const breadcrumbSchema = generateBreadcrumbSchema([
       });
     }
   </script>
+  <!-- Contact Form Modal (for general inquiries) -->
+  <ContactForm client:load />
 </BaseLayout>

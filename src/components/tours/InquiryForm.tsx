@@ -8,7 +8,7 @@ interface InquiryFormProps {
   inquiryType?: 'tour' | 'general'
 }
 
-export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType = 'tour' }: InquiryFormProps) {
+export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator, inquiryType = 'tour' }: InquiryFormProps & { tourOperator?: string }) {
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -97,7 +97,10 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => setIsOpen(false)}>
       <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Send Inquiry</h2>
+          <div>
+            <h2 className="text-2xl font-bold">Tour Inquiry</h2>
+            <p className="text-xs text-gray-500 mt-1">Direct to tour operator</p>
+          </div>
           <button
             onClick={() => setIsOpen(false)}
             className="text-gray-500 hover:text-gray-700"
@@ -109,15 +112,40 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
         </div>
 
         {tourTitle && (
-          <p className="text-sm text-gray-600 mb-4">
-            Inquiring about: <strong>{tourTitle}</strong>
-          </p>
+          <div className="mb-4">
+            <p className="text-sm text-gray-600">
+              Tour: <strong>{tourTitle}</strong>
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              You're contacting the <strong>tour operator</strong> directly for availability and booking.
+            </p>
+          </div>
         )}
+        
+        {/* Option to contact AlbaniaVisit instead */}
+        <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg mb-4">
+          <p className="text-sm text-blue-900">
+            <strong>Need general help?</strong> 
+            <button 
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+                // Trigger the general contact form
+                setTimeout(() => {
+                  window.dispatchEvent(new CustomEvent('open-contact-form'));
+                }, 100);
+              }}
+              className="text-blue-700 underline hover:text-blue-800 ml-1"
+            >
+              Contact AlbaniaVisit instead
+            </button>
+          </p>
+        </div>
 
         {success ? (
           <div className="bg-gray-50 border border-gray-200 text-gray-800 p-4 rounded-lg">
             <p className="font-semibold">Thank you for your inquiry!</p>
-            <p className="text-sm mt-1">We'll get back to you within 24 hours.</p>
+            <p className="text-sm mt-1">The tour operator will respond within 24-48 hours.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
