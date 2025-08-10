@@ -1,0 +1,45 @@
+---
+// This page exists solely for Netlify to detect forms during build
+// It's not linked from anywhere and users won't see it
+---
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forms Detection</title>
+</head>
+<body>
+  <h1>Netlify Forms Detection Page</h1>
+  
+  <!-- Tour Inquiry Form -->
+  <form name="tour-inquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="tour-inquiry" />
+    <p style="display:none">
+      <label>Don't fill this out: <input name="bot-field" /></label>
+    </p>
+    <input type="text" name="name" placeholder="Name" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="tel" name="phone" placeholder="Phone" />
+    <input type="text" name="tour_title" placeholder="Tour Title" />
+    <input type="text" name="tour_slug" placeholder="Tour Slug" />
+    <input type="text" name="tour_operator" placeholder="Tour Operator" />
+    <input type="date" name="arrival_date" placeholder="Arrival Date" />
+    <input type="number" name="group_size" placeholder="Group Size" />
+    <textarea name="message" placeholder="Message"></textarea>
+    <button type="submit">Submit</button>
+  </form>
+  
+  <!-- General Contact Form -->
+  <form name="general-contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="general-contact" />
+    <p style="display:none">
+      <label>Don't fill this out: <input name="bot-field" /></label>
+    </p>
+    <input type="text" name="name" placeholder="Name" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="tel" name="phone" placeholder="Phone" />
+    <input type="text" name="subject" placeholder="Subject" />
+    <textarea name="message" placeholder="Message" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

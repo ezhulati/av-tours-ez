@@ -46,7 +46,7 @@ export default function ContactForm({ subject }: ContactFormProps) {
         body: netlifyFormData
       })
 
-      if (netlifyResponse.ok) {
+      if (netlifyResponse.ok || netlifyResponse.status === 200) {
         setSuccess(true)
         setFormData({
           name: '',

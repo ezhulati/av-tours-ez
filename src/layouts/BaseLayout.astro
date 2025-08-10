@@ -211,6 +211,44 @@ const GA4_ID = import.meta.env.GA4_ID
     <slot />
   </main>
   
+  <!-- Hidden Netlify Forms for Detection -->
+  <!-- These forms are hidden but allow Netlify to detect them during build -->
+  <div style="display: none;">
+    <!-- Tour Inquiry Form -->
+    <form name="tour-inquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="tour-inquiry" />
+      <input name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="tour_title" />
+      <input type="text" name="tour_slug" />
+      <input type="text" name="tour_operator" />
+      <input type="date" name="arrival_date" />
+      <input type="number" name="group_size" />
+      <input type="text" name="travelDate" />
+      <input type="number" name="groupSize" />
+      <textarea name="message"></textarea>
+      <input type="text" name="utm_source" />
+      <input type="text" name="utm_medium" />
+      <input type="text" name="utm_campaign" />
+      <button type="submit">Submit</button>
+    </form>
+    
+    <!-- General Contact Form -->
+    <form name="general-contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="general-contact" />
+      <input name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="subject" />
+      <textarea name="message"></textarea>
+      <input type="text" name="created-at" />
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  
   <!-- Mobile Bottom Navigation Bar -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40">
     <div class="grid grid-cols-4 h-16">

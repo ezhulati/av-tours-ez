@@ -13,7 +13,8 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
-  const [csrfToken, setCsrfToken] = useState('')
+  // CSRF token not needed for Netlify Forms
+  // const [csrfToken, setCsrfToken] = useState('')
   
   const [formData, setFormData] = useState({
     name: '',
@@ -30,84 +31,55 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, inquiryType =
     return () => window.removeEventListener('open-inquiry-form', handleOpenInquiry)
   }, [])
 
-  useEffect(() => {
-    const fetchCSRFToken = async () => {
-      try {
-        const response = await fetch('/api/csrf-token')
-        const data = await response.json()
-        if (data.csrfToken) {
-          setCsrfToken(data.csrfToken)
-        }
-      } catch (error) {
-        console.error('Failed to fetch CSRF token:', error)
-      }
-    }
-
-    fetchCSRFToken()
-  }, [])
+  // CSRF token fetching removed - not needed for Netlify Forms
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    if (!csrfToken) {
-      setError('Security token missing. Please refresh the page and try again.')
-      setLoading(false)
-      return
-    }
+    // CSRF validation removed - not needed for Netlify Forms
 
     try {
-      // Step 1: Submit to our enhanced API for tracking and routing
-      const enhancedResponse = await fetch('/api/inquiries-enhanced', {
+      // Submit directly to Netlify Forms
+      const netlifyFormData = new FormData()
+      netlifyFormData.append('form-name', 'tour-inquiry')
+      netlifyFormData.append('name', formData.name)
+      netlifyFormData.append('email', formData.email)
+      netlifyFormData.append('phone', formData.phone || '')
+      netlifyFormData.append('message', formData.message)
+      netlifyFormData.append('tour_title', tourTitle || '')
+      netlifyFormData.append('tour_slug', tourSlug || '')
+      netlifyFormData.append('travelDate', formData.travelDate || '')
+      netlifyFormData.append('groupSize', formData.groupSize.toString())
+      
+      // Add UTM parameters if present
+      const urlParams = new URLSearchParams(window.location.search)
+      netlifyFormData.append('utm_source', urlParams.get('utm_source') || '')
+      netlifyFormData.append('utm_medium', urlParams.get('utm_medium') || '')
+      netlifyFormData.append('utm_campaign', urlParams.get('utm_campaign') || '')
+
+      const netlifyResponse = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tourId,
-          tourSlug,
-          tourTitle,
-          inquiryType,
-          csrfToken,
-          ...formData,
-          utm_source: new URLSearchParams(window.location.search).get('utm_source'),
-          utm_medium: new URLSearchParams(window.location.search).get('utm_medium'),
-          utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign')
-        })
+        body: netlifyFormData
       })
 
-      const enhancedData = await enhancedResponse.json()
-
-      if (enhancedData.ok && enhancedData.netlifyFormData) {
-        // Step 2: Submit to Netlify Forms for actual email delivery
-        const netlifyFormData = new FormData()
-        Object.entries(enhancedData.netlifyFormData).forEach(([key, value]) => {
-          netlifyFormData.append(key, value as string)
+      if (netlifyResponse.ok || netlifyResponse.status === 200) {
+        setSuccess(true)
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          travelDate: '',
+          groupSize: 1
         })
-
-        const netlifyResponse = await fetch('/', {
-          method: 'POST',
-          body: netlifyFormData
-        })
-
-        if (netlifyResponse.ok) {
-          setSuccess(true)
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            message: '',
-            travelDate: '',
-            groupSize: 1
-          })
-          setTimeout(() => {
-            setIsOpen(false)
-            setSuccess(false)
-          }, 3000)
-        } else {
-          throw new Error('Failed to send inquiry via Netlify')
-        }
+        setTimeout(() => {
+          setIsOpen(false)
+          setSuccess(false)
+        }, 3000)
       } else {
-        setError(enhancedData.error || 'Failed to process inquiry')
+        throw new Error('Failed to send inquiry')
       }
     } catch (err) {
       console.error('Inquiry submission error:', err)
