@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getFeaturedTours, getTotalTourCount } from '@/lib/queries'
 import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSchema } from '@/lib/seo'
 import BookingButton from '@/components/tours/BookingButton'
+import ContactForm from '@/components/ContactForm'
 
 const featuredTours = await getFeaturedTours(6)
 const totalTourCount = await getTotalTourCount()
@@ -540,4 +541,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
       }
     });
   </script>
+  
+  <!-- Contact Form Modal -->
+  <ContactForm client:load />
 </BaseLayout>
