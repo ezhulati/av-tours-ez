@@ -565,8 +565,8 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     </section>
   )}
 
-  <!-- Mobile Sticky Booking Bar - Positioned above bottom nav -->
-  <div class="lg:hidden fixed bottom-16 md:bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg">
+  <!-- Mobile Sticky Booking Bar - Smart visibility based on scroll -->
+  <div id="sticky-cta" class="lg:hidden fixed bottom-16 md:bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg transform translate-y-full transition-transform duration-300">
     <div class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-4">
         <div>
@@ -772,5 +772,74 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     document.getElementById('inquiry-btn')?.addEventListener('click', () => {
       window.dispatchEvent(new CustomEvent('open-inquiry-form'));
     });
+    
+    // Smart Sticky CTA behavior
+    const stickyCTA = document.getElementById('sticky-cta');
+    if (stickyCTA && window.innerWidth < 1024) { // Only on mobile/tablet
+      const firstBookingBtn = document.querySelector('.container .flex .gap-4 button, [data-context="tour-detail"]');
+      const footer = document.querySelector('footer');
+      let isVisible = false;
+      let lastScrollY = 0;
+      let ticking = false;
+      
+      function updateCTAVisibility() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        // Get positions
+        const firstBtnBottom = firstBookingBtn ? firstBookingBtn.getBoundingClientRect().bottom + scrollY : 400;
+        const footerTop = footer ? footer.getBoundingClientRect().top + scrollY : documentHeight;
+        
+        // Check if we're at the very top (within 50px)
+        const isAtTop = scrollY < 50;
+        
+        // Check if footer is visible
+        const footerVisible = (scrollY + windowHeight) >= (footerTop - 100);
+        
+        // Check if we've scrolled past first booking button
+        const pastFirstButton = scrollY > (firstBtnBottom + 100);
+        
+        // Determine if CTA should be visible
+        const shouldShow = pastFirstButton && !footerVisible && !isAtTop;
+        
+        // Show/hide with smooth transition
+        if (shouldShow && !isVisible) {
+          stickyCTA.classList.remove('translate-y-full');
+          stickyCTA.classList.add('translate-y-0');
+          isVisible = true;
+        } else if (!shouldShow && isVisible) {
+          stickyCTA.classList.remove('translate-y-0');
+          stickyCTA.classList.add('translate-y-full');
+          isVisible = false;
+        }
+        
+        lastScrollY = scrollY;
+        ticking = false;
+      }
+      
+      function requestTick() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateCTAVisibility);
+          ticking = true;
+        }
+      }
+      
+      // Listen for scroll events
+      window.addEventListener('scroll', requestTick, { passive: true });
+      
+      // Initial check
+      updateCTAVisibility();
+      
+      // Re-check on resize
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) {
+          stickyCTA.classList.add('translate-y-full');
+          isVisible = false;
+        } else {
+          updateCTAVisibility();
+        }
+      });
+    }
   </script>
 </BaseLayout>
