@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import Clarity from '@microsoft/clarity'
 
 interface ClarityAnalyticsProps {
   projectId?: string
@@ -15,9 +14,12 @@ export default function ClarityAnalytics({ projectId }: ClarityAnalyticsProps) {
       return
     }
 
-    try {
-      // Initialize Clarity
-      Clarity.init(clarityProjectId)
+    // Dynamically import Clarity only on client side
+    import('@microsoft/clarity').then((ClarityModule) => {
+      const Clarity = ClarityModule.default
+      try {
+        // Initialize Clarity
+        Clarity.init(clarityProjectId)
       
       // Optional: Set custom tags for better filtering
       // You can add custom tags based on your needs
@@ -30,9 +32,12 @@ export default function ClarityAnalytics({ projectId }: ClarityAnalyticsProps) {
       //   Clarity.identify(userId)
       // }
       
-    } catch (error) {
-      console.error('Failed to initialize Microsoft Clarity:', error)
-    }
+      } catch (error) {
+        console.error('Failed to initialize Microsoft Clarity:', error)
+      }
+    }).catch(error => {
+      console.error('Failed to load Microsoft Clarity module:', error)
+    })
   }, [projectId])
 
   // This component doesn't render anything

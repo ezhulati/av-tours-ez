@@ -1,7 +1,17 @@
-import Clarity from '@microsoft/clarity'
+// Only import Clarity on the client side
+let Clarity: any = null;
+if (typeof window !== 'undefined') {
+  import('@microsoft/clarity').then(module => {
+    Clarity = module.default;
+  });
+}
 
 // Initialize Clarity
 export function initClarity(projectId?: string) {
+  if (typeof window === 'undefined' || !Clarity) {
+    return false; // Skip on server-side
+  }
+  
   const clarityProjectId = projectId || import.meta.env.PUBLIC_CLARITY_PROJECT_ID
   
   if (!clarityProjectId) {
@@ -25,6 +35,8 @@ export function initClarity(projectId?: string) {
 
 // Track page views with custom data
 export function trackPageView(pageName: string, pageType: string, customData?: Record<string, string>) {
+  if (typeof window === 'undefined' || !Clarity) return; // Skip on server-side
+  
   try {
     // Set page-specific tags
     Clarity.setTag('page_name', pageName)
@@ -43,6 +55,8 @@ export function trackPageView(pageName: string, pageType: string, customData?: R
 
 // Track tour views
 export function trackTourView(tourSlug: string, tourTitle: string, tourOperator: string, tourPrice?: number) {
+  if (typeof window === 'undefined' || !Clarity) return; // Skip on server-side
+  
   try {
     Clarity.event('tour_viewed')
     Clarity.setTag('tour_slug', tourSlug)
@@ -57,6 +71,8 @@ export function trackTourView(tourSlug: string, tourTitle: string, tourOperator:
 
 // Track booking button clicks
 export function trackBookingClick(tourSlug: string, context: string, buttonLocation: string) {
+  if (typeof window === 'undefined' || !Clarity) return; // Skip on server-side
+  
   try {
     Clarity.event('booking_button_clicked')
     Clarity.setTag('booking_tour', tourSlug)
@@ -72,6 +88,8 @@ export function trackBookingClick(tourSlug: string, context: string, buttonLocat
 
 // Track filter usage
 export function trackFilterUsage(filterType: string, filterValue: string) {
+  if (typeof window === 'undefined' || !Clarity) return; // Skip on server-side
+  
   try {
     Clarity.event('filter_applied')
     Clarity.setTag('filter_type', filterType)
@@ -83,6 +101,8 @@ export function trackFilterUsage(filterType: string, filterValue: string) {
 
 // Track search
 export function trackSearch(searchQuery: string, resultsCount: number) {
+  if (typeof window === 'undefined' || !Clarity) return; // Skip on server-side
+  
   try {
     Clarity.event('search_performed')
     Clarity.setTag('search_query_length', searchQuery.length.toString())
@@ -99,6 +119,8 @@ export function trackSearch(searchQuery: string, resultsCount: number) {
 
 // Track inquiry form interactions
 export function trackInquiryForm(action: 'opened' | 'submitted' | 'abandoned', tourSlug?: string) {
+  if (typeof window === 'undefined' || !Clarity) return; // Skip on server-side
+  
   try {
     Clarity.event(`inquiry_form_${action}`)
     if (tourSlug) {
@@ -124,6 +146,8 @@ function getPriceRange(price: number): string {
 
 // Set user consent for GDPR compliance
 export function setClarityConsent(hasConsent: boolean) {
+  if (typeof window === 'undefined' || !Clarity) return; // Skip on server-side
+  
   try {
     Clarity.consent(hasConsent)
   } catch (error) {
