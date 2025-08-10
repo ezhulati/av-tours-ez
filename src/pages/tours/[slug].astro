@@ -570,10 +570,10 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     <div class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-4">
         <div>
-          <div class="text-2xl font-bold text-gray-900">
+          <div class={tour.priceMin ? "text-2xl font-bold text-gray-900" : "text-base font-semibold text-gray-900 whitespace-nowrap"}>
             {tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
           </div>
-          <p class="text-sm text-gray-500">per person</p>
+          <p class="text-sm text-gray-500">{tour.priceMin ? 'per person' : 'Contact for pricing'}</p>
         </div>
         <BookingButton
           tour={tour}
