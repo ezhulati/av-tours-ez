@@ -139,9 +139,9 @@ export default function ContactForm({ subject }: ContactFormProps) {
                   />
                 </div>
 
-                {/* Subject Field */}
+                {/* Subject Field - Add [GENERAL] prefix for non-tour inquiries */}
                 {subject && (
-                  <input type="hidden" name="subject" value={subject} />
+                  <input type="hidden" name="_subject" value={`[GENERAL INQUIRY] ${subject}`} />
                 )}
                 {!subject && (
                   <div>

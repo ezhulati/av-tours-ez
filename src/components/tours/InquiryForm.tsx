@@ -100,7 +100,9 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                 {tourOperator && (
                   <input type="hidden" name="tour_operator" value={tourOperator} />
                 )}
-                <input type="hidden" name="_subject" value={`Tour Inquiry: ${tourTitle || 'General'}`} />
+                <input type="hidden" name="_subject" value={`[OPERATOR INQUIRY] Tour: ${tourTitle || 'General'} - ${tourOperator || 'BNAdventure'}`} />
+                <input type="hidden" name="forward_to" value="info@bnadventures.com" />
+                <input type="hidden" name="inquiry_type" value="tour_operator" />
                 
                 {/* Name Field */}
                 <div>
