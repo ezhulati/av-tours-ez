@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 import { z } from 'zod'
 import { supabaseServer } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
-import { trackClickLimiter } from '@/lib/rateLimit'
+// Rate limiting disabled - needs Redis or edge-compatible solution
 
 // Strict validation schema to prevent XSS and injection attacks
 const trackClickSchema = z.object({
@@ -33,23 +33,6 @@ function anonymizeIP(ip: string | null): string | null {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    // Apply rate limiting (skip in production for now - needs Redis or similar)
-    if (import.meta.env.DEV) {
-      const rateLimitResult = trackClickLimiter(request)
-      if (!rateLimitResult.success) {
-        return new Response(JSON.stringify({ 
-          error: rateLimitResult.error,
-          rateLimited: true 
-        }), {
-        status: 429,
-        headers: { 
-          'Content-Type': 'application/json',
-          'X-RateLimit-Remaining': '0',
-          'Retry-After': '60'
-        }
-      })
-      }
-    }
     
     const rawData = await request.json()
     

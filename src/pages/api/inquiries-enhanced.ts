@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { supabaseServer } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 import { validateCSRFToken } from './csrf-token'
-import { inquiryLimiter } from '@/lib/rateLimit'
+// Rate limiting disabled - needs Redis or edge-compatible solution
 
 const inquirySchema = z.object({
   tourId: z.string().uuid(),
@@ -62,23 +62,6 @@ function getEmailRecipients(inquiryType: 'tour' | 'general', operator?: string):
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    // Apply rate limiting (skip in production for now - needs Redis or similar)
-    if (import.meta.env.DEV) {
-      const rateLimitResult = inquiryLimiter(request)
-      if (!rateLimitResult.success) {
-        return new Response(JSON.stringify({ 
-          error: rateLimitResult.error,
-          rateLimited: true 
-        }), {
-          status: 429,
-          headers: { 
-            'Content-Type': 'application/json',
-            'X-RateLimit-Remaining': '0',
-            'Retry-After': '3600'
-          }
-        })
-      }
-    }
     
     const body = await request.json()
     
