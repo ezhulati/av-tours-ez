@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import RedirectModal from './RedirectModal'
 import { buildAffiliateUrl, trackBookingClick } from '@/lib/affiliateTracking'
+import { trackBookingClick as trackClarityBooking } from '@/lib/clarityTracking'
 import { getEnhancedTour } from '@/data/enhancedTours'
 
 interface Tour {
@@ -42,7 +43,6 @@ export default function BookingButton({
     try {
       // Build affiliate URL on client-side to access window.location
       const url = buildAffiliateUrl(tour, context)
-      console.log('Built affiliate URL:', url)
       setAffiliateUrl(url)
     } catch (error) {
       console.error('Error building affiliate URL:', error)
@@ -59,13 +59,11 @@ export default function BookingButton({
       navigator.vibrate(10)
     }
     
-    console.log('=== BOOKING BUTTON CLICKED ===')
-    console.log('Context:', context, 'Variant:', variant)
-    console.log('Tour slug:', tour.slug)
-    
     try {
+      // Track booking click in Clarity
+      trackClarityBooking(tour.slug, context, variant || 'default')
+      
       // Always show modal for all booking buttons
-      console.log('=> Opening modal')
       setIsLoading(true)
       setTimeout(() => {
         setShowModal(true)
@@ -78,7 +76,6 @@ export default function BookingButton({
   }
 
   const handleContinueToPartner = () => {
-    console.log('=== CONTINUE TO PARTNER CLICKED ===')
     try {
       // Navigate via server-side redirect for proper affiliate tracking
       window.open(`/out/${tour.slug}`, '_blank', 'noopener,noreferrer')
@@ -135,8 +132,6 @@ export default function BookingButton({
       </>
     )
   }
-
-  console.log('BookingButton rendering:', { tour: tour?.slug, context, variant, className })
 
   return (
     <>

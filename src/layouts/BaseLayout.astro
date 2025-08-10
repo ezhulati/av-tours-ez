@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css'
+import ClarityAnalytics from '@/components/analytics/ClarityAnalytics'
 
 export interface Props {
   title: string
@@ -26,6 +27,7 @@ const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).toString(
 // Ensure ogImage is always an absolute URL
 const absoluteOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`
 const GA4_ID = import.meta.env.GA4_ID
+const CLARITY_PROJECT_ID = import.meta.env.PUBLIC_CLARITY_PROJECT_ID
 ---
 
 <!DOCTYPE html>
@@ -97,6 +99,11 @@ const GA4_ID = import.meta.env.GA4_ID
   )}
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
+  <!-- Microsoft Clarity Analytics -->
+  {CLARITY_PROJECT_ID && (
+    <ClarityAnalytics projectId={CLARITY_PROJECT_ID} client:only="react" />
+  )}
+  
   <!-- Skip link for accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
