@@ -386,7 +386,7 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
         <div class="p-6 space-y-4">
           <div class="space-y-3">
             <h2 class="text-xl font-bold mb-1 line-clamp-2 leading-tight">
-              <a href="/tours/${tour.slug}" class="tour-title-link hover:text-accent transition-colors group-hover:text-accent" data-slug="${tour.slug}">
+              <a href="/tours/${encodeURIComponent(tour.slug)}" class="hover:text-accent transition-colors group-hover:text-accent">
                 ${tour.title}
               </a>
             </h2>
@@ -433,7 +433,7 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
               </span>
               ${tour.priceMin ? '<span class="text-sm text-gray-500 ml-1">per person</span>' : ''}
             </div>
-            <a href="/tours/${tour.slug}" class="tour-details-link text-accent font-semibold hover:underline" data-slug="${tour.slug}">
+            <a href="/tours/${encodeURIComponent(tour.slug)}" class="text-accent font-semibold hover:underline" onclick="event.stopPropagation(); window.location.href='/tours/${encodeURIComponent(tour.slug)}'; return false;">
               View Details →
             </a>
           </div>
@@ -446,24 +446,6 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
     // Set up event handlers
     document.addEventListener('DOMContentLoaded', () => {
       console.log('DOM loaded, setting up handlers');
-      
-      // Event delegation for tour detail links - ensure proper navigation
-      document.addEventListener('click', (e) => {
-        // Check if clicked element or its parent is a tour link
-        const link = e.target.closest('a[href^="/tours/"]');
-        if (link) {
-          // Only intervene if it's a dynamically created link
-          if (link.classList.contains('tour-details-link') || link.parentElement?.querySelector('.tour-details-link')) {
-            e.preventDefault();
-            e.stopPropagation();
-            const href = link.getAttribute('href');
-            if (href) {
-              // Use location.assign for proper navigation
-              window.location.assign(href);
-            }
-          }
-        }
-      });
       
       // Load More button handler
       const loadMoreBtn = document.getElementById('load-more');
