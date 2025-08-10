@@ -93,6 +93,11 @@ export async function getTourCardPage(
 }
 
 export async function getTourDetail(slug: string): Promise<TourDetailDTO | null> {
+  if (!supabaseServer) {
+    console.error('Supabase not configured - cannot fetch tour detail')
+    return null
+  }
+
   // Get tour data
   const { data: tour, error: tourError } = await supabaseServer
     .from(TABLES.tours)
@@ -184,6 +189,11 @@ export async function getTotalTourCount(): Promise<number> {
 }
 
 export async function getSimilarTours(currentTour: TourDetailDTO, limit: number = 4): Promise<TourCardDTO[]> {
+  if (!supabaseServer) {
+    console.error('Supabase not configured - cannot fetch similar tours')
+    return []
+  }
+
   // Build similarity query based on multiple factors
   let query = supabaseServer
     .from(TABLES.tours)
