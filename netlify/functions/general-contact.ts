@@ -97,7 +97,6 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     } else {
       console.warn('RESEND_KEY not configured - email not sent')
     }
-    }
 
     // Store in database if Supabase is configured
     if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
