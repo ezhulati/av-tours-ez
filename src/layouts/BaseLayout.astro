@@ -213,41 +213,30 @@ const GA4_ID = import.meta.env.GA4_ID
   
   <!-- Hidden Netlify Forms for Detection -->
   <!-- These forms are hidden but allow Netlify to detect them during build -->
-  <div style="display: none;">
-    <!-- Tour Inquiry Form -->
-    <form name="tour-inquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="tour-inquiry" />
-      <input name="bot-field" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="tel" name="phone" />
-      <input type="text" name="tour_title" />
-      <input type="text" name="tour_slug" />
-      <input type="text" name="tour_operator" />
-      <input type="date" name="arrival_date" />
-      <input type="number" name="group_size" />
-      <input type="text" name="travelDate" />
-      <input type="number" name="groupSize" />
-      <textarea name="message"></textarea>
-      <input type="text" name="utm_source" />
-      <input type="text" name="utm_medium" />
-      <input type="text" name="utm_campaign" />
-      <button type="submit">Submit</button>
-    </form>
+  <form name="tour-inquiry" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="bot-field" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="tour_title" />
+    <input type="text" name="tour_slug" />
+    <input type="text" name="travelDate" />
+    <input type="number" name="groupSize" />
+    <textarea name="message"></textarea>
+    <input type="text" name="utm_source" />
+    <input type="text" name="utm_medium" />
+    <input type="text" name="utm_campaign" />
+  </form>
     
-    <!-- General Contact Form -->
-    <form name="general-contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="general-contact" />
-      <input name="bot-field" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="tel" name="phone" />
-      <input type="text" name="subject" />
-      <textarea name="message"></textarea>
-      <input type="text" name="created-at" />
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+  <form name="general-contact" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="bot-field" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <input type="text" name="subject" />
+    <textarea name="message"></textarea>
+    <input type="text" name="created-at" />
+  </form>
   
   <!-- Mobile Bottom Navigation Bar -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40">
@@ -598,58 +587,5 @@ const GA4_ID = import.meta.env.GA4_ID
     document.addEventListener('touchstart', () => {}, { passive: true });
   </script>
 
-  <!-- Hidden Netlify Forms for detection -->
-  <div style="display: none;">
-    <!-- Tour Inquiry Form for BNAdventure + AlbaniaVisit routing -->
-    <form name="tour-inquiry" data-netlify="true" action="/thank-you" method="POST">
-      <input type="hidden" name="form-name" value="tour-inquiry" />
-      <input type="text" name="tour-title" />
-      <input type="text" name="tour-slug" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="tel" name="phone" />
-      <input type="date" name="travel-date" />
-      <input type="number" name="group-size" />
-      <textarea name="message"></textarea>
-      <input type="text" name="operator" />
-      <input type="text" name="email-recipients" />
-      <input type="text" name="utm-source" />
-      <input type="text" name="utm-campaign" />
-      <input type="text" name="created-at" />
-    </form>
-
-    <!-- General Contact Form for AlbaniaVisit only -->
-    <form name="general-contact" data-netlify="true" action="/thank-you" method="POST">
-      <input type="hidden" name="form-name" value="general-contact" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="tel" name="phone" />
-      <textarea name="message"></textarea>
-      <input type="text" name="subject" />
-      <input type="text" name="created-at" />
-    </form>
-  </div>
-  <!-- Netlify Forms Detection - Hidden forms for Netlify to recognize -->
-  <form name="tour-inquiry" data-netlify="true" data-netlify-honeypot="bot-field" style="display:none">
-    <input type="text" name="name" />
-    <input type="email" name="email" />
-    <input type="tel" name="phone" />
-    <input type="text" name="tour_title" />
-    <input type="text" name="tour_slug" />
-    <input type="text" name="tour_operator" />
-    <input type="text" name="arrival_date" />
-    <input type="text" name="group_size" />
-    <textarea name="message"></textarea>
-    <input type="text" name="bot-field" />
-  </form>
-  
-  <form name="general-contact" data-netlify="true" data-netlify-honeypot="bot-field" style="display:none">
-    <input type="text" name="name" />
-    <input type="email" name="email" />
-    <input type="tel" name="phone" />
-    <input type="text" name="subject" />
-    <textarea name="message"></textarea>
-    <input type="text" name="bot-field" />
-  </form>
 </body>
 </html>
