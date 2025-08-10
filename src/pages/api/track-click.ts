@@ -33,13 +33,14 @@ function anonymizeIP(ip: string | null): string | null {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    // CRITICAL: Apply rate limiting first
-    const rateLimitResult = trackClickLimiter(request)
-    if (!rateLimitResult.success) {
-      return new Response(JSON.stringify({ 
-        error: rateLimitResult.error,
-        rateLimited: true 
-      }), {
+    // Apply rate limiting (skip in production for now - needs Redis or similar)
+    if (import.meta.env.DEV) {
+      const rateLimitResult = trackClickLimiter(request)
+      if (!rateLimitResult.success) {
+        return new Response(JSON.stringify({ 
+          error: rateLimitResult.error,
+          rateLimited: true 
+        }), {
         status: 429,
         headers: { 
           'Content-Type': 'application/json',
@@ -47,6 +48,7 @@ export const POST: APIRoute = async ({ request }) => {
           'Retry-After': '60'
         }
       })
+      }
     }
     
     const rawData = await request.json()

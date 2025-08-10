@@ -62,20 +62,22 @@ function getEmailRecipients(inquiryType: 'tour' | 'general', operator?: string):
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    // CRITICAL: Apply rate limiting first
-    const rateLimitResult = inquiryLimiter(request)
-    if (!rateLimitResult.success) {
-      return new Response(JSON.stringify({ 
-        error: rateLimitResult.error,
-        rateLimited: true 
-      }), {
-        status: 429,
-        headers: { 
-          'Content-Type': 'application/json',
-          'X-RateLimit-Remaining': '0',
-          'Retry-After': '3600'
-        }
-      })
+    // Apply rate limiting (skip in production for now - needs Redis or similar)
+    if (import.meta.env.DEV) {
+      const rateLimitResult = inquiryLimiter(request)
+      if (!rateLimitResult.success) {
+        return new Response(JSON.stringify({ 
+          error: rateLimitResult.error,
+          rateLimited: true 
+        }), {
+          status: 429,
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-RateLimit-Remaining': '0',
+            'Retry-After': '3600'
+          }
+        })
+      }
     }
     
     const body = await request.json()
