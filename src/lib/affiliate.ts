@@ -1,4 +1,4 @@
-import { supabaseServer } from './supabase.server'
+import { supabaseServer, isSupabaseConfigured } from './supabase.server'
 import { TABLES } from './adapters/dbMapper'
 
 export function injectAffiliateParams(
@@ -51,6 +51,12 @@ export async function logAffiliateClick(
   cookieId?: string
 ) {
   try {
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured - skipping affiliate click logging')
+      return
+    }
+    
     await supabaseServer
       .from(TABLES.clicks)
       .insert({

@@ -1,4 +1,4 @@
-import { supabaseServer } from './supabase.server'
+import { supabaseServer, isSupabaseConfigured } from './supabase.server'
 import { TABLES, mapToTourCard, mapToTourDetail } from './adapters/dbMapper'
 import type { TourCardDTO, TourDetailDTO, TourFilters, PaginationParams, PaginatedResponse } from './dto'
 
@@ -17,6 +17,18 @@ export async function getTourCardPage(
   filters: TourFilters = {},
   pagination: PaginationParams = { page: 1, limit: 12 }
 ): Promise<PaginatedResponse<TourCardDTO>> {
+  // Check if Supabase is configured
+  if (!isSupabaseConfigured()) {
+    console.error('Supabase not configured - returning empty response')
+    return {
+      items: [],
+      total: 0,
+      page: pagination.page,
+      limit: pagination.limit,
+      totalPages: 0
+    }
+  }
+  
   let query = supabaseServer
     .from(TABLES.tours)
     .select('*', { count: 'exact' })

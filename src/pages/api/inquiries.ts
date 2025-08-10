@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
-import { supabaseServer } from '@/lib/supabase.server'
+import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 
 const inquirySchema = z.object({
@@ -20,6 +20,17 @@ const inquirySchema = z.object({
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured - inquiry submission disabled')
+      return new Response(JSON.stringify({ 
+        error: 'Service temporarily unavailable' 
+      }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+    
     const body = await request.json()
     
     // Get affiliate cookie

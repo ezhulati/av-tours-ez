@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
-import { supabaseServer } from '@/lib/supabase.server'
+import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 import { validateCSRFToken } from './csrf-token'
 // Rate limiting disabled - needs Redis or edge-compatible solution
@@ -91,7 +91,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     
     if (validated.inquiryType === 'tour' && validated.tourId) {
       try {
-        const { data: tour } = await supabaseServer
+        // Check if Supabase is configured before querying
+        if (!isSupabaseConfigured()) {
+          console.warn('Supabase not configured - skipping tour fetch')
+        } else {
+          const { data: tour } = await supabaseServer
           .from(TABLES.tours)
           .select(`
             id, slug, title, 
@@ -101,9 +105,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           .eq('id', validated.tourId)
           .single()
         
-        tourData = tour
-        if (tour) {
-          operator = determineOperator(tour)
+          tourData = tour
+          if (tour) {
+            operator = determineOperator(tour)
+          }
         }
       } catch (error) {
         console.warn('Could not fetch tour data for operator detection:', error)
@@ -112,6 +117,17 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     
     // Get email recipients based on inquiry type and operator
     const emailRecipients = getEmailRecipients(validated.inquiryType, operator)
+    
+    // Check if Supabase is configured before inserting
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured - inquiry submission disabled')
+      return new Response(JSON.stringify({ 
+        error: 'Service temporarily unavailable' 
+      }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
     
     // Insert inquiry with routing information
     const { data, error } = await supabaseServer

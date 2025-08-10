@@ -10,7 +10,7 @@ import { generateSecureToken, anonymizeIP } from '@/lib/security/encryption'
 import { getTourDetail } from '@/lib/queries'
 
 export const prerender = false
-import { supabaseServer } from '@/lib/supabase.server'
+import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 import { z } from 'zod'
 
@@ -270,6 +270,12 @@ function hashUserAgent(userAgent: string | null): string {
  */
 async function logSecureClick(data: any): Promise<void> {
   try {
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured - skipping secure click logging')
+      return
+    }
+    
     await supabaseServer
       .from(TABLES.clicks)
       .insert(data)

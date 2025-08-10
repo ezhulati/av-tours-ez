@@ -1,4 +1,4 @@
-import { supabaseServer } from '@/lib/supabase.server'
+import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 
 interface ClickData {
@@ -47,6 +47,12 @@ interface ReportData {
 
 // Get clicks for a specific period
 async function getClicksForPeriod(startDate: Date, endDate: Date): Promise<ClickData[]> {
+  // Check if Supabase is configured
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase not configured - returning empty click data')
+    return []
+  }
+  
   const { data, error } = await supabaseServer
     .from(TABLES.clicks)
     .select('*')

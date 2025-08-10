@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
-import { supabaseServer } from '@/lib/supabase.server'
+import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 // Rate limiting disabled - needs Redis or edge-compatible solution
 
@@ -33,6 +33,16 @@ function anonymizeIP(ip: string | null): string | null {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured - skipping click tracking')
+      return new Response(JSON.stringify({ success: true, skipped: true }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    }
     
     const rawData = await request.json()
     

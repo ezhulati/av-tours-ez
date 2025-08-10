@@ -12,7 +12,7 @@ import type { APIRoute } from 'astro'
 import { createPublicEndpoint } from '@/lib/security/secure-api-handler'
 import { validators, sanitizers } from '@/lib/security/middleware'
 import { encrypt, mask, anonymizeIP, gdpr } from '@/lib/security/encryption'
-import { supabaseServer } from '@/lib/supabase.server'
+import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
 
 // Enhanced inquiry schema with GDPR consent
@@ -82,6 +82,17 @@ export const POST: APIRoute = createPublicEndpoint(
     }
     
     try {
+      // Check if Supabase is configured
+      if (!isSupabaseConfigured()) {
+        console.warn('Supabase not configured - secure inquiry submission disabled')
+        return new Response(JSON.stringify({ 
+          error: 'Service temporarily unavailable' 
+        }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' }
+        })
+      }
+      
       // Insert with transaction for data integrity
       const { data, error } = await supabaseServer
         .from(TABLES.inquiries)

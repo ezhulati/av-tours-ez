@@ -1,44 +1,34 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 
-let _supabaseServer: SupabaseClient | undefined
-
-// Lazy getter that creates the client on first use
-export const supabaseServer = new Proxy({} as SupabaseClient, {
-  get(target, prop, receiver) {
-    if (!_supabaseServer) {
-      // Try different env variable access methods for compatibility
-      let url: string | undefined
-      let key: string | undefined
-      
-      // For Netlify Edge Functions
-      if (typeof process !== 'undefined' && process.env) {
-        url = process.env.SUPABASE_URL
-        key = process.env.SUPABASE_SERVICE_ROLE_KEY
-      }
-      
-      // For local development with Vite
-      if (!url && typeof import.meta !== 'undefined' && import.meta.env) {
-        url = import.meta.env.SUPABASE_URL
-        key = import.meta.env.SUPABASE_SERVICE_ROLE_KEY
-      }
-      
-      if (!url || !key) {
-        console.error('Supabase environment variables not found:', {
-          hasUrl: !!url,
-          hasKey: !!key,
-          processEnvExists: typeof process !== 'undefined' && !!process.env,
-          importMetaExists: typeof import.meta !== 'undefined' && !!import.meta.env
-        })
-        throw new Error('Missing Supabase environment variables')
-      }
-
-      _supabaseServer = createClient(url, key, { 
-        auth: { 
-          persistSession: false 
-        } 
-      })
-    }
-    
-    return Reflect.get(_supabaseServer, prop, receiver)
+// Get environment variables - compatible with both Vite and Netlify Edge
+function getEnvVar(name: string): string | undefined {
+  // Try process.env first (Netlify Edge Functions)
+  if (typeof process !== 'undefined' && process.env && process.env[name]) {
+    return process.env[name]
   }
-})
+  
+  // Try import.meta.env (Vite/local dev)
+  if (typeof import !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[name]) {
+    return import.meta.env[name]
+  }
+  
+  return undefined
+}
+
+// Get the environment variables
+const supabaseUrl = getEnvVar('SUPABASE_URL')
+const supabaseKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY')
+
+// Create the client only if we have the env vars
+export const supabaseServer = supabaseUrl && supabaseKey 
+  ? createClient(supabaseUrl, supabaseKey, { 
+      auth: { 
+        persistSession: false 
+      } 
+    })
+  : null as any // Return null if no env vars, but typed as any to avoid breaking existing code
+
+// Helper to check if Supabase is configured
+export function isSupabaseConfigured(): boolean {
+  return !!(supabaseUrl && supabaseKey)
+}
