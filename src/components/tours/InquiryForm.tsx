@@ -147,39 +147,38 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                     <ValidationError prefix="Phone" field="phone" errors={state.errors} className="text-red-500 text-xs mt-1" />
                   </div>
                   
-                  {/* Date and Group Size Row */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {/* Travel Date */}
-                    <div>
-                      <label htmlFor="form-date" className="block text-sm font-medium text-gray-700 mb-1">
-                        Travel Date
-                      </label>
-                      <input
-                        id="form-date"
-                        type="date"
-                        name="travel_date"
-                        min={new Date().toISOString().split('T')[0]}
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
-                      />
-                    </div>
-                    
-                    {/* Group Size */}
-                    <div>
-                      <label htmlFor="form-group" className="block text-sm font-medium text-gray-700 mb-1">
-                        Group Size
-                      </label>
-                      <select
-                        id="form-group"
-                        name="group_size"
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white"
-                      >
-                        <option value="1">1 person</option>
-                        <option value="2">2 people</option>
-                        <option value="3-4">3-4 people</option>
-                        <option value="5-8">5-8 people</option>
-                        <option value="9+">9+ people</option>
-                      </select>
-                    </div>
+                  {/* Travel Date */}
+                  <div>
+                    <label htmlFor="form-date" className="block text-sm font-medium text-gray-700 mb-1">
+                      Travel Date
+                    </label>
+                    <input
+                      id="form-date"
+                      type="date"
+                      name="travel_date"
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white appearance-none"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                    />
+                  </div>
+                  
+                  {/* Group Size */}
+                  <div>
+                    <label htmlFor="form-group" className="block text-sm font-medium text-gray-700 mb-1">
+                      Group Size
+                    </label>
+                    <select
+                      id="form-group"
+                      name="group_size"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent bg-white appearance-none"
+                      style={{ WebkitAppearance: 'none' }}
+                    >
+                      <option value="1">1 person</option>
+                      <option value="2">2 people</option>
+                      <option value="3-4">3-4 people</option>
+                      <option value="5-8">5-8 people</option>
+                      <option value="9+">9+ people</option>
+                    </select>
                   </div>
                   
                   {/* Message Field */}
