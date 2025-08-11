@@ -135,11 +135,17 @@ const OptimizedTourCard: React.FC<OptimizedTourCardProps> = ({ tour, priority = 
           </div>
           
           {/* Price Badge */}
-          <div className="absolute bottom-3 left-3 bg-gray-900/90 backdrop-blur-sm text-white px-3 py-2 rounded-lg">
+          <div className={`absolute bottom-3 left-3 backdrop-blur-sm px-3 py-2 rounded-lg ${
+            priceDisplay.primary === 'Check availability' 
+              ? 'bg-white/90 text-gray-700' 
+              : 'bg-gray-900/90 text-white'
+          }`}>
             {priceDisplay.secondary && (
               <div className="text-xs opacity-90">{priceDisplay.secondary}</div>
             )}
-            <div className="text-lg font-bold">{priceDisplay.primary}</div>
+            <div className={priceDisplay.primary === 'Check availability' ? 'text-sm font-medium' : 'text-lg font-bold'}>
+              {priceDisplay.primary}
+            </div>
           </div>
         </div>
         

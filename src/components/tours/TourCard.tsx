@@ -61,8 +61,8 @@ export default function TourCard({ tour, loading = false }: TourCardProps) {
               </span>
             )}
           </div>
-          <span className="font-bold text-lg">
-            {tour.priceMin ? `From €${tour.priceMin}` : 'Price on request'}
+          <span className={tour.priceMin ? "font-bold text-lg" : "text-sm text-gray-600"}>
+            {tour.priceMin ? `From €${tour.priceMin}` : 'Check availability'}
           </span>
         </div>
         <a 

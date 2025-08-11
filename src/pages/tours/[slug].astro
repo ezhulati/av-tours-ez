@@ -364,7 +364,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
           <div class="info-card border-2 border-accent/20">
             <!-- Price Section -->
             <div class="text-center pb-6 border-b">
-              {tour.priceMin ? (
+              {tour.priceMin && tour.price !== 'Check availability' ? (
                 <>
                   <p class="text-sm text-gray-500 uppercase tracking-wide mb-2">Starting from</p>
                   <div class="text-5xl font-bold text-gray-900 mb-2">
@@ -377,9 +377,9 @@ const breadcrumbSchema = generateBreadcrumbSchema([
                 </>
               ) : (
                 <>
-                  <p class="text-sm text-gray-500 uppercase tracking-wide mb-2">Pricing</p>
-                  <div class="text-3xl font-bold text-gray-900 mb-2">Price on Request</div>
-                  <p class="text-gray-500">Contact for details</p>
+                  <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Pricing</p>
+                  <div class="text-base font-medium text-gray-600 mb-1">Check availability</div>
+                  <p class="text-sm text-gray-500">View current prices on partner site</p>
                 </>
               )}
             </div>
