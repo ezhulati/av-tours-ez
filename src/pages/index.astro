@@ -4,9 +4,11 @@ import { getFeaturedTours, getTotalTourCount } from '@/lib/queries'
 import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSchema } from '@/lib/seo'
 import BookingButton from '@/components/tours/BookingButton'
 import ContactForm from '@/components/ContactForm'
+import { getHomepageHeroImages } from '@/data/heroImages'
 
 const featuredTours = await getFeaturedTours(6)
 const totalTourCount = await getTotalTourCount()
+const heroImages = getHomepageHeroImages()
 const organizationSchema = generateOrganizationSchema()
 const websiteSchema = generateWebSiteSchema()
 const breadcrumbSchema = generateBreadcrumbSchema([
@@ -22,33 +24,26 @@ const breadcrumbSchema = generateBreadcrumbSchema([
 >
   <!-- Hero Section with Brand Design - Mobile Optimized -->
   <section class="relative h-screen min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
-    <!-- Slideshow Background -->
+    <!-- Premium Hero Slideshow - Adventure & Action -->
     <div class="absolute inset-0">
       <div class="hero-slideshow">
-        <div class="slide active">
-          <img src="/Assets/Albania/Accursed_Mountains.jpeg" alt="Accursed Mountains" class="slide-image" />
-        </div>
-        <div class="slide">
-          <img src="/Assets/Albania/Albanian_Alps.jpg" alt="Albanian Alps" class="slide-image" />
-        </div>
-        <div class="slide">
-          <img src="/Assets/Albania/Valbona_to_Theth_Trail.jpg" alt="Valbona to Theth Trail" class="slide-image" />
-        </div>
-        <div class="slide">
-          <img src="/Assets/Albania/Northern_Albania_Shala_River.jpeg" alt="Shala River" class="slide-image" />
-        </div>
-        <div class="slide">
-          <img src="/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg" alt="Albanian Riviera" class="slide-image" />
-        </div>
-        <div class="slide">
-          <img src="/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg" alt="Gjeravica Peak Kosovo" class="slide-image" />
-        </div>
-        <div class="slide">
-          <img src="/Assets/Montenegro/Kotor Montenegro_123711552.jpeg" alt="Bay of Kotor" class="slide-image" />
-        </div>
-        <div class="slide">
-          <img src="/Assets/Albania/Albania_Lake_Koman.jpeg" alt="Lake Koman" class="slide-image" />
-        </div>
+        {heroImages.map((image, index) => (
+          <div class={`slide ${index === 0 ? 'active' : ''}`}>
+            <picture>
+              <source 
+                srcset={image.optimizedSrc} 
+                type="image/webp"
+              />
+              <img 
+                src={image.src} 
+                alt={image.alt} 
+                class="slide-image"
+                loading={index < 2 ? "eager" : "lazy"}
+                fetchpriority={index === 0 ? "high" : "auto"}
+              />
+            </picture>
+          </div>
+        ))}
       </div>
       <!-- Optimized overlay with perfect contrast balance -->
       <div class="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-gray-800/50 to-gray-900/55"></div>
