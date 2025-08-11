@@ -31,3 +31,7 @@
 # Price Synchronization - Daily
 [functions."scheduled-price-sync"]
   schedule = "0 3 * * *"  # Every day at 3 AM UTC
+
+# Image Synchronization - Weekly
+[functions."scheduled-image-sync"]
+  schedule = "0 2 * * 0"  # Every Sunday at 2 AM UTC

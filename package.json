@@ -21,11 +21,15 @@
     "test:seo:ci": "NODE_OPTIONS='--max-old-space-size=2048' playwright test tests/seo/ --workers=1",
     "test:all": "pnpm test:coverage && pnpm test:e2e",
     "test:ci": "vitest run && playwright test",
-    "sync:prices": "tsx src/scripts/syncPrices.ts"
+    "sync:prices": "tsx src/scripts/syncPrices.ts",
+    "sync:images": "tsx scripts/sync-images.ts",
+    "sync:images:all": "tsx scripts/sync-images.ts all",
+    "sync:images:stats": "tsx scripts/sync-images.ts stats"
   },
   "dependencies": {
     "@astrojs/netlify": "^6.5.6",
     "@astrojs/react": "^4.3.0",
+    "@netlify/functions": "^2.8.2",
     "@astrojs/sitemap": "^3.4.2",
     "@astrojs/tailwind": "^6.0.2",
     "@formspree/react": "^3.0.0",
