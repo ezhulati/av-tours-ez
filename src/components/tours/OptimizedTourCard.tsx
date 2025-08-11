@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import BookingButton from './BookingButton'
 import { TourCardSkeleton } from '../ui/SkeletonLoader'
+import { formatPriceDisplay } from '@/lib/pricing/priceValidator'
 
 interface Tour {
   id: string
@@ -77,6 +78,12 @@ const OptimizedTourCard: React.FC<OptimizedTourCardProps> = ({ tour, priority = 
   
   const mainImage = tour.images?.[0]?.url || '/placeholder.jpg'
   
+  // Format price display with validation
+  const priceDisplay = formatPriceDisplay(
+    tour.priceMin ? `€${tour.priceMin}` : null,
+    'BNAdventure'
+  )
+  
   return (
     <article 
       ref={cardRef}
@@ -128,12 +135,12 @@ const OptimizedTourCard: React.FC<OptimizedTourCardProps> = ({ tour, priority = 
           </div>
           
           {/* Price Badge */}
-          {tour.priceMin && (
-            <div className="absolute bottom-3 left-3 bg-gray-900/90 backdrop-blur-sm text-white px-3 py-2 rounded-lg">
-              <div className="text-xs opacity-80">From</div>
-              <div className="text-lg font-bold">€{tour.priceMin}</div>
-            </div>
-          )}
+          <div className="absolute bottom-3 left-3 bg-gray-900/90 backdrop-blur-sm text-white px-3 py-2 rounded-lg">
+            {priceDisplay.secondary && (
+              <div className="text-xs opacity-90">{priceDisplay.secondary}</div>
+            )}
+            <div className="text-lg font-bold">{priceDisplay.primary}</div>
+          </div>
         </div>
         
         {/* Content */}
