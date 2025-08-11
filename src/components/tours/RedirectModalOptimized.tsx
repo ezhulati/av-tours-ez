@@ -151,12 +151,10 @@ export default function RedirectModalOptimized({
                       strokeLinecap="round" 
                       strokeLinejoin="round" 
                       strokeWidth="2" 
-                      d={benefit.icon}
+                      d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <p>
-                    <strong className="text-gray-700">{benefit.title}:</strong> {benefit.description}
-                  </p>
+                  <p className="text-gray-700">{benefit}</p>
                 </div>
               ))}
             </div>
@@ -169,13 +167,13 @@ export default function RedirectModalOptimized({
                 onClick={onClose}
                 className="btn-outline w-full sm:flex-1"
               >
-                {microcopy.redirect.stayButton}
+                {microcopy.redirect.buttons.back}
               </button>
               <button
                 onClick={onContinue}
                 className="btn-primary w-full sm:flex-1 flex items-center justify-center gap-1 text-sm px-3"
               >
-                <span>{microcopy.redirect.continueButton}</span>
+                <span>{microcopy.redirect.buttons.continue}</span>
                 <svg 
                   className="w-4 h-4 flex-shrink-0" 
                   fill="none" 

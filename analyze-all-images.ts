@@ -278,8 +278,10 @@ async function findBestHeroImages() {
   
   console.log('\nFinal Selection:')
   recommendations.forEach((img, i) => {
-    console.log(`${i + 1}. ${img.filename}`)
-    console.log(`   ${img.path}`)
+    if (img) {
+      console.log(`${i + 1}. ${img.filename}`)
+      console.log(`   ${img.path}`)
+    }
   })
   
   // Generate code snippet
@@ -287,12 +289,14 @@ async function findBestHeroImages() {
   console.log('=' .repeat(70))
   console.log('export const heroImages = [')
   recommendations.slice(0, 8).forEach(img => {
-    console.log(`  {`)
-    console.log(`    src: '${img.path}',`)
-    console.log(`    alt: '${img.content.replace('/', ' ')} in Albania',`)
-    console.log(`    title: '${img.filename.split('.')[0].replace(/_/g, ' ')}',`)
-    console.log(`    category: '${img.content.includes('adventure') || img.content.includes('mountain') ? 'adventure' : 'destination'}'`)
-    console.log(`  },`)
+    if (img) {
+      console.log(`  {`)
+      console.log(`    src: '${img.path}',`)
+      console.log(`    alt: '${img.content.replace('/', ' ')} in Albania',`)
+      console.log(`    title: '${img.filename.split('.')[0].replace(/_/g, ' ')}',`)
+      console.log(`    category: '${img.content.includes('adventure') || img.content.includes('mountain') ? 'adventure' : 'destination'}'`)
+      console.log(`  },`)
+    }
   })
   console.log(']')
 }

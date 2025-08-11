@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import RedirectModal from './RedirectModalOptimized'
+import RedirectModalOptimized from './RedirectModalOptimized'
 import { buildAffiliateUrl, trackBookingClick } from '@/lib/affiliateTracking'
 import { getEnhancedTour } from '@/data/enhancedTours'
 import { microcopy } from '@/lib/microcopy'
