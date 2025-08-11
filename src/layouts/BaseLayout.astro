@@ -261,23 +261,111 @@ const GA4_ID = import.meta.env.GA4_ID
             
             <!-- Left Column - Proverb & Description -->
             <div class="text-left">
-              <!-- Proverb -->
+              <!-- Albanian Proverb - Beautiful Single Line Layout -->
               <div class="mb-8">
-                <!-- Albanian text - responsive sizing to fit screen width -->
-                <div class="font-serif italic">
-                  <!-- Mobile: scale to fit viewport width, Desktop: fixed sizes -->
-                  <p class="text-[clamp(0.875rem,3.5vw,1.75rem)] sm:text-2xl md:text-3xl lg:text-4xl text-white leading-tight">
-                    "Shtëpia e shqiptarit është e mikut dhe e Zotit"
-                  </p>
-                  
-                  <!-- Pronunciation - scales proportionally -->
-                  <p class="text-[clamp(0.5rem,1.8vw,0.75rem)] sm:text-xs md:text-sm lg:text-base text-gray-400 mt-1 md:mt-2 italic">
-                    shtuh-PEE-ah eh shchip-TAR-eet UHSH-tuh eh MEE-koot dheh eh ZOH-teet
-                  </p>
+                <!-- Quotation Mark -->
+                <div class="text-white/40 text-6xl md:text-8xl font-serif leading-none mb-2">"</div>
+                
+                <!-- Albanian Quote with Phonetic Spelling -->
+                <div class="font-serif italic overflow-x-auto">
+                  <div class="flex flex-wrap justify-start items-start gap-x-3 md:gap-x-4 lg:gap-x-6 gap-y-6 min-w-max">
+                    <!-- Shtëpia -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        Shtëpia
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        shtuh-PEE-ah
+                      </div>
+                    </div>
+                    
+                    <!-- e -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        e
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        eh
+                      </div>
+                    </div>
+                    
+                    <!-- shqiptarit -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        shqiptarit
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        shchip-TAR-eet
+                      </div>
+                    </div>
+                    
+                    <!-- është -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        është
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        UHSH-tuh
+                      </div>
+                    </div>
+                    
+                    <!-- e -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        e
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        eh
+                      </div>
+                    </div>
+                    
+                    <!-- mikut -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        mikut
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        MEE-koot
+                      </div>
+                    </div>
+                    
+                    <!-- dhe -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        dhe
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        dheh
+                      </div>
+                    </div>
+                    
+                    <!-- e -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        e
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        eh
+                      </div>
+                    </div>
+                    
+                    <!-- Zotit -->
+                    <div class="text-center flex-shrink-0">
+                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
+                        Zotit
+                      </div>
+                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
+                        ZOH-teet
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
-                <!-- English translation - scales to fit -->
-                <p class="text-[clamp(0.75rem,2.5vw,1.125rem)] sm:text-base md:text-xl lg:text-2xl text-gray-300 font-light mt-3 md:mt-4">
+                <!-- Closing Quotation Mark -->
+                <div class="text-white/40 text-6xl md:text-8xl font-serif leading-none mt-4 text-right">"</div>
+                
+                <!-- English Translation -->
+                <p class="text-[clamp(1rem,2.8vw,1.5rem)] md:text-xl lg:text-2xl text-gray-300 font-light mt-6 italic text-center">
                   "The house of an Albanian belongs to the guest and to God."
                 </p>
               </div>
