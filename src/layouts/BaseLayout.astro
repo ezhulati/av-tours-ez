@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css'
+import CookieConsent from '@/components/CookieConsent'
 
 export interface Props {
   title: string
@@ -563,6 +564,9 @@ const GA4_ID = import.meta.env.GA4_ID
     // Improve touch responsiveness
     document.addEventListener('touchstart', () => {}, { passive: true });
   </script>
+  
+  <!-- Cookie Consent for GDPR Compliance -->
+  <CookieConsent client:idle />
 
 </body>
 </html>
