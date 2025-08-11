@@ -208,16 +208,22 @@ export default function RedirectModal({
                   />
                   <div className="flex-1">
                     <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                      {microcopy.redirect.checkbox.label}
+                      {microcopy.redirect.checkbox.label}{' '}
+                      <a 
+                        href={microcopy.redirect.checkbox.termsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-accent hover:underline"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {microcopy.redirect.checkbox.termsLink}
+                      </a>
                     </span>
                     {!accepted && (
                       <p className="text-xs text-gray-500 mt-1">
                         {microcopy.redirect.checkbox.helper}
                       </p>
                     )}
-                    <p className="text-[10px] text-gray-400 mt-1">
-                      {microcopy.redirect.checkbox.termsNote}
-                    </p>
                   </div>
                 </label>
               </div>

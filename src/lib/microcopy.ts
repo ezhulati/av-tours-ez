@@ -268,16 +268,16 @@ export const microcopy = {
       'Secure booking with verified operator',
     ],
     checkbox: {
-      label: 'I\'m leaving AlbaniaVisit.com',
+      label: 'I\'m leaving AlbaniaVisit.com and accept the',
       labelVariants: ['Continue to partner site', 'Open BNAdventure.com', 'I understand I\'m leaving this site'],
       helper: 'Check this box to continue',
       helperError: 'Please check the box above to continue',
-      termsNote: 'By checking, you accept our terms of service',
-      termsNoteVariants: ['By proceeding, you agree to our terms', 'Checking confirms acceptance of terms']
+      termsLink: 'terms of service',
+      termsUrl: '/terms'
     },
     buttons: {
-      continue: 'Continue to BNAdventure →',
-      continueVariants: ['Check Availability →', 'View on BNAdventure', 'Open Booking Page'],
+      continue: 'Continue to BNAdventure',
+      continueVariants: ['Check Availability', 'View on BNAdventure', 'Open Booking Page'],
       back: 'Stay here',
       backVariants: ['Not yet', 'Go back', 'Return to tour'],
     },
