@@ -8,13 +8,10 @@ interface TourDisclaimerProps {
 export default function TourDisclaimer({ variant = 'compact', className = '' }: TourDisclaimerProps) {
   if (variant === 'minimal') {
     return (
-      <div className={`bg-yellow-50 border border-yellow-400 rounded-lg p-3 text-xs text-gray-700 ${className}`}>
-        <p className="font-semibold">
-          ⚠️ Important: AlbaniaVisit.com is not a tour operator. We provide information only. 
-          All bookings are made directly with third-party operators. You assume all travel risks. 
-          <a href="/travel-disclaimer" className="text-accent hover:text-accent-600 font-bold ml-1">
-            Read full disclaimer
-          </a>
+      <div className={`bg-gray-50 rounded-lg p-3 text-xs text-gray-600 ${className}`}>
+        <p>
+          Tours provided by independent operators. 
+          <a href="/terms" className="text-accent hover:underline ml-1">Terms apply</a>.
         </p>
       </div>
     )
@@ -22,138 +19,90 @@ export default function TourDisclaimer({ variant = 'compact', className = '' }: 
 
   if (variant === 'compact') {
     return (
-      <div className={`bg-red-50 border-2 border-red-300 rounded-lg p-4 ${className}`}>
-        <h4 className="font-bold text-red-900 mb-2 flex items-center">
-          <span className="text-xl mr-2">⚠️</span>
-          Important Safety & Legal Notice
-        </h4>
-        <div className="space-y-2 text-sm text-gray-800">
-          <p className="font-semibold">
-            Albania Visit Tours is NOT a tour operator. We are an information service only.
-          </p>
-          <p>
-            When you click "Check Availability," you will be redirected to the actual tour operator's website 
-            (BNAdventure.com). Any booking contract is between you and the tour operator directly.
-          </p>
-          <p className="font-semibold">
-            By booking any tour, you acknowledge that you:
-          </p>
-          <ul className="list-disc pl-5 space-y-1 text-xs">
-            <li>Assume ALL risks including injury, death, or property loss</li>
-            <li>Release AlbaniaVisit.com from ANY and ALL liability</li>
-            <li>Will not hold us responsible for tour quality, safety, or any issues</li>
-            <li>Understand travel involves inherent dangers</li>
-          </ul>
-          <p className="font-bold text-red-900 mt-3">
-            We strongly recommend purchasing comprehensive travel insurance.
-          </p>
-          <div className="mt-3 pt-3 border-t border-red-200">
-            <a 
-              href="/travel-disclaimer" 
-              className="text-accent hover:text-accent-600 font-bold text-sm"
-            >
-              Read Complete Travel Disclaimer →
-            </a>
-            {' | '}
-            <a 
-              href="/terms" 
-              className="text-accent hover:text-accent-600 font-bold text-sm"
-            >
-              Terms of Service →
-            </a>
+      <div className={`bg-gray-50 border border-gray-200 rounded-lg p-4 ${className}`}>
+        <div className="flex items-start space-x-2">
+          <svg className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <div className="text-sm text-gray-700 space-y-2">
+            <p>
+              <strong>Booking Information:</strong> Tours are operated by independent partners. 
+              Albania Visit Tours provides information and facilitates bookings only.
+            </p>
+            <p className="text-xs text-gray-600">
+              By booking, you acknowledge travel risks and agree to our{' '}
+              <a href="/terms" className="text-accent hover:underline">terms</a> and{' '}
+              <a href="/travel-disclaimer" className="text-accent hover:underline">travel policies</a>.
+            </p>
           </div>
         </div>
       </div>
     )
   }
 
-  // Full variant
+  // Full variant - still available but more professional
   return (
-    <div className={`bg-red-50 border-2 border-red-500 rounded-lg p-6 ${className}`}>
-      <h3 className="text-xl font-bold text-red-900 mb-4 flex items-center">
-        <span className="text-2xl mr-2">⚠️</span>
-        CRITICAL SAFETY & LEGAL DISCLAIMER
+    <div className={`bg-white border border-gray-300 rounded-lg p-6 ${className}`}>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+        <svg className="w-6 h-6 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Important Booking Information
       </h3>
       
-      <div className="space-y-4 text-gray-800">
-        <div className="bg-white border border-red-300 rounded p-4">
-          <p className="font-bold text-lg text-red-900 mb-2">
-            Albania Visit Tours is NOT a Tour Operator
+      <div className="space-y-4 text-sm text-gray-700">
+        <div className="bg-gray-50 rounded-lg p-4">
+          <p className="font-semibold text-gray-900 mb-2">
+            About Our Service
           </p>
           <p>
-            We are solely an informational website. We do not operate, control, or provide any tours. 
-            When you click any booking button, you are leaving our site and contracting directly with 
-            an independent tour operator (primarily BNAdventure.com). We have no control over tour 
-            operations, safety, quality, or any aspect of the services provided.
+            Albania Visit Tours is an information and booking facilitation service. All tours are 
+            operated by independent partners, primarily BNAdventure.com. When you book, your contract 
+            is directly with the tour operator.
           </p>
         </div>
 
         <div>
-          <p className="font-bold mb-2">By proceeding to book this tour, you acknowledge and agree:</p>
-          <ul className="space-y-2">
-            <li className="flex">
-              <span className="text-red-600 mr-2">•</span>
-              <div>
-                <strong>You assume ALL risks</strong> associated with this tour including but not limited to 
-                injury, death, illness, property damage, financial loss, natural disasters, political unrest, 
-                crime, and any other hazards of travel.
-              </div>
+          <p className="font-semibold text-gray-900 mb-2">Travel Terms & Conditions</p>
+          <ul className="space-y-2 ml-4">
+            <li className="flex items-start">
+              <span className="text-gray-400 mr-2">•</span>
+              <span>All travel activities involve inherent risks that participants assume</span>
             </li>
-            <li className="flex">
-              <span className="text-red-600 mr-2">•</span>
-              <div>
-                <strong>You completely release and discharge</strong> Albania Visit Tours from ANY and ALL 
-                liability, claims, demands, or causes of action, whether caused by negligence or otherwise.
-              </div>
+            <li className="flex items-start">
+              <span className="text-gray-400 mr-2">•</span>
+              <span>We recommend comprehensive travel insurance for all bookings</span>
             </li>
-            <li className="flex">
-              <span className="text-red-600 mr-2">•</span>
-              <div>
-                <strong>You agree to indemnify and hold harmless</strong> Albania Visit Tours from any 
-                claims, including the cost of defense and attorney's fees.
-              </div>
+            <li className="flex items-start">
+              <span className="text-gray-400 mr-2">•</span>
+              <span>Tour operators maintain their own terms, conditions, and policies</span>
             </li>
-            <li className="flex">
-              <span className="text-red-600 mr-2">•</span>
-              <div>
-                <strong>You understand</strong> that tour activities can be dangerous and that adequate 
-                medical facilities may not be available.
-              </div>
+            <li className="flex items-start">
+              <span className="text-gray-400 mr-2">•</span>
+              <span>Albania Visit Tours' liability is limited as outlined in our terms of service</span>
             </li>
           </ul>
         </div>
 
-        <div className="bg-yellow-50 border border-yellow-400 rounded p-3">
-          <p className="font-bold text-gray-900 mb-1">
-            🛡️ Travel Insurance Strongly Recommended
+        <div className="pt-4 border-t border-gray-200">
+          <p className="text-xs text-gray-600 mb-3">
+            This booking is subject to our terms of service and travel policies. 
+            Disputes are governed by Texas law with jurisdiction in Dallas County.
           </p>
-          <p className="text-sm">
-            We strongly advise purchasing comprehensive travel insurance including medical coverage, 
-            emergency evacuation, trip cancellation, and coverage for adventure activities.
-          </p>
-        </div>
-
-        <div className="bg-white border border-red-300 rounded p-4">
-          <p className="font-bold text-gray-900 mb-2">Legal Jurisdiction</p>
-          <p className="text-sm">
-            Any disputes shall be governed by the laws of Texas, USA, with exclusive jurisdiction in 
-            Dallas County, Texas. Claims must be filed within one year or are forever barred.
-          </p>
-        </div>
-
-        <div className="flex gap-4 mt-4 pt-4 border-t-2 border-red-300">
-          <a 
-            href="/travel-disclaimer" 
-            className="flex-1 text-center bg-red-600 text-white px-4 py-2 rounded font-bold hover:bg-red-700 transition-colors"
-          >
-            Read Full Travel Disclaimer
-          </a>
-          <a 
-            href="/terms" 
-            className="flex-1 text-center bg-gray-600 text-white px-4 py-2 rounded font-bold hover:bg-gray-700 transition-colors"
-          >
-            View Terms of Service
-          </a>
+          <div className="flex gap-4">
+            <a 
+              href="/terms" 
+              className="text-accent hover:text-accent-600 font-medium text-sm"
+            >
+              Terms of Service →
+            </a>
+            <a 
+              href="/travel-disclaimer" 
+              className="text-accent hover:text-accent-600 font-medium text-sm"
+            >
+              Travel Policies →
+            </a>
+          </div>
         </div>
       </div>
     </div>
