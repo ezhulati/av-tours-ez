@@ -19,13 +19,12 @@ interface ImageOptimizationOptions {
   enhance?: boolean
 }
 
-// Cloudinary configuration (can use free tier or upgrade as needed)
-const CLOUDINARY_CLOUD_NAME = 'dwnmuolg8' // Your Cloudinary cloud name
-const CLOUDINARY_BASE_URL = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch`
+// Using Weserv.nl - FREE image optimization service (no signup required!)
+// Documentation: https://images.weserv.nl/docs/
 
 /**
- * Generate optimized image URL using Cloudinary's fetch API
- * This doesn't require uploading images - it fetches and optimizes on-the-fly
+ * Generate optimized image URL using Weserv.nl
+ * FREE service with unlimited usage, no API key needed
  */
 export function getOptimizedImageUrl(
   originalUrl: string,
@@ -42,53 +41,55 @@ export function getOptimizedImageUrl(
   
   const opts = { ...defaultOptions, ...options }
   
-  // Build Cloudinary transformation string
-  const transformations: string[] = []
+  // Build Weserv.nl URL with parameters
+  const baseUrl = 'https://images.weserv.nl/'
+  const params = new URLSearchParams()
   
-  // Size transformations
+  // Set the source URL
+  params.set('url', originalUrl)
+  
+  // Size parameters
   if (opts.width) {
-    transformations.push(`w_${opts.width}`)
+    params.set('w', opts.width.toString())
   }
   if (opts.height) {
-    transformations.push(`h_${opts.height}`)
+    params.set('h', opts.height.toString())
   }
   
-  // Quality and format
-  transformations.push(`q_${opts.quality}`)
-  transformations.push(`f_${opts.format}`)
+  // Quality (0-100, or use default 85 for 'auto:best')
+  const quality = opts.quality === 'auto:best' ? '90' :
+                  opts.quality === 'auto:good' ? '80' :
+                  opts.quality === 'auto:eco' ? '60' :
+                  typeof opts.quality === 'number' ? opts.quality.toString() : '85'
+  params.set('q', quality)
   
-  // Enhancements for travel photos
+  // Format conversion
+  if (opts.format === 'auto') {
+    params.set('output', 'webp') // WebP for best compression
+  } else if (opts.format) {
+    params.set('output', opts.format)
+  }
+  
+  // Enhancement filters
   if (opts.enhance) {
-    // Auto enhance colors and contrast
-    transformations.push('e_auto_brightness')
-    transformations.push('e_auto_color')
-    transformations.push('e_sharpen:50')
+    params.set('af', '') // Auto filter (enhances colors/contrast)
+    params.set('sharp', '1') // Sharpen image
   }
   
-  // AI upscaling for low-res images
-  if (opts.upscale) {
-    transformations.push('c_scale')
-    transformations.push('e_upscale')
-    transformations.push('fl_progressive:steep')
-  }
+  // Progressive/interlaced loading
+  params.set('il', '') // Interlace for progressive loading
   
-  // Blur placeholder for lazy loading
+  // Blur for placeholder
   if (opts.blur) {
-    transformations.push('e_blur:1000')
-    transformations.push('q_1')
-    transformations.push('w_50')
+    params.set('blur', '20')
+    params.set('w', '50') // Small size for placeholder
+    params.set('q', '30') // Low quality for placeholder
   }
   
-  // Additional optimizations
-  transformations.push('fl_lossy')
-  transformations.push('fl_strip_profile')
-  transformations.push('dpr_auto')
+  // Cache control (-1 = no expiry)
+  params.set('n', '-1')
   
-  // Build final URL
-  const transformation = transformations.join(',')
-  const encodedUrl = encodeURIComponent(originalUrl)
-  
-  return `${CLOUDINARY_BASE_URL}/${transformation}/${encodedUrl}`
+  return `${baseUrl}?${params.toString()}`
 }
 
 /**
@@ -100,7 +101,12 @@ export function generateSrcSet(
 ): string {
   return sizes
     .map(width => {
-      const url = getOptimizedImageUrl(originalUrl, { width })
+      const url = getOptimizedImageUrl(originalUrl, { 
+        width,
+        format: 'auto',
+        quality: 'auto:best',
+        enhance: true
+      })
       return `${url} ${width}w`
     })
     .join(', ')
@@ -112,8 +118,9 @@ export function generateSrcSet(
 export function getPlaceholderUrl(originalUrl: string): string {
   return getOptimizedImageUrl(originalUrl, {
     width: 50,
-    quality: 1,
-    blur: true
+    quality: 30,
+    blur: true,
+    format: 'jpg' // Use JPEG for placeholders (smaller for blurred images)
   })
 }
 

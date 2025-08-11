@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import { 
   getOptimizedImageUrl, 
   generateSrcSet,
+  getPlaceholderUrl,
   IMAGE_SIZES 
-} from '@/lib/imageOptimizationSimple'
+} from '@/lib/imageOptimization'
 
 interface OptimizedImageProps {
   src: string
@@ -45,16 +46,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const dimensions = IMAGE_SIZES[context] || IMAGE_SIZES.card
   const optimizedUrl = getOptimizedImageUrl(src, {
     ...dimensions,
-    quality: 90,
-    format: 'auto'
+    quality: 'auto:best',
+    format: 'auto',
+    enhance: true,
+    upscale: true
   })
   
-  // Create placeholder by using small version
-  const placeholderUrl = getOptimizedImageUrl(src, {
-    width: 50,
-    quality: 30,
-    format: 'jpg'
-  })
+  const placeholderUrl = getPlaceholderUrl(src)
   const srcSet = generateSrcSet(src)
   
   // Sizes for responsive loading
