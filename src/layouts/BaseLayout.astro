@@ -263,63 +263,21 @@ const GA4_ID = import.meta.env.GA4_ID
             <div class="text-left">
               <!-- Proverb -->
               <div class="mb-8">
-                <!-- Word-by-word with pronunciations - responsive layout -->
-                <div class="flex flex-wrap items-start gap-x-1 sm:gap-x-2 md:gap-x-3 lg:gap-x-4 font-serif italic">
-                  <!-- Opening quote -->
-                  <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">"</span>
+                <!-- Albanian text - responsive sizing to fit screen width -->
+                <div class="font-serif italic">
+                  <!-- Mobile: scale to fit viewport width, Desktop: fixed sizes -->
+                  <p class="text-[clamp(0.875rem,3.5vw,1.75rem)] sm:text-2xl md:text-3xl lg:text-4xl text-white leading-tight">
+                    "Shtëpia e shqiptarit është e mikut dhe e Zotit"
+                  </p>
                   
-                  <!-- Each word with pronunciation underneath -->
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">Shtëpia</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">shtuh-PEE-ah</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">e</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">eh</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">shqiptarit</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">shchip-TAR-eet</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">është</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">UHSH-tuh</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">e</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">eh</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">mikut</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">MEE-koot</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">dhe</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">dheh</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">e</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">eh</span>
-                  </div>
-                  
-                  <div class="inline-flex flex-col items-center">
-                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">Zotit</span>
-                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">ZOH-teet</span>
-                  </div>
-                  
-                  <!-- Closing quote -->
-                  <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">"</span>
+                  <!-- Pronunciation - scales proportionally -->
+                  <p class="text-[clamp(0.5rem,1.8vw,0.75rem)] sm:text-xs md:text-sm lg:text-base text-gray-400 mt-1 md:mt-2 italic">
+                    shtuh-PEE-ah eh shchip-TAR-eet UHSH-tuh eh MEE-koot dheh eh ZOH-teet
+                  </p>
                 </div>
                 
-                <!-- English translation -->
-                <p class="text-sm md:text-base lg:text-xl text-gray-300 font-light mt-4">
+                <!-- English translation - scales to fit -->
+                <p class="text-[clamp(0.75rem,2.5vw,1.125rem)] sm:text-base md:text-xl lg:text-2xl text-gray-300 font-light mt-3 md:mt-4">
                   "The house of an Albanian belongs to the guest and to God."
                 </p>
               </div>

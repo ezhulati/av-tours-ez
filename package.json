@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:node": "astro dev --config astro.config.dev.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint .",

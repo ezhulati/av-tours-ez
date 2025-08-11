@@ -292,6 +292,7 @@ function FilterBarOptimized({
 
   // Optimized fetch function with proper error handling
   const fetchTours = useCallback(async (filters: TourFilters, pagination: PaginationParams) => {
+    console.log('FilterBar: Fetching tours with filters:', filters, 'pagination:', pagination)
     setLoading(true)
     setError(null)
     
@@ -302,10 +303,10 @@ function FilterBarOptimized({
       if (filters.country) params.set('country', filters.country)
       if (filters.category) params.set('category', filters.category)
       if (filters.difficulty) params.set('difficulty', filters.difficulty)
-      if (filters.priceMin) params.set('price_min', filters.priceMin.toString())
-      if (filters.priceMax) params.set('price_max', filters.priceMax.toString())
-      if (filters.durationMin) params.set('duration_min', filters.durationMin.toString())
-      if (filters.durationMax) params.set('duration_max', filters.durationMax.toString())
+      if (filters.priceMin !== undefined) params.set('price_min', filters.priceMin.toString())
+      if (filters.priceMax !== undefined) params.set('price_max', filters.priceMax.toString())
+      if (filters.durationMin !== undefined) params.set('duration_min', filters.durationMin.toString())
+      if (filters.durationMax !== undefined) params.set('duration_max', filters.durationMax.toString())
       if (filters.groupSize && filters.groupSize !== 'any') params.set('group_size', filters.groupSize)
       params.set('page', pagination.page.toString())
       params.set('limit', pagination.limit.toString())
@@ -384,6 +385,8 @@ function FilterBarOptimized({
   useEffect(() => {
     if (isInitialMount) {
       setIsInitialMount(false)
+      // Trigger initial fetch to sync with server state
+      fetchTours(filters, pagination)
       return
     }
     debouncedFetch(filters, pagination)

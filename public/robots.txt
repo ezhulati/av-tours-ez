@@ -1,10 +1,34 @@
 User-agent: *
 Allow: /
 
-# Directories
+# Core SEO Landing Pages - Highest Priority
+Allow: /tours/albania
+Allow: /tours/kosovo
+Allow: /tours/montenegro
+Allow: /tours/north-macedonia
+Allow: /tours/albania/hiking
+Allow: /tours/kosovo/hiking
+Allow: /tours/montenegro/hiking
+
+# Filter Landing Pages
+Allow: /tours/easy
+Allow: /tours/moderate
+Allow: /tours/challenging
+Allow: /tours/weekend
+Allow: /tours/week-long
+Allow: /tours/budget
+Allow: /tours/luxury
+Allow: /tours/cultural
+Allow: /tours/adventure
+Allow: /tours/balkans
+
+# General Directories
 Allow: /tours/
 Allow: /category/
 Allow: /country/
+
+# Disallow query parameters to prevent duplicate content
+Disallow: /*?*
 
 # API endpoints (block from crawling)
 Disallow: /api/
@@ -12,5 +36,9 @@ Disallow: /api/
 # Affiliate redirects (allow for tracking)
 Allow: /out/
 
-# Sitemap
+# Sitemaps
+Sitemap: https://tours.albaniavisit.com/sitemap-seo.xml
 Sitemap: https://tours.albaniavisit.com/sitemap.xml
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1

@@ -48,14 +48,28 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   jsonLd={[touristTripSchema, breadcrumbSchema]}
 >
   <style>
+    /* Mobile-first: Minimal gradient to show the image */
     .hero-gradient {
       background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.1) 40%,
-        rgba(0, 0, 0, 0.4) 70%,
-        rgba(0, 0, 0, 0.7) 100%
+        rgba(0, 0, 0, 0) 50%,
+        rgba(0, 0, 0, 0.2) 80%,
+        rgba(0, 0, 0, 0.5) 100%
       );
+    }
+    
+    /* Desktop: Stronger gradient for readability */
+    @media (min-width: 768px) {
+      .hero-gradient {
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.1) 40%,
+          rgba(0, 0, 0, 0.4) 70%,
+          rgba(0, 0, 0, 0.7) 100%
+        );
+      }
     }
     
     .content-section {
@@ -75,8 +89,8 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     }
   </style>
 
-  <!-- Hero Section - Full Screen Impact -->
-  <section class="relative h-screen max-h-[900px] min-h-[600px]">
+  <!-- Hero Section - Clean Mobile View -->
+  <section class="relative h-[70vh] md:h-screen max-h-[600px] md:max-h-[900px] min-h-[400px] md:min-h-[600px]">
     <!-- Hero Image Container -->
     <div class="absolute inset-0">
       <img 
@@ -88,29 +102,29 @@ const breadcrumbSchema = generateBreadcrumbSchema([
       <div class="hero-gradient absolute inset-0"></div>
     </div>
 
-    <!-- Navigation Arrows -->
+    <!-- Navigation Arrows - Smaller on Mobile -->
     {tour.images.length > 1 && (
       <>
-        <button id="prev-image" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all transform hover:scale-110">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button id="prev-image" class="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all">
+          <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
-        <button id="next-image" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all transform hover:scale-110">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button id="next-image" class="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all">
+          <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
           </svg>
         </button>
       </>
     )}
 
-    <!-- Hero Content -->
-    <div class="absolute bottom-0 left-0 right-0 z-10 pb-12">
+    <!-- Mobile: Minimal Hero Content -->
+    <div class="absolute bottom-0 left-0 right-0 z-10 pb-6 md:pb-12">
       <div class="container mx-auto px-4">
         <div class="max-w-4xl">
-          <!-- Badges -->
+          <!-- Desktop Only: Badges on Hero -->
           {hasEnhanced && enhancedTour?.badges && (
-            <div class="flex flex-wrap gap-3 mb-6">
+            <div class="hidden md:flex flex-wrap gap-3 mb-6">
               {enhancedTour.badges.map(badge => (
                 <span class="badge-pill bg-accent text-white shadow-lg">
                   <span class="text-lg">{getBadgeEmoji(badge)}</span>
@@ -120,68 +134,134 @@ const breadcrumbSchema = generateBreadcrumbSchema([
             </div>
           )}
           
-          <!-- Title & Tagline -->
-          <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+          <!-- Title - Smaller on Mobile -->
+          <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-4 leading-tight drop-shadow-lg">
             {hasEnhanced && enhancedTour ? enhancedTour.enhancedTitle : tour.title}
           </h1>
           
+          <!-- Tagline - Hidden on Mobile -->
           {hasEnhanced && enhancedTour?.tagline && (
-            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light">{enhancedTour.tagline}</p>
+            <p class="hidden md:block text-xl md:text-2xl text-white/90 mb-4 font-light">{enhancedTour.tagline}</p>
           )}
           
-          {/* Trust Indicator - Prominent but subtle */}
-          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg mb-8">
-            <div class="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-              ))}
+          <!-- Desktop Only: Trust & Info on Hero -->
+          <div class="hidden md:block">
+            {/* Trust Indicator */}
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg mb-8">
+              <div class="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+              <span class="text-white font-semibold">5.0</span>
+              <span class="text-white/80 text-sm">({reviewStats.totalReviews} verified reviews)</span>
+              <span class="text-white/60 text-xs">• {tour.operator?.name || 'BNAdventure'}</span>
             </div>
-            <span class="text-white font-semibold">5.0</span>
-            <span class="text-white/80 text-sm">({reviewStats.totalReviews} verified reviews)</span>
-            <span class="text-white/60 text-xs">• {tour.operator?.name || 'BNAdventure'}</span>
+            
+            {/* Quick Info Pills */}
+            <div class="flex flex-wrap gap-4">
+              {tour.durationDisplay && (
+                <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  {tour.durationDisplay}
+                </div>
+              )}
+              {tour.difficulty && (
+                <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7"/>
+                  </svg>
+                  {tour.difficulty} Level
+                </div>
+              )}
+              <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                </svg>
+                {tour.countries.join(' • ')}
+              </div>
+            </div>
           </div>
-          
-          <!-- Quick Info -->
-          <div class="flex flex-wrap gap-4">
-            {tour.durationDisplay && (
-              <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                {tour.durationDisplay}
-              </div>
-            )}
-            {tour.difficulty && (
-              <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7"/>
-                </svg>
-                {tour.difficulty} Level
-              </div>
-            )}
-            <div class="badge-pill bg-white/20 backdrop-blur-md text-white border border-white/30">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-              </svg>
-              {tour.countries.join(' • ')}
-            </div>
+
+          <!-- Mobile Only: Minimal Info -->
+          <div class="md:hidden">
+            <p class="text-white/90 text-sm">{enhancedTour?.tagline || tour.shortDescription}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Image Counter -->
+    <!-- Image Counter - Smaller on Mobile -->
     <button 
       id="open-lightbox"
-      class="absolute top-8 right-8 bg-white/10 backdrop-blur-md rounded-full px-6 py-3 flex items-center gap-3 text-white hover:bg-white/20 transition-all"
+      class="absolute top-4 right-4 md:top-8 md:right-8 bg-white/10 backdrop-blur-sm rounded-full px-3 py-2 md:px-6 md:py-3 flex items-center gap-2 md:gap-3 text-white hover:bg-white/20 transition-all text-sm md:text-base"
     >
-      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+      <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
       </svg>
       <span class="font-medium">{tour.images.length} Photos</span>
     </button>
+  </section>
+
+  <!-- Mobile Info Section - All the details moved here -->
+  <section class="md:hidden bg-white py-6 border-b">
+    <div class="container mx-auto px-4">
+      {/* Badges */}
+      {hasEnhanced && enhancedTour?.badges && (
+        <div class="flex flex-wrap gap-2 mb-4">
+          {enhancedTour.badges.map(badge => (
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-accent text-white">
+              <span>{getBadgeEmoji(badge)}</span>
+              {badge}
+            </span>
+          ))}
+        </div>
+      )}
+      
+      {/* Trust Indicator */}
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-1">
+          {[...Array(5)].map((_, i) => (
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+          ))}
+        </div>
+        <span class="font-semibold text-gray-900">5.0</span>
+        <span class="text-gray-600 text-sm">({reviewStats.totalReviews} reviews)</span>
+        <span class="text-gray-500 text-sm">• {tour.operator?.name || 'BNAdventure'}</span>
+      </div>
+      
+      {/* Quick Info Pills */}
+      <div class="flex flex-wrap gap-2">
+        {tour.durationDisplay && (
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-gray-100 text-gray-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            {tour.durationDisplay}
+          </span>
+        )}
+        {tour.difficulty && (
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-gray-100 text-gray-700 capitalize">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7"/>
+            </svg>
+            {tour.difficulty}
+          </span>
+        )}
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-gray-100 text-gray-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          </svg>
+          {tour.countries.join(' • ')}
+        </span>
+      </div>
+    </div>
   </section>
 
   <!-- Thumbnail Gallery - Clean Grid -->

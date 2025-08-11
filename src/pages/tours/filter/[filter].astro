@@ -1,0 +1,375 @@
+---
+/**
+ * Programmatic SEO route handler for filtered tour pages
+ * Maps SEO-friendly URLs to filtered tour collections
+ * 
+ * URL patterns:
+ * - /tours/filter/albania -> Country filter
+ * - /tours/filter/easy -> Difficulty filter
+ * - /tours/filter/weekend -> Duration filter
+ * - /tours/filter/budget -> Price filter
+ */
+
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getTourCardPage } from '@/lib/queries'
+import { getEnhancedTour, getBadgeEmoji } from '@/data/enhancedTours'
+import FilterBar from '@/components/tours/FilterBarOptimized'
+import HeroSlideshow from '@/components/HeroSlideshow.astro'
+import ContactForm from '@/components/ContactForm'
+import EUConsumerRights from '@/components/EUConsumerRights'
+import { getHeroImagesByCategory } from '@/data/heroImages'
+import type { TourFilters } from '@/lib/dto'
+
+// Get the filter parameter
+const { filter } = Astro.params
+
+// Map filter values to SEO configuration
+const SEO_CONFIG: Record<string, any> = {
+  // Countries
+  'albania': {
+    title: 'Albania Tours',
+    metaTitle: 'Albania Tours 2025 | Hiking, Culture & Adventure Tours',
+    metaDescription: 'Explore Albania with our handpicked tours. From Albanian Alps hiking to Riviera beaches, discover authentic adventures with local guides. Best prices guaranteed.',
+    h1: 'Albania Tours & Adventures',
+    introText: 'Discover the Land of Eagles with our carefully selected Albania tours. From the dramatic peaks of the Albanian Alps to the turquoise waters of the Riviera, experience authentic adventures led by local experts.',
+    filters: { country: 'Albania' },
+    heroCategory: 'albania'
+  },
+  'kosovo': {
+    title: 'Kosovo Tours',
+    metaTitle: 'Kosovo Tours 2025 | Hiking, Cultural & Adventure Experiences',
+    metaDescription: 'Discover Kosovo\'s hidden gems with expert-led tours. Explore Rugova Valley, Sharr Mountains, and vibrant Pristina. Small groups, authentic experiences.',
+    h1: 'Kosovo Tours & Adventures',
+    introText: 'Experience Europe\'s youngest country through our expertly curated Kosovo tours. From the peaks of Sharr Mountains to the cultural treasures of Pristina.',
+    filters: { country: 'Kosovo' },
+    heroCategory: 'kosovo'
+  },
+  'montenegro': {
+    title: 'Montenegro Tours',
+    metaTitle: 'Montenegro Tours 2025 | Mountain, Coast & Adventure Tours',
+    metaDescription: 'Book Montenegro tours: Durmitor hiking, Bay of Kotor, Tara rafting. Small group adventures with expert local guides. Compare prices & book online.',
+    h1: 'Montenegro Tours & Adventures',
+    introText: 'Explore Montenegro\'s dramatic landscapes from mountain to sea. Our tours showcase the best of Durmitor National Park, the stunning Bay of Kotor, and hidden coastal gems.',
+    filters: { country: 'Montenegro' },
+    heroCategory: 'montenegro'
+  },
+  'north-macedonia': {
+    title: 'North Macedonia Tours',
+    metaTitle: 'North Macedonia Tours 2025 | Hiking, Culture & Wine Tours',
+    metaDescription: 'Explore North Macedonia with guided tours. Lake Ohrid, Mavrovo hiking, Skopje culture tours. Authentic Balkan experiences with local guides.',
+    h1: 'North Macedonia Tours',
+    introText: 'Journey through North Macedonia\'s rich tapestry of history and nature. From the ancient shores of Lake Ohrid to the peaks of Mavrovo.',
+    filters: { country: 'North Macedonia' },
+    heroCategory: 'adventure'
+  },
+  
+  // Difficulties
+  'easy': {
+    title: 'Easy Tours',
+    metaTitle: 'Easy Tours in Albania & Balkans | Family-Friendly Adventures',
+    metaDescription: 'Easy tours perfect for families and beginners. Gentle hikes, cultural experiences, scenic drives. No experience needed. All ages welcome.',
+    h1: 'Easy & Family-Friendly Tours',
+    introText: 'Perfect for families, beginners, and those seeking gentle adventures. These tours offer the beauty of the Balkans without the challenge.',
+    filters: { difficulty: 'easy' },
+    heroCategory: 'cultural'
+  },
+  'moderate': {
+    title: 'Moderate Tours',
+    metaTitle: 'Moderate Difficulty Tours | Active Adventures in the Balkans',
+    metaDescription: 'Moderate tours for active travelers. Balance of adventure and comfort. Some hiking experience helpful but not required.',
+    h1: 'Moderate Adventure Tours',
+    introText: 'Ideal for active travelers seeking a balance of adventure and comfort. These tours require basic fitness but reward you with incredible experiences.',
+    filters: { difficulty: 'moderate' },
+    heroCategory: 'hiking'
+  },
+  'challenging': {
+    title: 'Challenging Tours',
+    metaTitle: 'Challenging Mountain Tours | Advanced Hiking in Albania & Balkans',
+    metaDescription: 'Challenging tours for experienced hikers. Mountain peaks, multi-day treks, technical trails. Good fitness and hiking experience required.',
+    h1: 'Challenging Mountain Adventures',
+    introText: 'For experienced adventurers seeking to push their limits. These tours feature demanding hikes, high peaks, and remote wilderness areas.',
+    filters: { difficulty: 'challenging' },
+    heroCategory: 'adventure'
+  },
+  
+  // Durations
+  'weekend': {
+    title: 'Weekend Tours',
+    metaTitle: 'Weekend Tours Albania & Balkans | 2-3 Day Short Breaks',
+    metaDescription: 'Perfect weekend getaways in Albania and the Balkans. 2-3 day tours, city breaks, short hikes. Make the most of your long weekend.',
+    h1: 'Weekend Tours & Short Breaks',
+    introText: 'Make the most of your weekend with these perfectly crafted 2-3 day adventures. Ideal for quick escapes and long weekends.',
+    filters: { durationMin: 2, durationMax: 3 },
+    heroCategory: 'adventure'
+  },
+  'week-long': {
+    title: 'Week-Long Tours',
+    metaTitle: '7-Day Tours Albania & Balkans | One Week Adventures',
+    metaDescription: 'Week-long tours across Albania and the Balkans. 6-8 day itineraries covering multiple destinations. Perfect vacation length adventures.',
+    h1: 'Week-Long Adventures',
+    introText: 'Our most popular tour length - one week of Balkan adventure. These 6-8 day tours offer the perfect balance of exploration and relaxation.',
+    filters: { durationMin: 6, durationMax: 8 },
+    heroCategory: 'adventure'
+  },
+  
+  // Prices
+  'budget': {
+    title: 'Budget Tours',
+    metaTitle: 'Budget Tours Albania & Balkans | Affordable Adventures Under €500',
+    metaDescription: 'Affordable Balkan tours under €500. Budget-friendly adventures without compromising quality. Backpacker tours, group discounts, best value guaranteed.',
+    h1: 'Budget-Friendly Tours',
+    introText: 'Incredible adventures that won\'t break the bank. These budget tours offer amazing value without compromising on quality or experience.',
+    filters: { priceMax: 500 },
+    heroCategory: 'adventure'
+  },
+  'luxury': {
+    title: 'Luxury Tours',
+    metaTitle: 'Luxury Tours Albania & Balkans | Premium Small Group Adventures',
+    metaDescription: 'Premium tours with luxury accommodation, private guides, gourmet dining. Exclusive small group experiences in Albania and the Balkans.',
+    h1: 'Luxury & Premium Tours',
+    introText: 'Experience the Balkans in style. Premium accommodations, private guides, gourmet cuisine, and exclusive access to the region\'s hidden gems.',
+    filters: { priceMin: 1500 },
+    heroCategory: 'cultural'
+  },
+  
+  // Country + Activity combinations
+  'albania-hiking': {
+    title: 'Albania Hiking Tours',
+    metaTitle: 'Albania Hiking Tours 2025 | Albanian Alps, Valbona & Theth Treks',
+    metaDescription: 'Best Albania hiking tours: Valbona to Theth trek, Albanian Alps circuits, coastal trails. Expert guides, all levels. Book your mountain adventure.',
+    h1: 'Albania Hiking & Trekking Tours',
+    introText: 'Trek through Albania\'s spectacular mountain landscapes. From the famous Valbona to Theth trail to multi-day Albanian Alps circuits, find your perfect hiking adventure.',
+    filters: { country: 'Albania', category: 'hiking' },
+    heroCategory: 'hiking'
+  },
+  'kosovo-hiking': {
+    title: 'Kosovo Hiking Tours',
+    metaTitle: 'Kosovo Hiking Tours | Rugova Valley & Sharr Mountain Treks',
+    metaDescription: 'Discover Kosovo hiking: Rugova Valley trails, Sharr Mountains peaks, Via Dinarica routes. Small groups, expert guides, authentic mountain experiences.',
+    h1: 'Kosovo Hiking & Mountain Tours',
+    introText: 'Explore Kosovo\'s pristine mountain trails. From day hikes in Rugova Valley to challenging peaks in the Sharr Mountains.',
+    filters: { country: 'Kosovo', category: 'hiking' },
+    heroCategory: 'hiking'
+  },
+  'montenegro-hiking': {
+    title: 'Montenegro Hiking Tours',
+    metaTitle: 'Montenegro Hiking Tours | Durmitor, Prokletije & Coastal Trails',
+    metaDescription: 'Montenegro hiking adventures: Durmitor peaks, Prokletije wilderness, coastal paths. All levels welcome. Expert guides, small groups.',
+    h1: 'Montenegro Hiking Adventures',
+    introText: 'Hike Montenegro\'s diverse landscapes from Durmitor\'s glacial lakes to Prokletije\'s wild peaks.',
+    filters: { country: 'Montenegro', category: 'hiking' },
+    heroCategory: 'hiking'
+  },
+  'balkans': {
+    title: 'Balkan Tours',
+    metaTitle: 'Balkan Tours 2025 | Multi-Country Adventures Albania Kosovo Montenegro',
+    metaDescription: 'Multi-country Balkan tours covering Albania, Kosovo, Montenegro, Macedonia. Cross-border adventures, Peaks of the Balkans, Via Dinarica trails.',
+    h1: 'Multi-Country Balkan Tours',
+    introText: 'Cross borders and explore multiple Balkan countries in one epic adventure. From the Peaks of the Balkans to the Via Dinarica.',
+    filters: {}, // Will show all tours
+    heroCategory: 'adventure'
+  },
+  
+  // Activities
+  'hiking': {
+    title: 'Hiking Tours',
+    metaTitle: 'Hiking Tours Albania & Balkans | Mountain Trekking Adventures',
+    metaDescription: 'Best hiking tours in Albania, Kosovo, Montenegro. Valbona to Theth, Peaks of the Balkans, Via Dinarica trails. All levels, expert guides.',
+    h1: 'Hiking & Trekking Tours',
+    introText: 'Explore the Balkans on foot. From day hikes to multi-day treks, discover pristine mountain trails and breathtaking landscapes.',
+    filters: { category: 'hiking' },
+    heroCategory: 'hiking'
+  },
+  'cultural': {
+    title: 'Cultural Tours',
+    metaTitle: 'Cultural Tours Albania & Balkans | History, Heritage & Local Life',
+    metaDescription: 'Cultural tours exploring Balkan history, UNESCO sites, local traditions. City tours, archaeological sites, authentic village experiences.',
+    h1: 'Cultural & Heritage Tours',
+    introText: 'Immerse yourself in the rich cultural tapestry of the Balkans. From ancient ruins to living traditions, discover the stories that shaped this region.',
+    filters: { category: 'cultural' },
+    heroCategory: 'cultural'
+  },
+  'adventure': {
+    title: 'Adventure Tours',
+    metaTitle: 'Adventure Tours Albania & Balkans | Rafting, Climbing, Extreme Sports',
+    metaDescription: 'Extreme adventure tours: rafting, rock climbing, canyoning, paragliding. Adrenaline-pumping activities in Albania and the Balkans.',
+    h1: 'Adventure & Adrenaline Tours',
+    introText: 'Get your adrenaline pumping with our adventure tours. From white-water rafting to rock climbing, these tours are for true thrill-seekers.',
+    filters: { category: 'adventure' },
+    heroCategory: 'adventure'
+  }
+}
+
+// Get configuration for this filter
+const config = SEO_CONFIG[filter]
+
+if (!config) {
+  return Astro.redirect('/404')
+}
+
+// Build API filters from configuration
+const apiFilters: TourFilters = { ...config.filters }
+
+// Fetch tours with these filters
+const initialData = await getTourCardPage(apiFilters, { page: 1, limit: 12 })
+
+// Generate canonical URL
+const canonicalUrl = `https://tours.albaniavisit.com/tours/filter/${filter}`
+
+// Get hero images
+const heroImages = getHeroImagesByCategory(config.heroCategory).map(img => ({
+  url: img.optimizedSrc || img.src,
+  alt: img.alt
+})).slice(0, 8)
+
+// Generate breadcrumbs
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://tours.albaniavisit.com' },
+    { '@type': 'ListItem', 'position': 2, 'name': 'Tours', 'item': 'https://tours.albaniavisit.com/tours' },
+    { '@type': 'ListItem', 'position': 3, 'name': config.title, 'item': canonicalUrl }
+  ]
+}
+
+// Generate collection schema
+const collectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  'name': config.h1,
+  'description': config.metaDescription,
+  'url': canonicalUrl,
+  'breadcrumb': breadcrumbs,
+  'mainEntity': {
+    '@type': 'ItemList',
+    'numberOfItems': initialData.pagination.total,
+    'itemListElement': initialData.items.slice(0, 10).map((tour, index) => ({
+      '@type': 'ListItem',
+      'position': index + 1,
+      'item': {
+        '@type': 'TouristTrip',
+        'name': tour.title,
+        'description': tour.shortDescription,
+        'url': `https://tours.albaniavisit.com/tours/${tour.slug}`,
+        'image': tour.primaryImageUrl
+      }
+    }))
+  }
+}
+---
+
+<BaseLayout 
+  title={config.metaTitle}
+  description={config.metaDescription}
+  ogImage="/Assets/Albania/Albanian_Alps.jpg"
+  canonicalUrl={canonicalUrl}
+  jsonLd={[breadcrumbs, collectionSchema]}
+>
+  <!-- Hero Section -->
+  <section class="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+    <HeroSlideshow images={heroImages} overlayIntensity="medium" />
+    
+    <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 drop-shadow-2xl">
+        {config.h1}
+      </h1>
+      <p class="text-lg md:text-xl text-gray-100 mb-8 drop-shadow-lg max-w-3xl mx-auto">
+        {config.introText}
+      </p>
+      
+      <div class="flex justify-center gap-8 text-center">
+        <div>
+          <div class="text-3xl font-bold text-accent drop-shadow-lg">{initialData.pagination.total}</div>
+          <div class="text-sm text-gray-300">Available Tours</div>
+        </div>
+        {initialData.items.some(t => t.priceMin) && (
+          <div>
+            <div class="text-3xl font-bold text-accent drop-shadow-lg">
+              €{Math.min(...initialData.items.filter(t => t.priceMin).map(t => t.priceMin!))}+
+            </div>
+            <div class="text-sm text-gray-300">Starting From</div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <div class="container mx-auto px-4 py-12">
+    <!-- SEO Content -->
+    <div class="max-w-4xl mx-auto mb-12">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <p class="text-gray-700 leading-relaxed mb-6">
+          {config.introText}
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="text-sm text-gray-600">Related searches:</span>
+          <a href="/tours" class="text-sm text-accent hover:underline">all tours</a>
+          {filter !== 'albania' && <a href="/tours/filter/albania" class="text-sm text-accent hover:underline">Albania tours</a>}
+          {filter !== 'easy' && <a href="/tours/filter/easy" class="text-sm text-accent hover:underline">easy tours</a>}
+          {filter !== 'hiking' && <a href="/tours/filter/hiking" class="text-sm text-accent hover:underline">hiking tours</a>}
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="mb-12">
+      <FilterBar client:load initialFilters={apiFilters} />
+    </div>
+
+    <!-- Tours Grid -->
+    <div id="tours-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {initialData.items.map((tour) => {
+        const enhancedTour = getEnhancedTour(tour.slug);
+        return (
+          <article class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-accent/20 transition-all duration-300 transform hover:-translate-y-2 flex flex-col h-full">
+            <div class="aspect-[4/3] relative overflow-hidden flex-shrink-0">
+              <img 
+                src={tour.primaryImageUrl} 
+                alt={tour.title}
+                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+            
+            <div class="p-6 flex flex-col flex-grow">
+              <h2 class="text-xl font-bold mb-2 line-clamp-2">
+                <a href={`/tours/${tour.slug}`} class="hover:text-accent transition-colors">
+                  {enhancedTour?.enhancedTitle || tour.title}
+                </a>
+              </h2>
+              <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                {tour.shortDescription || 'Discover the beauty of the Balkans on this unforgettable adventure.'}
+              </p>
+              
+              <div class="mt-auto pt-4 border-t">
+                <div class="flex items-center justify-between">
+                  {tour.priceMin ? (
+                    <span class="text-2xl font-bold">€{tour.priceMin}</span>
+                  ) : (
+                    <span class="text-sm text-gray-600">Price on request</span>
+                  )}
+                  <a href={`/tours/${tour.slug}`} class="text-accent font-semibold text-sm">
+                    View Details →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    {initialData.pagination.total > 12 && (
+      <div class="flex justify-center mt-8">
+        <button id="load-more" class="px-8 py-4 bg-accent text-white rounded-lg font-semibold hover:bg-accent-600 transition-all">
+          Load More {config.title}
+        </button>
+      </div>
+    )}
+  </div>
+
+  <ContactForm client:load />
+  <EUConsumerRights client:load />
+</BaseLayout>

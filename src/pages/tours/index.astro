@@ -10,6 +10,7 @@ import HeroSlideshow from '@/components/HeroSlideshow.astro'
 import PhotoGallery from '@/components/PhotoGallery'
 import ContactForm from '@/components/ContactForm'
 import EUConsumerRights from '@/components/EUConsumerRights'
+import SEOLandingLinks from '@/components/tours/SEOLandingLinks'
 import { getHeroImagesByCategory } from '@/data/heroImages'
 
 // Get initial tours (SSG)
@@ -103,6 +104,9 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
   </section>
 
   <div class="container mx-auto px-4 py-12">
+    <!-- SEO Landing Links -->
+    <SEOLandingLinks client:load />
+    
     <!-- Filter Bar -->
     <div class="mb-12">
       <FilterBar client:load />
@@ -208,12 +212,9 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
               {/* Price & CTA - Always at Bottom */}
               <div class="pt-4 mt-auto border-t">
                 <div class="flex items-center justify-between">
-                  <div class="flex flex-col">
-                    <span class={tour.priceMin ? "text-2xl font-bold text-gray-900" : "text-sm font-medium text-gray-600"}>
-                      {tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
-                    </span>
-                    {tour.priceMin && <span class="text-xs text-gray-500">per person</span>}
-                  </div>
+                  <span class={tour.priceMin ? "text-2xl font-bold text-gray-900" : "text-sm font-medium text-gray-600"}>
+                    {tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
+                  </span>
                   <a 
                     href={`/tours/${tour.slug}`}
                     class="text-accent font-semibold hover:underline text-sm whitespace-nowrap"
@@ -221,6 +222,9 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
                     View Details →
                   </a>
                 </div>
+                {tour.priceMin && (
+                  <div class="text-xs text-gray-500 mt-1">per person</div>
+                )}
               </div>
             </div>
           </article>
@@ -472,16 +476,14 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
           <!-- Price and CTA - Always at Bottom -->
           <div class="pt-4 mt-auto border-t">
             <div class="flex items-center justify-between">
-              <div class="flex flex-col">
-                <span class="${tour.priceMin ? 'text-2xl font-bold text-gray-900' : 'text-sm font-medium text-gray-600'}">
-                  ${tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
-                </span>
-                ${tour.priceMin ? '<span class="text-xs text-gray-500">per person</span>' : ''}
-              </div>
+              <span class="${tour.priceMin ? 'text-2xl font-bold text-gray-900' : 'text-sm font-medium text-gray-600'}">
+                ${tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
+              </span>
               <a href="/tours/${tour.slug}" class="text-accent font-semibold hover:underline text-sm whitespace-nowrap">
                 View Details →
               </a>
             </div>
+            ${tour.priceMin ? '<div class="text-xs text-gray-500 mt-1">per person</div>' : ''}
           </div>
       `;
       
@@ -523,10 +525,9 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
       const data = event.detail;
       console.log('Tours updated event received:', data);
       
-      // Check if this is a filter update
+      // Always update if this is a filter update
       if (data.isFilterUpdate) {
-        // This is a filter change, always update the grid
-        const toursGrid = document.getElementById('tours-grid');
+        console.log('Processing filter update with', data.items?.length, 'tours');
         
         // Store filter parameters from the event
         if (data.filters) {
@@ -548,11 +549,13 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
         
         currentPage = 1; // Reset to first page when filters change
         
+        // Always update the grid
         updateToursGrid(data.items || []);
         
         // Update pagination info
         if (data.pagination) {
           totalPages = data.pagination.totalPages || 1;
+          console.log('Total pages:', totalPages, 'Current page:', currentPage);
         }
         
         // Show/hide load more button based on pagination
@@ -569,6 +572,7 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
       } else if (!hasReceivedFirstUpdate) {
         // Skip the very first update if we already have tours rendered from server
         hasReceivedFirstUpdate = true;
+        console.log('Skipping initial update - tours already rendered from server');
         const toursGrid = document.getElementById('tours-grid');
         if (toursGrid && toursGrid.children.length > 0) {
           // Just update the load more button state without clearing tours

@@ -1,0 +1,41 @@
+# SEO-friendly URL redirects for programmatic pages
+# These clean URLs redirect to the actual filter pages
+
+# Country pages
+/tours/albania /tours/filter/albania 301
+/tours/kosovo /tours/filter/kosovo 301
+/tours/montenegro /tours/filter/montenegro 301
+/tours/north-macedonia /tours/filter/north-macedonia 301
+
+# Country + Activity combinations
+/tours/albania/hiking /tours/filter/albania-hiking 301
+/tours/kosovo/hiking /tours/filter/kosovo-hiking 301
+/tours/montenegro/hiking /tours/filter/montenegro-hiking 301
+
+# Difficulty pages
+/tours/easy /tours/filter/easy 301
+/tours/moderate /tours/filter/moderate 301
+/tours/challenging /tours/filter/challenging 301
+/tours/difficult /tours/filter/difficult 301
+
+# Duration pages
+/tours/weekend /tours/filter/weekend 301
+/tours/week-long /tours/filter/week-long 301
+/tours/extended /tours/filter/extended 301
+
+# Price pages
+/tours/budget /tours/filter/budget 301
+/tours/luxury /tours/filter/luxury 301
+/tours/premium /tours/filter/luxury 301
+
+# Activity pages
+/tours/hiking /tours/filter/hiking 301
+/tours/cultural /tours/filter/cultural 301
+/tours/adventure /tours/filter/adventure 301
+
+# Multi-country
+/tours/balkans /tours/filter/balkans 301
+
+# Seasonal
+/tours/summer /tours/filter/summer 301
+/tours/winter /tours/filter/winter 301

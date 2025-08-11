@@ -17,6 +17,8 @@ export async function getTourCardPage(
   filters: TourFilters = {},
   pagination: PaginationParams = { page: 1, limit: 12 }
 ): Promise<PaginatedResponse<TourCardDTO>> {
+  console.log('getTourCardPage called with:', { filters, pagination })
+  
   // Check if Supabase is configured
   if (!isSupabaseConfigured()) {
     console.error('Supabase not configured - returning empty response')
@@ -40,6 +42,7 @@ export async function getTourCardPage(
   // Apply database-level filters
   if (filters.country) {
     // Filter by location in the locations JSON array
+    // Use contains for JSON array matching
     query = query.contains('locations', [filters.country])
   }
   if (filters.category) {
@@ -47,7 +50,15 @@ export async function getTourCardPage(
     query = query.ilike('activity_type', `%${filters.category}%`)
   }
   if (filters.difficulty) {
-    query = query.ilike('difficulty_level', `%${filters.difficulty}%`)
+    // Map difficulty values to match database values
+    const difficultyMap: Record<string, string> = {
+      'easy': 'Easy',
+      'moderate': 'Moderate',
+      'challenging': 'Challenging',
+      'difficult': 'Difficult'
+    }
+    const dbDifficulty = difficultyMap[filters.difficulty] || filters.difficulty
+    query = query.ilike('difficulty_level', `%${dbDifficulty}%`)
   }
   if (filters.featured !== undefined) {
     query = query.eq('is_featured', filters.featured)
@@ -120,7 +131,12 @@ export async function getTourCardPage(
       })
       break
     case 'popular':
-      // Keep database order (already sorted by view_count)
+      // Sort by featured status first, then keep database order
+      items.sort((a, b) => {
+        if (a.featured && !b.featured) return -1
+        if (!a.featured && b.featured) return 1
+        return 0
+      })
       break
     case 'newest':
     default:

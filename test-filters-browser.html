@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Filters Test Suite</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .test-container {
+            display: grid;
+            gap: 20px;
+        }
+        .test-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status.pending { background: #fef3c7; color: #92400e; }
+        .status.running { background: #dbeafe; color: #1e40af; }
+        .status.success { background: #d1fae5; color: #065f46; }
+        .status.failed { background: #fee2e2; color: #991b1b; }
+        .test-details {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .tour-item {
+            background: #f3f4f6;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #6b46c1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover {
+            background: #553c9a;
+        }
+        .summary {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .metric {
+            display: inline-block;
+            margin-right: 30px;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 Tour Filters Test Suite</h1>
+        <p>Comprehensive testing of all filter and sort functionality</p>
+    </div>
+
+    <div class="controls">
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button onclick="clearResults()">Clear Results</button>
+        <button onclick="window.location.href='/tours'">Go to Tours Page</button>
+    </div>
+
+    <div id="summary" class="summary">
+        <div class="metric">
+            <div class="metric-value" id="totalTests">0</div>
+            <div class="metric-label">Total Tests</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value" id="passedTests" style="color: #065f46;">0</div>
+            <div class="metric-label">Passed</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value" id="failedTests" style="color: #991b1b;">0</div>
+            <div class="metric-label">Failed</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value" id="responseTime">0ms</div>
+            <div class="metric-label">Avg Response</div>
+        </div>
+    </div>
+
+    <div id="testContainer" class="test-container"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:4321/api/tours';
+        
+        const tests = [
+            {
+                name: 'No Filters - All Tours',
+                params: {},
+                validate: (data) => data.items && data.items.length > 0,
+                description: 'Should return all active tours'
+            },
+            {
+                name: 'Country Filter - Albania',
+                params: { country: 'Albania' },
+                validate: (data) => {
+                    return data.items && data.items.every(tour => 
+                        tour.countries && tour.countries.includes('Albania')
+                    );
+                },
+                description: 'All tours should include Albania'
+            },
+            {
+                name: 'Country Filter - Kosovo',
+                params: { country: 'Kosovo' },
+                validate: (data) => {
+                    return data.items && data.items.every(tour => 
+                        tour.countries && tour.countries.includes('Kosovo')
+                    );
+                },
+                description: 'All tours should include Kosovo'
+            },
+            {
+                name: 'Difficulty Filter - Easy',
+                params: { difficulty: 'easy' },
+                validate: (data) => {
+                    return data.items && data.items.every(tour => 
+                        tour.difficulty === 'easy'
+                    );
+                },
+                description: 'All tours should be easy difficulty'
+            },
+            {
+                name: 'Difficulty Filter - Moderate',
+                params: { difficulty: 'moderate' },
+                validate: (data) => {
+                    return data.items && data.items.every(tour => 
+                        tour.difficulty === 'moderate'
+                    );
+                },
+                description: 'All tours should be moderate difficulty'
+            },
+            {
+                name: 'Price Range Filter',
+                params: { price_min: 50, price_max: 200 },
+                validate: (data) => {
+                    return data.items && data.items.every(tour => 
+                        !tour.priceMin || (tour.priceMin >= 50 && tour.priceMin <= 200)
+                    );
+                },
+                description: 'Tours should be within €50-€200'
+            },
+            {
+                name: 'Duration Filter',
+                params: { duration_min: 3, duration_max: 7 },
+                validate: (data) => {
+                    return data.items && data.items.every(tour => 
+                        !tour.durationDays || (tour.durationDays >= 3 && tour.durationDays <= 7)
+                    );
+                },
+                description: 'Tours should be 3-7 days'
+            },
+            {
+                name: 'Combined Filters',
+                params: { country: 'Albania', difficulty: 'moderate', price_max: 500 },
+                validate: (data) => {
+                    return data.items && data.items.every(tour => 
+                        tour.countries?.includes('Albania') && 
+                        tour.difficulty === 'moderate' &&
+                        (!tour.priceMin || tour.priceMin <= 500)
+                    );
+                },
+                description: 'Albania + Moderate + Under €500'
+            },
+            {
+                name: 'Sort by Price',
+                params: { sort: 'price' },
+                validate: (data) => {
+                    if (!data.items || data.items.length < 2) return true;
+                    for (let i = 1; i < data.items.length; i++) {
+                        const prevPrice = data.items[i-1].priceMin || Number.MAX_VALUE;
+                        const currPrice = data.items[i].priceMin || Number.MAX_VALUE;
+                        if (prevPrice > currPrice) return false;
+                    }
+                    return true;
+                },
+                description: 'Tours should be sorted by price (low to high)'
+            },
+            {
+                name: 'Sort by Duration',
+                params: { sort: 'duration' },
+                validate: (data) => {
+                    if (!data.items || data.items.length < 2) return true;
+                    for (let i = 1; i < data.items.length; i++) {
+                        const prevDur = data.items[i-1].durationDays || Number.MAX_VALUE;
+                        const currDur = data.items[i].durationDays || Number.MAX_VALUE;
+                        if (prevDur > currDur) return false;
+                    }
+                    return true;
+                },
+                description: 'Tours should be sorted by duration'
+            },
+            {
+                name: 'Pagination - Page 1',
+                params: { page: 1, limit: 5 },
+                validate: (data) => {
+                    return data.items && data.items.length <= 5 && 
+                           data.pagination && data.pagination.page === 1;
+                },
+                description: 'Should return max 5 items on page 1'
+            },
+            {
+                name: 'Pagination - Page 2',
+                params: { page: 2, limit: 5 },
+                validate: (data) => {
+                    return data.items && data.pagination && data.pagination.page === 2;
+                },
+                description: 'Should return page 2 results'
+            }
+        ];
+
+        let testResults = [];
+        let responseTimes = [];
+
+        async function runTest(test, index) {
+            const testEl = document.getElementById(`test-${index}`);
+            const statusEl = testEl.querySelector('.status');
+            const detailsEl = testEl.querySelector('.test-details');
+            
+            statusEl.textContent = 'Running';
+            statusEl.className = 'status running';
+            
+            const params = new URLSearchParams();
+            Object.entries(test.params).forEach(([key, value]) => {
+                params.set(key, value.toString());
+            });
+            
+            const startTime = Date.now();
+            
+            try {
+                const response = await fetch(`${API_BASE}?${params}`);
+                const data = await response.json();
+                const responseTime = Date.now() - startTime;
+                responseTimes.push(responseTime);
+                
+                const passed = test.validate(data);
+                
+                let details = `Response Time: ${responseTime}ms\n`;
+                details += `Status: ${response.status}\n`;
+                details += `Items: ${data.items?.length || 0}\n`;
+                details += `Total: ${data.pagination?.total || 0}\n`;
+                
+                if (data.items && data.items.length > 0) {
+                    details += '\nSample Tours:\n';
+                    data.items.slice(0, 3).forEach(tour => {
+                        details += `• ${tour.title} (${tour.countries?.join(', ') || 'N/A'})\n`;
+                        if (tour.difficulty) details += `  Difficulty: ${tour.difficulty}\n`;
+                        if (tour.priceMin) details += `  Price: €${tour.priceMin}\n`;
+                        if (tour.durationDays) details += `  Duration: ${tour.durationDays} days\n`;
+                    });
+                }
+                
+                detailsEl.textContent = details;
+                
+                statusEl.textContent = passed ? 'Passed' : 'Failed';
+                statusEl.className = `status ${passed ? 'success' : 'failed'}`;
+                
+                return passed;
+            } catch (error) {
+                statusEl.textContent = 'Failed';
+                statusEl.className = 'status failed';
+                detailsEl.textContent = `Error: ${error.message}`;
+                return false;
+            }
+        }
+
+        async function runAllTests() {
+            testResults = [];
+            responseTimes = [];
+            
+            for (let i = 0; i < tests.length; i++) {
+                const passed = await runTest(tests[i], i);
+                testResults.push(passed);
+                await new Promise(resolve => setTimeout(resolve, 500)); // Small delay between tests
+            }
+            
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const totalTests = testResults.length;
+            const passedTests = testResults.filter(r => r).length;
+            const failedTests = totalTests - passedTests;
+            const avgResponse = responseTimes.length > 0 
+                ? Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length)
+                : 0;
+            
+            document.getElementById('totalTests').textContent = totalTests;
+            document.getElementById('passedTests').textContent = passedTests;
+            document.getElementById('failedTests').textContent = failedTests;
+            document.getElementById('responseTime').textContent = `${avgResponse}ms`;
+        }
+
+        function clearResults() {
+            testResults = [];
+            responseTimes = [];
+            renderTests();
+            updateSummary();
+        }
+
+        function renderTests() {
+            const container = document.getElementById('testContainer');
+            container.innerHTML = tests.map((test, index) => `
+                <div class="test-card" id="test-${index}">
+                    <div class="test-header">
+                        <div class="test-title">${test.name}</div>
+                        <div class="status pending">Pending</div>
+                    </div>
+                    <div style="color: #6b7280; font-size: 14px; margin-bottom: 10px;">
+                        ${test.description}
+                    </div>
+                    <div style="font-family: monospace; font-size: 12px; color: #4b5563;">
+                        Params: ${JSON.stringify(test.params)}
+                    </div>
+                    <div class="test-details"></div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        renderTests();
+        updateSummary();
+    </script>
+</body>
+</html>
