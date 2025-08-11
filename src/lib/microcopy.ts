@@ -272,6 +272,8 @@ export const microcopy = {
       labelVariants: ['Continue to partner site', 'Open BNAdventure.com', 'I understand I\'m leaving this site'],
       helper: 'Check this box to continue',
       helperError: 'Please check the box above to continue',
+      termsNote: 'By checking, you accept our terms of service',
+      termsNoteVariants: ['By proceeding, you agree to our terms', 'Checking confirms acceptance of terms']
     },
     buttons: {
       continue: 'Continue to BNAdventure →',
@@ -279,9 +281,9 @@ export const microcopy = {
       back: 'Stay here',
       backVariants: ['Not yet', 'Go back', 'Return to tour'],
     },
-    footer: 'AlbaniaVisit partners with trusted local operators',
+    footer: 'By continuing, you accept our terms of service',
     footerVariants: [
-      'We connect you with Albania\'s best tour operators',
+      'Continuing confirms acceptance of our terms',
       'Trusted partners since 2020'
     ],
     partnerSite: 'Partner Site',

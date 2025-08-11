@@ -215,6 +215,9 @@ export default function RedirectModal({
                         {microcopy.redirect.checkbox.helper}
                       </p>
                     )}
+                    <p className="text-[10px] text-gray-400 mt-1">
+                      {microcopy.redirect.checkbox.termsNote}
+                    </p>
                   </div>
                 </label>
               </div>
