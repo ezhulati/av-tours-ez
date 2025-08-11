@@ -1,0 +1,73 @@
+---
+import { getOptimizedImageUrl, generateResponsiveSrcSet } from '@/lib/safeImageOptimization'
+
+export interface Props {
+  src: string
+  alt: string
+  class?: string
+  width?: number
+  height?: number
+  loading?: 'lazy' | 'eager'
+  priority?: boolean
+  sizes?: string
+}
+
+const { 
+  src, 
+  alt, 
+  class: className = '', 
+  width,
+  height,
+  loading = 'lazy', 
+  priority = false,
+  sizes = '100vw'
+} = Astro.props
+
+// Generate responsive sizes
+const responsiveSizes = [320, 640, 768, 1024, 1366, 1920]
+
+// Check if this is a local asset we can optimize
+const canOptimize = src && !src.startsWith('data:') && !src.endsWith('.svg')
+
+// For SSR, we can check if we're in production
+const isProduction = import.meta.env.PROD
+
+// Only optimize in production for safety
+const shouldOptimize = canOptimize && isProduction
+---
+
+{shouldOptimize ? (
+  <picture>
+    <!-- WebP format for modern browsers -->
+    <source
+      type="image/webp"
+      srcset={generateResponsiveSrcSet(src, responsiveSizes, 'webp')}
+      sizes={sizes}
+    />
+    <!-- JPEG fallback -->
+    <img
+      src={getOptimizedImageUrl(src, { width: width || 1024, format: 'jpg' })}
+      srcset={generateResponsiveSrcSet(src, responsiveSizes, 'jpg')}
+      sizes={sizes}
+      alt={alt}
+      class={className}
+      width={width}
+      height={height}
+      loading={priority ? 'eager' : loading}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding={priority ? 'sync' : 'async'}
+    />
+  </picture>
+) : (
+  <!-- Fallback: Just use the original image -->
+  <img
+    src={src || '/placeholder.jpg'}
+    alt={alt}
+    class={className}
+    width={width}
+    height={height}
+    loading={priority ? 'eager' : loading}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding={priority ? 'sync' : 'async'}
+  />
+)}
