@@ -1,6 +1,6 @@
 import React from 'react'
 import type { TourCardDTO } from '@/lib/dto'
-import { getOptimizedImageUrl, generateResponsiveSrcSet } from '@/lib/imageOptimizationHelper'
+import { getOptimizedImageUrl, generateResponsiveSrcSet } from '@/lib/safeImageOptimization'
 
 interface TourCardProps {
   tour: TourCardDTO
@@ -27,25 +27,15 @@ export default function TourCardOptimized({ tour, loading = false, priority = fa
     )
   }
 
-  // Detect development environment
-  const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-  
   // Generate responsive sizes for card images
   const cardSizes = [320, 640, 768, 1024]
-  const srcsetWebp = generateResponsiveSrcSet(tour.primaryImageUrl, cardSizes, 'webp', isDev)
-  const srcsetAvif = generateResponsiveSrcSet(tour.primaryImageUrl, cardSizes, 'avif', isDev)
-  const srcsetJpg = generateResponsiveSrcSet(tour.primaryImageUrl, cardSizes, 'jpg', isDev)
+  const srcsetWebp = generateResponsiveSrcSet(tour.primaryImageUrl, cardSizes, 'webp')
+  const srcsetJpg = generateResponsiveSrcSet(tour.primaryImageUrl, cardSizes, 'jpg')
 
   return (
     <article className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
       <div className="aspect-[4/3] relative bg-gray-100">
         <picture>
-          {/* AVIF - Best compression */}
-          <source
-            type="image/avif"
-            srcSet={srcsetAvif}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
           {/* WebP - Good compression */}
           <source
             type="image/webp"
@@ -54,7 +44,7 @@ export default function TourCardOptimized({ tour, loading = false, priority = fa
           />
           {/* JPEG fallback */}
           <img 
-            src={isDev ? tour.primaryImageUrl : getOptimizedImageUrl(tour.primaryImageUrl, 640, 'jpg', isDev)}
+            src={getOptimizedImageUrl(tour.primaryImageUrl, { width: 640, format: 'jpg' })}
             srcSet={srcsetJpg}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             alt={tour.title}

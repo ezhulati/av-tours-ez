@@ -1,5 +1,5 @@
 ---
-import { getOptimizedImageUrl, generateResponsiveSrcSet } from '@/lib/imageOptimizationHelper'
+import { getOptimizedImageUrl, generateResponsiveSrcSet } from '@/lib/safeImageOptimization'
 
 export interface Props {
   images: Array<{
@@ -30,15 +30,12 @@ const overlayClasses = {
   dark: 'from-black/80 via-black/70 to-black/90'
 };
 
-// Use environment-aware helper
-const isDev = import.meta.env.DEV
-
 // Generate responsive sizes for hero images
 const heroSizes = [640, 768, 1024, 1366, 1920, 2560]
 
 // Preload first image for better LCP
 const firstImage = images[0]
-const preloadSrcset = generateResponsiveSrcSet(firstImage.url, heroSizes, 'webp', isDev)
+const preloadSrcset = generateResponsiveSrcSet(firstImage.url, heroSizes, 'webp')
 ---
 
 <!-- Preload critical first image -->
@@ -56,22 +53,16 @@ const preloadSrcset = generateResponsiveSrcSet(firstImage.url, heroSizes, 'webp'
     {images.map((image, index) => (
       <div class={`slide absolute inset-0 w-full h-full ${index === 0 ? 'active' : ''}`} data-slide-index={index}>
         <picture>
-          <!-- AVIF - Best compression (50% smaller than JPEG) -->
-          <source
-            type="image/avif"
-            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'avif', isDev)}
-            sizes="100vw"
-          />
           <!-- WebP - Good compression (25-35% smaller than JPEG) -->
           <source
             type="image/webp"
-            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'webp', isDev)}
+            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'webp')}
             sizes="100vw"
           />
           <!-- JPEG fallback -->
           <img
-            src={isDev ? image.url : getOptimizedImageUrl(image.url, 1920, 'jpg', isDev)}
-            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'jpg', isDev)}
+            src={getOptimizedImageUrl(image.url, { width: 1920, format: 'jpg' })}
+            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'jpg')}
             sizes="100vw"
             alt={image.alt}
             loading={index === 0 ? 'eager' : 'lazy'}
