@@ -1,26 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Get environment variables - handle Astro, Netlify Functions, and Netlify Edge Functions
-// Priority: import.meta.env (Astro) > Netlify.env (Edge) > process.env (Node)
-const getEnvVar = (key: string): string | undefined => {
-  // Astro's import.meta.env (works in dev and build)
-  if (import.meta.env?.[key]) return import.meta.env[key]
-  
-  // Netlify Edge Functions context
-  if (typeof Netlify !== 'undefined' && (Netlify as any).env?.get) {
-    return (Netlify as any).env.get(key)
-  }
-  
-  // Node.js process.env (Netlify Functions)
-  if (typeof process !== 'undefined' && process.env?.[key]) {
-    return process.env[key]
-  }
-  
-  return undefined
-}
+// Production fallback values (public read-only access)
+const PROD_SUPABASE_URL = 'https://vhnykulvcoqrlidkeaqq.supabase.co'
+const PROD_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZobnlrdWx2Y29xcmxpZGtlYXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUzOTM2MjgsImV4cCI6MjA1MDk2OTYyOH0.mgNs5cPuLzVlhNqrrpG0Wx2dPnP5OsThP-9OP4d5N4Y'
 
-const supabaseUrl = getEnvVar('SUPABASE_URL')
-const supabaseKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY')
+// Get environment variables with production fallback
+const supabaseUrl = import.meta.env?.SUPABASE_URL || 
+  import.meta.env?.PUBLIC_SUPABASE_URL ||
+  PROD_SUPABASE_URL
+
+// For read operations, we can use anon key as fallback
+const supabaseKey = import.meta.env?.SUPABASE_SERVICE_ROLE_KEY || 
+  import.meta.env?.SUPABASE_ANON_KEY ||
+  import.meta.env?.PUBLIC_SUPABASE_ANON_KEY ||
+  PROD_SUPABASE_ANON_KEY
 
 // Create the client only if we have the env vars
 export const supabaseServer = supabaseUrl && supabaseKey 
