@@ -9,7 +9,13 @@ export default defineConfig({
   output: 'server',
   adapter: netlify({
     edgeMiddleware: false,
-    functionPerRoute: false
+    functionPerRoute: false,
+    imageCDN: false // Disable image CDN to avoid edge functions
   }),
-  integrations: [react(), tailwind(), sitemap()]
+  integrations: [react(), tailwind(), sitemap()],
+  vite: {
+    ssr: {
+      external: ['@supabase/supabase-js'] // Ensure Supabase works in SSR
+    }
+  }
 })

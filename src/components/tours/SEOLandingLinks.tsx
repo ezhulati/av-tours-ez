@@ -75,28 +75,28 @@ export default function SEOLandingLinks() {
         <p className="text-sm text-gray-600">Quick links to our most popular tour categories</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {popularSearches.map((link) => (
           <a
             key={link.href}
             href={link.href}
-            className="group bg-white rounded-lg p-4 border border-gray-200 hover:border-accent hover:shadow-md transition-all duration-200"
+            className="group bg-white rounded-lg p-4 border border-gray-200 hover:border-accent hover:shadow-md transition-all duration-200 block"
           >
-            <div className="flex items-start gap-3">
+            <div className="flex items-center gap-3">
               {link.icon && (
                 <span className="text-2xl flex-shrink-0" role="img" aria-label={link.title}>
                   {link.icon}
                 </span>
               )}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm text-gray-900 group-hover:text-accent transition-colors">
+              <div className="flex-1">
+                <h3 className="font-semibold text-base sm:text-sm text-gray-900 group-hover:text-accent transition-colors">
                   {link.title}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                <p className="text-sm sm:text-xs text-gray-500 mt-0.5">
                   {link.description}
                 </p>
                 {link.count && (
-                  <span className="inline-block mt-2 text-xs text-accent font-semibold">
+                  <span className="inline-block mt-1 text-xs text-accent font-semibold">
                     {link.count} tours
                   </span>
                 )}

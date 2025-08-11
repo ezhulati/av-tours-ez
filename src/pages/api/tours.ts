@@ -5,6 +5,24 @@ import type { TourFilters, PaginationParams } from '@/lib/dto'
 
 export const GET: APIRoute = async ({ request, url }) => {
   try {
+    // Check if Supabase is configured
+    const { isSupabaseConfigured } = await import('@/lib/supabase.server')
+    if (!isSupabaseConfigured()) {
+      console.error('Supabase not configured - missing environment variables')
+      return new Response(JSON.stringify({ 
+        error: 'Database configuration error',
+        items: [],
+        pagination: {
+          page: 1,
+          limit: 12,
+          total: 0,
+          totalPages: 0
+        }
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
     
     const params = url.searchParams
     

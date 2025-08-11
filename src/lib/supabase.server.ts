@@ -1,11 +1,26 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Get environment variables - handle both local (import.meta.env) and Netlify (process.env)
-// Netlify Functions use process.env, local Astro dev uses import.meta.env
-const supabaseUrl = import.meta.env?.SUPABASE_URL || 
-  (typeof process !== 'undefined' ? process.env?.SUPABASE_URL : undefined)
-const supabaseKey = import.meta.env?.SUPABASE_SERVICE_ROLE_KEY || 
-  (typeof process !== 'undefined' ? process.env?.SUPABASE_SERVICE_ROLE_KEY : undefined)
+// Get environment variables - handle Astro, Netlify Functions, and Netlify Edge Functions
+// Priority: import.meta.env (Astro) > Netlify.env (Edge) > process.env (Node)
+const getEnvVar = (key: string): string | undefined => {
+  // Astro's import.meta.env (works in dev and build)
+  if (import.meta.env?.[key]) return import.meta.env[key]
+  
+  // Netlify Edge Functions context
+  if (typeof Netlify !== 'undefined' && (Netlify as any).env?.get) {
+    return (Netlify as any).env.get(key)
+  }
+  
+  // Node.js process.env (Netlify Functions)
+  if (typeof process !== 'undefined' && process.env?.[key]) {
+    return process.env[key]
+  }
+  
+  return undefined
+}
+
+const supabaseUrl = getEnvVar('SUPABASE_URL')
+const supabaseKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY')
 
 // Create the client only if we have the env vars
 export const supabaseServer = supabaseUrl && supabaseKey 
