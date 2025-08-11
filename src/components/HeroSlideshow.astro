@@ -21,11 +21,11 @@ const {
 // Generate unique ID for this slideshow instance
 const slideshowId = `slideshow-${Math.random().toString(36).substr(2, 9)}`;
 
-// Consistent overlay gradients across all screen sizes for better text readability
+// WCAG AA compliant overlay gradients for proper text contrast (4.5:1 ratio)
 const overlayClasses = {
-  light: 'from-black/40 via-black/30 to-black/60',
-  medium: 'from-black/50 via-black/40 to-black/70',
-  dark: 'from-black/60 via-black/50 to-black/80'
+  light: 'from-black/60 via-black/50 to-black/75',
+  medium: 'from-black/70 via-black/60 to-black/85',
+  dark: 'from-black/80 via-black/70 to-black/90'
 };
 ---
 
@@ -38,10 +38,12 @@ const overlayClasses = {
       </div>
     ))}
   </div>
-  <!-- Dark overlay with gradient -->
+  <!-- Primary WCAG compliant overlay -->
   <div class={`absolute inset-0 bg-gradient-to-br ${overlayClasses[overlayIntensity]}`}></div>
-  <!-- Additional gradient for better text readability -->
-  <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+  <!-- Secondary gradient for enhanced text areas (where hero text appears) -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
+  <!-- Mobile-specific additional darkening for better readability on small screens -->
+  <div class="absolute inset-0 bg-black/10 md:bg-transparent"></div>
   
   <!-- Subtle Image Captions - Bottom Center -->
   {showCaptions && (

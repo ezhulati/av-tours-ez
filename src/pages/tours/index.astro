@@ -78,10 +78,10 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
     <HeroSlideshow images={toursHeroImages} overlayIntensity="medium" />
     
     <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-      <h1 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-2xl">
+      <h1 class="text-[clamp(3rem,8vw,5rem)] md:text-[clamp(4rem,7vw,6rem)] font-bold leading-[1.1] tracking-wide mb-6" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.6), 1px 1px 3px rgba(0,0,0,1); letter-spacing: 0.02em;">
         Explore the <span class="text-accent">Untamed Balkans</span>
       </h1>
-      <p class="text-xl md:text-2xl text-gray-100 mb-8 drop-shadow-lg">
+      <p class="text-xl md:text-2xl text-white mb-8" style="text-shadow: 1px 1px 6px rgba(0,0,0,0.8), 0 0 12px rgba(0,0,0,0.5), 1px 1px 2px rgba(0,0,0,1);">
         {initialData.pagination.total} handpicked adventures across Albania's peaks, Kosovo's valleys, and Montenegro's wild coastlines
       </p>
       
@@ -169,7 +169,7 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
               </div>
               
               {/* Metadata Section - Fixed Height */}
-              <div class="space-y-3 flex-grow">
+              <div class="space-y-3 flex-grow mb-4">
                 {/* Duration and Difficulty */}
                 {(tour.durationDisplay || tour.difficulty) && (
                   <div class="flex flex-wrap gap-2">
@@ -211,8 +211,8 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
               
               {/* Price & CTA - Always at Bottom */}
               <div class="pt-4 mt-auto border-t">
-                <div class="flex items-center justify-between">
-                  <span class={tour.priceMin ? "text-2xl font-bold text-gray-900" : "text-sm font-medium text-gray-600"}>
+                <div class="flex items-baseline justify-between">
+                  <span class={tour.priceMin ? "text-2xl font-bold text-gray-900" : "text-sm font-semibold text-gray-600"}>
                     {tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
                   </span>
                   <a 
@@ -433,7 +433,7 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
           </div>
           
           <!-- Metadata Section - Fixed Height -->
-          <div class="space-y-3 flex-grow">
+          <div class="space-y-3 flex-grow mb-4">
             ${(tour.durationDisplay || tour.difficulty) ? `
             <!-- Duration and Difficulty -->
             <div class="flex flex-wrap gap-2">
@@ -475,8 +475,8 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
           
           <!-- Price and CTA - Always at Bottom -->
           <div class="pt-4 mt-auto border-t">
-            <div class="flex items-center justify-between">
-              <span class="${tour.priceMin ? 'text-2xl font-bold text-gray-900' : 'text-sm font-medium text-gray-600'}">
+            <div class="flex items-baseline justify-between">
+              <span class="${tour.priceMin ? 'text-2xl font-bold text-gray-900' : 'text-sm font-semibold text-gray-600'}">
                 ${tour.priceMin ? `€${tour.priceMin}` : 'Price on request'}
               </span>
               <a href="/tours/${tour.slug}" class="text-accent font-semibold hover:underline text-sm whitespace-nowrap">

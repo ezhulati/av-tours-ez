@@ -135,7 +135,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
           )}
           
           <!-- Title - Smaller on Mobile -->
-          <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-4 leading-tight drop-shadow-lg">
+          <h1 class="text-[clamp(2rem,6vw,3.5rem)] sm:text-[clamp(2.5rem,6vw,4rem)] md:text-[clamp(3.5rem,8vw,5.5rem)] font-bold text-white mb-2 md:mb-4 leading-[1.1] tracking-wide" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.6), 1px 1px 3px rgba(0,0,0,1); letter-spacing: 0.015em;">
             {hasEnhanced && enhancedTour ? enhancedTour.enhancedTitle : tour.title}
           </h1>
           
