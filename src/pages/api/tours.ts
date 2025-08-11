@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ request, url }) => {
     
     const params = url.searchParams
     
-    // Parse filters
+    // Parse filters with proper validation
     const filters: TourFilters = {
       country: params.get('country') || undefined,
       category: params.get('category') || undefined,
@@ -17,6 +17,7 @@ export const GET: APIRoute = async ({ request, url }) => {
       priceMax: params.get('price_max') ? Number(params.get('price_max')) : undefined,
       durationMin: params.get('duration_min') ? Number(params.get('duration_min')) : undefined,
       durationMax: params.get('duration_max') ? Number(params.get('duration_max')) : undefined,
+      groupSize: params.get('group_size') as any || undefined,
       featured: params.get('featured') === 'true' ? true : undefined
     }
     
@@ -27,13 +28,13 @@ export const GET: APIRoute = async ({ request, url }) => {
       sort: params.get('sort') as any || 'newest'
     }
     
+    // Log the request for debugging
+    console.log('API /tours request:', { filters, pagination })
+    
     const result = await getTourCardPage(filters, pagination)
     
-    // Wrap the result in a success response format
-    return new Response(JSON.stringify({
-      success: true,
-      data: result
-    }), {
+    // Return the result directly (not wrapped) to match frontend expectations
+    return new Response(JSON.stringify(result), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +43,16 @@ export const GET: APIRoute = async ({ request, url }) => {
     })
   } catch (error) {
     console.error('Error fetching tours:', error)
-    return new Response(JSON.stringify({ error: 'Failed to fetch tours' }), {
+    return new Response(JSON.stringify({ 
+      error: 'Failed to fetch tours',
+      items: [],
+      pagination: {
+        page: 1,
+        limit: 12,
+        total: 0,
+        totalPages: 0
+      }
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     })

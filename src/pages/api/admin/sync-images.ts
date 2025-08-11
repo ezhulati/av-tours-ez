@@ -1,36 +1,31 @@
 import type { APIRoute } from 'astro'
 import { syncAllTourImages, syncTourImages } from '../../../lib/scraping/imageScraper'
 import { supabaseServer } from '../../../lib/supabase.server'
+import { requireAdminAuth } from '@/lib/security/admin-auth'
+import { z } from 'zod'
 
-export const POST: APIRoute = async ({ request, url }) => {
+// Input validation schema
+const syncImagesSchema = z.object({
+  tourSlug: z.string().regex(/^[a-z0-9-]+$/).optional(),
+  fullSync: z.boolean().default(false)
+}).refine(data => data.fullSync || data.tourSlug, {
+  message: 'Either tourSlug or fullSync must be provided'
+})
+
+export const POST: APIRoute = async (context) => {
   try {
-    // Check for admin authorization (you should implement proper auth)
-    const authHeader = request.headers.get('authorization')
-    const adminToken = import.meta.env.ADMIN_API_TOKEN || process.env.ADMIN_API_TOKEN
-    
-    if (adminToken && authHeader !== `Bearer ${adminToken}`) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { 
-          status: 401,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      )
+    // Secure admin authentication
+    const authResult = await requireAdminAuth(context, 'sync:images')
+    if (!authResult.authorized) {
+      return authResult.response!
     }
     
-    // Parse request body
-    const body = await request.json().catch(() => ({}))
-    const { tourSlug, fullSync = false } = body
+    // Parse and validate request body
+    const body = await context.request.json().catch(() => ({}))
+    const validatedData = syncImagesSchema.parse(body)
+    const { tourSlug, fullSync } = validatedData
     
-    if (!fullSync && !tourSlug) {
-      return new Response(
-        JSON.stringify({ error: 'Either tourSlug or fullSync must be provided' }),
-        { 
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      )
-    }
+    // Validation is now handled by Zod schema above
     
     let result
     
@@ -107,10 +102,16 @@ export const POST: APIRoute = async ({ request, url }) => {
 }
 
 // GET endpoint to check sync status
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async (context) => {
   try {
-    const tourSlug = url.searchParams.get('tour')
-    const limit = parseInt(url.searchParams.get('limit') || '10')
+    // Secure admin authentication
+    const authResult = await requireAdminAuth(context, 'sync:images')
+    if (!authResult.authorized) {
+      return authResult.response!
+    }
+    
+    const tourSlug = context.url.searchParams.get('tour')
+    const limit = parseInt(context.url.searchParams.get('limit') || '10')
     
     if (tourSlug) {
       // Get images for specific tour

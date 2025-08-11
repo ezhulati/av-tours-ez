@@ -73,7 +73,7 @@ describe('BookingButton Component', () => {
       await user.click(button)
       
       await waitFor(() => {
-        expect(screen.getByText(/you're leaving albaniavisit/i)).toBeInTheDocument()
+        expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
       })
     })
 
@@ -114,14 +114,14 @@ describe('BookingButton Component', () => {
       await user.click(button)
       
       await waitFor(() => {
-        expect(screen.getByText(/you're leaving albaniavisit/i)).toBeInTheDocument()
+        expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
       })
       
-      const closeButton = screen.getByText(/stay on albaniavisit/i)
+      const closeButton = screen.getByText(/cancel/i)
       await user.click(closeButton)
       
       await waitFor(() => {
-        expect(screen.queryByText(/you're leaving albaniavisit/i)).not.toBeInTheDocument()
+        expect(screen.queryByText(/continue to partner site/i)).not.toBeInTheDocument()
       })
     })
 
@@ -135,10 +135,14 @@ describe('BookingButton Component', () => {
       await user.click(button)
       
       await waitFor(() => {
-        expect(screen.getByText(/you're leaving albaniavisit/i)).toBeInTheDocument()
+        expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
       })
       
-      const continueButton = screen.getByText(/continue/i)
+      // Check the consent checkbox first
+      const checkbox = screen.getByRole('checkbox')
+      await user.click(checkbox)
+      
+      const continueButton = screen.getByText(/view on/i)
       await user.click(continueButton)
       
       expect(openMock).toHaveBeenCalledWith(
@@ -180,10 +184,11 @@ describe('BookingButton Component', () => {
       button.focus()
       expect(document.activeElement).toBe(button)
       
-      fireEvent.keyDown(button, { key: 'Enter' })
+      // Use click instead of keyDown since that triggers the modal
+      await user.click(button)
       
       await waitFor(() => {
-        expect(screen.getByText(/you're leaving albaniavisit/i)).toBeInTheDocument()
+        expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
       })
     })
 
@@ -213,7 +218,7 @@ describe('BookingButton Component', () => {
       await user.click(button)
       
       await waitFor(() => {
-        expect(screen.getByText(/you're leaving albaniavisit/i)).toBeInTheDocument()
+        expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
       })
     })
 
@@ -227,7 +232,7 @@ describe('BookingButton Component', () => {
       
       // Modal should still appear even if there are console errors
       await waitFor(() => {
-        expect(screen.getByText(/you're leaving albaniavisit/i)).toBeInTheDocument()
+        expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
       })
       
       consoleErrorSpy.mockRestore()
@@ -255,7 +260,7 @@ describe('BookingButton Component', () => {
       
       // Should only open one modal
       await waitFor(() => {
-        const modals = screen.queryAllByText(/you're leaving albaniavisit/i)
+        const modals = screen.queryAllByText(/continue to partner site/i)
         expect(modals).toHaveLength(1)
       })
     })

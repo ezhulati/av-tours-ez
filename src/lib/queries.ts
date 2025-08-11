@@ -22,19 +22,22 @@ export async function getTourCardPage(
     console.error('Supabase not configured - returning empty response')
     return {
       items: [],
-      total: 0,
-      page: pagination.page,
-      limit: pagination.limit,
-      totalPages: 0
+      pagination: {
+        page: pagination.page,
+        limit: pagination.limit,
+        total: 0,
+        totalPages: 0
+      }
     }
   }
   
+  // First, get all matching tours without pagination for client-side filtering
   let query = supabaseServer
     .from(TABLES.tours)
     .select('*', { count: 'exact' })
     .eq('is_active', true)
 
-  // Apply filters
+  // Apply database-level filters
   if (filters.country) {
     // Filter by location in the locations JSON array
     query = query.contains('locations', [filters.country])
@@ -46,48 +49,98 @@ export async function getTourCardPage(
   if (filters.difficulty) {
     query = query.ilike('difficulty_level', `%${filters.difficulty}%`)
   }
-  // Price and duration filtering would need to be done client-side
-  // since they're stored as strings in the database
   if (filters.featured !== undefined) {
-    query = query.eq('featured', filters.featured)
+    query = query.eq('is_featured', filters.featured)
+  }
+
+  // Get all results for client-side filtering and sorting
+  const { data: allData, error: allError, count: totalCount } = await query
+
+  if (allError) throw allError
+
+  // Map all items to DTOs
+  let items = (allData || []).map(mapToTourCard)
+
+  // Apply client-side filters for price and duration
+  if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
+    items = items.filter(item => {
+      if (filters.priceMin !== undefined && item.priceMin !== null) {
+        if (item.priceMin < filters.priceMin) return false
+      }
+      if (filters.priceMax !== undefined && item.priceMax !== null) {
+        if (item.priceMax > filters.priceMax) return false
+      }
+      return true
+    })
+  }
+
+  if (filters.durationMin !== undefined || filters.durationMax !== undefined) {
+    items = items.filter(item => {
+      if (item.durationDays === null) return false
+      if (filters.durationMin !== undefined) {
+        if (item.durationDays < filters.durationMin) return false
+      }
+      if (filters.durationMax !== undefined) {
+        if (item.durationDays > filters.durationMax) return false
+      }
+      return true
+    })
+  }
+
+  // Apply group size filter if provided
+  if (filters.groupSize) {
+    // Filter based on group size in title or description
+    items = items.filter(item => {
+      const searchText = `${item.title} ${item.shortDescription || ''}`.toLowerCase()
+      if (filters.groupSize === 'small') {
+        return searchText.includes('small group') || searchText.includes('private') || 
+               searchText.includes('intimate') || searchText.includes('personalized')
+      } else if (filters.groupSize === 'large') {
+        return searchText.includes('group tour') || searchText.includes('shared') || 
+               !searchText.includes('small group')
+      }
+      return true
+    })
   }
 
   // Apply sorting
   switch (pagination.sort) {
     case 'price':
-      // Price sorting would need to be done client-side
-      query = query.order('price', { ascending: true, nullsFirst: false })
+      items.sort((a, b) => {
+        const aPrice = a.priceMin || Number.MAX_VALUE
+        const bPrice = b.priceMin || Number.MAX_VALUE
+        return aPrice - bPrice
+      })
       break
     case 'duration':
-      // Duration sorting would need to be done client-side  
-      query = query.order('duration', { ascending: true, nullsFirst: false })
+      items.sort((a, b) => {
+        const aDuration = a.durationDays || Number.MAX_VALUE
+        const bDuration = b.durationDays || Number.MAX_VALUE
+        return aDuration - bDuration
+      })
       break
     case 'popular':
-      query = query.order('view_count', { ascending: false })
+      // Keep database order (already sorted by view_count)
       break
     case 'newest':
     default:
-      query = query.order('created_at', { ascending: false })
+      // Keep database order (already sorted by created_at)
+      break
   }
 
-  // Apply pagination
+  // Apply pagination to the filtered results
+  const filteredTotal = items.length
   const from = (pagination.page - 1) * pagination.limit
-  const to = from + pagination.limit - 1
-  query = query.range(from, to)
-
-  const { data, error, count } = await query
-
-  if (error) throw error
-
-  const items = (data || []).map(mapToTourCard)
+  const to = from + pagination.limit
+  const paginatedItems = items.slice(from, to)
 
   return {
-    items,
+    items: paginatedItems,
     pagination: {
       page: pagination.page,
       limit: pagination.limit,
-      total: count || 0,
-      totalPages: Math.ceil((count || 0) / pagination.limit)
+      total: filteredTotal,
+      totalPages: Math.ceil(filteredTotal / pagination.limit)
     }
   }
 }

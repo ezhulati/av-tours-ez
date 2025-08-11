@@ -1,6 +1,9 @@
 import type { APIRoute } from 'astro'
 import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
+import { requireAdminAuth } from '@/lib/security/admin-auth'
+import { validators } from '@/lib/security/middleware'
+import { z } from 'zod'
 
 // Price extraction regex patterns for BNAdventure
 const PRICE_PATTERNS = [
@@ -129,19 +132,20 @@ function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+// Input validation schema
+const syncPricesSchema = z.object({
+  dryRun: z.boolean().default(false),
+  tourIds: z.array(z.string().uuid()).optional().nullable()
+})
+
 export const prerender = false
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async (context) => {
   try {
-    // Check for admin authorization
-    const authHeader = request.headers.get('Authorization')
-    const adminKey = import.meta.env.ADMIN_API_KEY || process.env.ADMIN_API_KEY
-    
-    if (!adminKey || authHeader !== `Bearer ${adminKey}`) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      })
+    // Secure admin authentication with session management
+    const authResult = await requireAdminAuth(context, 'sync:prices')
+    if (!authResult.authorized) {
+      return authResult.response!
     }
     
     if (!isSupabaseConfigured()) {
@@ -151,9 +155,10 @@ export const POST: APIRoute = async ({ request }) => {
       })
     }
     
-    // Get request body for optional filters
-    const body = await request.json().catch(() => ({}))
-    const { dryRun = false, tourIds = null } = body
+    // Validate and sanitize input
+    const body = await context.request.json().catch(() => ({}))
+    const validatedData = syncPricesSchema.parse(body)
+    const { dryRun, tourIds } = validatedData
     
     // Fetch tours to check
     let query = supabaseServer
@@ -288,17 +293,12 @@ export const POST: APIRoute = async ({ request }) => {
 }
 
 // GET endpoint to retrieve last sync status
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async (context) => {
   try {
-    // Check for admin authorization
-    const authHeader = request.headers.get('Authorization')
-    const adminKey = import.meta.env.ADMIN_API_KEY || process.env.ADMIN_API_KEY
-    
-    if (!adminKey || authHeader !== `Bearer ${adminKey}`) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      })
+    // Secure admin authentication
+    const authResult = await requireAdminAuth(context, 'sync:prices')
+    if (!authResult.authorized) {
+      return authResult.response!
     }
     
     if (!isSupabaseConfigured()) {

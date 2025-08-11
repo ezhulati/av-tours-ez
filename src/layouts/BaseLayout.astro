@@ -14,7 +14,7 @@ export interface Props {
 
 const { 
   title, 
-  description = 'Discover authentic mountain tours in Albania and the Balkans with AlbaniaVisit. Expert guides, real adventures.',
+  description = 'Experience authentic Albania with local guides who know the hidden gems. Skip tourist traps and discover real Balkan adventures with expert local operators.',
   canonical,
   ogImage = '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg',
   ogType = 'website',
@@ -263,15 +263,63 @@ const GA4_ID = import.meta.env.GA4_ID
             <div class="text-left">
               <!-- Proverb -->
               <div class="mb-8">
-                <div class="inline-flex flex-col">
-                  <p class="text-lg md:text-2xl lg:text-3xl font-serif text-white italic leading-tight whitespace-nowrap">
-                    "Shtëpia e shqiptarit është e mikut dhe e Zotit"
-                  </p>
-                  <p class="text-xs md:text-sm text-gray-400 italic mt-1 whitespace-nowrap">
-                    shtuh-PEE-ah eh shkeep-TAR-eet UHSH-tuh eh MEE-koot dheh eh ZOH-teet
-                  </p>
+                <!-- Word-by-word with pronunciations - responsive layout -->
+                <div class="flex flex-wrap items-start gap-x-1 sm:gap-x-2 md:gap-x-3 lg:gap-x-4 font-serif italic">
+                  <!-- Opening quote -->
+                  <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">"</span>
+                  
+                  <!-- Each word with pronunciation underneath -->
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">Shtëpia</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">shtuh-PEE-ah</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">e</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">eh</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">shqiptarit</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">shchip-TAR-eet</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">është</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">UHSH-tuh</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">e</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">eh</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">mikut</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">MEE-koot</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">dhe</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">dheh</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">e</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">eh</span>
+                  </div>
+                  
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">Zotit</span>
+                    <span class="text-[8px] sm:text-[9px] md:text-xs text-gray-400 mt-0.5">ZOH-teet</span>
+                  </div>
+                  
+                  <!-- Closing quote -->
+                  <span class="text-base sm:text-lg md:text-2xl lg:text-3xl text-white">"</span>
                 </div>
-                <p class="text-sm md:text-base lg:text-xl text-gray-300 font-light whitespace-nowrap mt-4">
+                
+                <!-- English translation -->
+                <p class="text-sm md:text-base lg:text-xl text-gray-300 font-light mt-4">
                   "The house of an Albanian belongs to the guest and to God."
                 </p>
               </div>

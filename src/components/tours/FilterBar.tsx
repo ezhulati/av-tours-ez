@@ -30,11 +30,13 @@ export default function FilterBar({
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [totalResults, setTotalResults] = useState<number>(0)
 
   // Debounced fetch function
   const fetchTours = useCallback(
     debounce(async (filters: TourFilters, pagination: PaginationParams) => {
       setLoading(true)
+      setError(null)
       
       const params = new URLSearchParams()
       if (filters.country) params.set('country', filters.country)
@@ -44,6 +46,7 @@ export default function FilterBar({
       if (filters.priceMax) params.set('price_max', filters.priceMax.toString())
       if (filters.durationMin) params.set('duration_min', filters.durationMin.toString())
       if (filters.durationMax) params.set('duration_max', filters.durationMax.toString())
+      if (filters.groupSize && filters.groupSize !== 'any') params.set('group_size', filters.groupSize)
       params.set('page', pagination.page.toString())
       params.set('limit', pagination.limit.toString())
       if (pagination.sort) params.set('sort', pagination.sort)
@@ -52,6 +55,7 @@ export default function FilterBar({
       window.history.replaceState({}, '', `/tours?${params.toString()}`)
 
       try {
+        console.log('FilterBar: Fetching tours with params:', params.toString())
         const response = await fetch(`/api/tours?${params.toString()}`)
         
         if (!response.ok) {
@@ -59,13 +63,28 @@ export default function FilterBar({
         }
         
         const data: PaginatedResponse<TourCardDTO> = await response.json()
+        console.log('FilterBar: Received data:', data)
+        
+        // Validate response structure
+        if (!data.items || !data.pagination) {
+          throw new Error('Invalid response structure from API')
+        }
+        
+        // Update total results count
+        setTotalResults(data.pagination.total)
         
         if (onFiltersChange) {
           onFiltersChange(filters, pagination)
         }
 
-        // Update tours grid (you might want to emit an event or use a state management solution)
-        const event = new CustomEvent('tours-updated', { detail: data })
+        // Update tours grid with the data
+        const event = new CustomEvent('tours-updated', { 
+          detail: {
+            ...data,
+            filters,
+            isFilterUpdate: true
+          } 
+        })
         window.dispatchEvent(event)
         
         // Clear any previous errors
@@ -73,10 +92,26 @@ export default function FilterBar({
       } catch (error) {
         console.error('Failed to fetch tours:', error)
         setError('Failed to load tours. Please try again.')
+        // Send empty result on error
+        const event = new CustomEvent('tours-updated', { 
+          detail: {
+            items: [],
+            pagination: {
+              page: 1,
+              limit: 12,
+              total: 0,
+              totalPages: 0
+            },
+            filters,
+            isFilterUpdate: true,
+            error: true
+          } 
+        })
+        window.dispatchEvent(event)
       } finally {
         setLoading(false)
       }
-    }, 500),
+    }, 300),
     [onFiltersChange]
   )
 
@@ -103,6 +138,15 @@ export default function FilterBar({
   const clearFilters = () => {
     setFilters({})
     setPagination({ page: 1, limit: 12, sort: 'newest' })
+    setTotalResults(0)
+  }
+
+  // Check if any filters are active
+  const hasActiveFilters = () => {
+    return Object.entries(filters).some(([key, value]) => {
+      if (key === 'groupSize') return value && value !== 'any'
+      return value !== undefined && value !== null && value !== ''
+    })
   }
 
   return (
@@ -124,9 +168,12 @@ export default function FilterBar({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
           <span className="font-semibold text-gray-900">Filter Tours</span>
-          {Object.keys(filters).length > 0 && (
+          {hasActiveFilters() && (
             <span className="bg-accent text-white text-xs font-bold px-2.5 py-1 rounded-full ml-2">
-              {Object.keys(filters).length} active
+              {Object.entries(filters).filter(([key, value]) => {
+                if (key === 'groupSize') return value && value !== 'any'
+                return value !== undefined && value !== null && value !== ''
+              }).length} active
             </span>
           )}
         </div>
@@ -145,6 +192,23 @@ export default function FilterBar({
         id="filter-content"
         className={`${isOpen ? 'block animate-slide-down mt-6' : 'hidden'} md:block md:mt-6 space-y-4 md:space-y-0 md:flex md:items-center md:gap-4 md:flex-wrap`}
       >
+        {/* Country Filter */}
+        <div className="flex-1 md:flex-initial">
+          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Country</label>
+          <select
+            value={filters.country || ''}
+            onChange={(e) => handleFilterChange('country', e.target.value || undefined)}
+            className="w-full md:w-auto min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all cursor-pointer"
+            aria-label="Filter by country"
+          >
+            <option value="">All Countries</option>
+            <option value="Albania">Albania</option>
+            <option value="Kosovo">Kosovo</option>
+            <option value="Montenegro">Montenegro</option>
+            <option value="North Macedonia">North Macedonia</option>
+          </select>
+        </div>
+
         {/* Difficulty */}
         <div className="flex-1 md:flex-initial">
           <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Difficulty Level</label>
@@ -193,30 +257,46 @@ export default function FilterBar({
 
         {/* Price Range */}
         <div className="flex-1 md:flex-initial">
-          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Price Range</label>
+          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Price Range (€)</label>
           <div className="flex gap-2 items-center">
             <input
               type="number"
               min="0"
               step="50"
-              placeholder="Min €"
+              placeholder="Min"
               value={filters.priceMin || ''}
               onChange={(e) => handleFilterChange('priceMin', e.target.value ? Number(e.target.value) : undefined)}
-              className="w-full md:w-24 min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
+              className="w-full md:w-20 min-h-[48px] px-3 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
               aria-label="Minimum price"
             />
-            <span className="text-gray-400 font-medium px-1">–</span>
+            <span className="text-gray-400 font-medium">–</span>
             <input
               type="number"
               min="0"
               step="50"
-              placeholder="Max €"
+              placeholder="Max"
               value={filters.priceMax || ''}
               onChange={(e) => handleFilterChange('priceMax', e.target.value ? Number(e.target.value) : undefined)}
-              className="w-full md:w-24 min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
+              className="w-full md:w-20 min-h-[48px] px-3 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
               aria-label="Maximum price"
             />
+            <span className="hidden md:inline text-sm text-gray-600">€</span>
           </div>
+        </div>
+
+        {/* Group Size */}
+        <div className="flex-1 md:flex-initial">
+          <label className="block md:hidden text-sm font-medium text-gray-700 mb-2">Group Size</label>
+          <select
+            value={filters.groupSize || 'any'}
+            onChange={(e) => handleFilterChange('groupSize', e.target.value === 'any' ? undefined : e.target.value as any)}
+            className="w-full md:w-auto min-h-[48px] px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 hover:border-gray-400 focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all cursor-pointer"
+            aria-label="Filter by group size"
+          >
+            <option value="any">Any Group Size</option>
+            <option value="small">Small Group</option>
+            <option value="large">Large Group</option>
+          </select>
         </div>
 
         {/* Sort */}
@@ -235,9 +315,14 @@ export default function FilterBar({
           </select>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-2 md:ml-auto">
-          {Object.keys(filters).length > 0 && (
+        {/* Action Buttons and Results Count */}
+        <div className="flex gap-2 md:ml-auto items-center">
+          {totalResults > 0 && hasActiveFilters() && (
+            <span className="text-sm text-gray-600 font-medium px-3">
+              {totalResults} {totalResults === 1 ? 'tour' : 'tours'} found
+            </span>
+          )}
+          {hasActiveFilters() && (
             <button
               onClick={clearFilters}
               className="min-h-[48px] px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all flex items-center gap-2"

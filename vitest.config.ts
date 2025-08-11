@@ -29,7 +29,7 @@ export default defineConfig({
         statements: 80,
       },
     },
-    include: ['tests/component/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: ['tests/component/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', 'tests/security/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['node_modules', 'dist', 'tests/e2e', 'tests/performance', 'tests/accessibility', 'tests/seo'],
     testTimeout: 10000,
     hookTimeout: 10000,

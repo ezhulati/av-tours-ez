@@ -3,9 +3,21 @@ import { tourFactory } from '../factories/tourFactory'
 
 export const handlers = [
   // Mock tour API endpoints
-  http.get('/api/tours', () => {
+  http.get('/api/tours', ({ request }) => {
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1')
+    const limit = parseInt(url.searchParams.get('limit') || '12')
+    
     const tours = Array.from({ length: 10 }, () => tourFactory.build())
-    return HttpResponse.json({ tours, total: tours.length })
+    return HttpResponse.json({ 
+      items: tours,
+      pagination: {
+        page,
+        limit,
+        total: tours.length,
+        totalPages: Math.ceil(tours.length / limit)
+      }
+    })
   }),
 
   http.get('/api/tours/:slug', ({ params }) => {

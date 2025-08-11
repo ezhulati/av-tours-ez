@@ -2,23 +2,31 @@ import type { APIRoute } from 'astro'
 import { z } from 'zod'
 import { supabaseServer, isSupabaseConfigured } from '@/lib/supabase.server'
 import { TABLES } from '@/lib/adapters/dbMapper'
+import { rateLimiters, createAdvancedRateLimitMiddleware } from '@/lib/security/advanced-rate-limiter'
+import { sanitizeHtml, validateEmail } from '@/lib/security/sanitizer'
 
 const inquirySchema = z.object({
   tourId: z.string().uuid(),
-  tourSlug: z.string(),
-  name: z.string().min(2).max(100),
-  email: z.string().email(),
-  phone: z.string().optional(),
-  message: z.string().min(10).max(1000),
-  travelDate: z.string().optional(),
-  groupSize: z.number().min(1).max(100).optional(),
-  utm_source: z.string().optional(),
-  utm_medium: z.string().optional(),
-  utm_campaign: z.string().optional(),
-  affiliate_cookie: z.string().optional()
+  tourSlug: z.string().regex(/^[a-z0-9-]+$/).max(100),
+  name: z.string().min(2).max(100).transform(sanitizeHtml),
+  email: z.string().email().max(255).refine(validateEmail, 'Invalid email format'),
+  phone: z.string().max(20).optional().transform(val => val ? val.replace(/[^\d\s\-\+\(\)]/g, '') : val),
+  message: z.string().min(10).max(1000).transform(sanitizeHtml),
+  travelDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  groupSize: z.number().int().min(1).max(100).optional(),
+  utm_source: z.string().max(50).optional().transform(val => val ? sanitizeHtml(val) : val),
+  utm_medium: z.string().max(50).optional().transform(val => val ? sanitizeHtml(val) : val),
+  utm_campaign: z.string().max(50).optional().transform(val => val ? sanitizeHtml(val) : val),
+  affiliate_cookie: z.string().max(100).optional()
 })
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+// Apply advanced rate limiting middleware
+const rateLimitMiddleware = createAdvancedRateLimitMiddleware(rateLimiters.booking)
+
+export const POST: APIRoute = async (context) => {
+  // Apply rate limiting
+  return rateLimitMiddleware(context, async () => {
+    const { request, cookies } = context
   try {
     // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
@@ -100,4 +108,5 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       headers: { 'Content-Type': 'application/json' }
     })
   }
+  }) // Close rate limit middleware
 }

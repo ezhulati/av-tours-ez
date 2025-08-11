@@ -12,29 +12,29 @@ export const microcopy = {
   // ============================================
   cta: {
     booking: {
-      primary: 'Check Availability',
-      primaryVariants: ['View on Partner Site', 'See Dates & Prices', 'Check Tour Details'],
-      compact: 'View Tour',
-      compactVariants: ['Check Dates', 'See Details', 'View Operator'],
+      primary: 'Check Availability & Book',
+      primaryVariants: ['Book This Adventure', 'Secure Your Spot', 'Reserve Now'],
+      compact: 'Book Now',
+      compactVariants: ['Reserve', 'Book', 'Secure Spot'],
       loading: 'Loading...',
       mobile: 'View',
     },
     tourCard: {
-      default: 'See Adventure',
-      variants: ['Explore Tour', 'View Dates', 'See Options'],
-      detailed: 'See Dates & Prices',
+      default: 'Explore This Adventure',
+      variants: ['Discover More', 'View Details', 'See This Tour'],
+      detailed: 'Check Dates & Pricing',
     },
     hero: {
-      primary: 'Find Your Adventure',
-      primaryVariants: ['Browse Adventures', 'See All Tours', 'Start Exploring'],
-      secondary: 'Popular Tours',
-      secondaryVariants: ['Top Picks', 'Best Sellers'],
+      primary: 'Discover Real Albania',
+      primaryVariants: ['Find Your Adventure', 'Skip Tourist Traps', 'Explore Authentically'],
+      secondary: 'Traveler Favorites',
+      secondaryVariants: ['Most Loved', 'Top Rated'],
     },
     inquiry: {
-      open: 'Ask a Question',
-      submit: 'Get Tour Info',
-      submitting: 'Securing info...',
-      success: 'Request Sent',
+      open: 'Get Expert Advice',
+      submit: 'Send My Questions',
+      submitting: 'Connecting you with local experts...',
+      success: 'Message Sent Successfully',
     },
     filters: {
       apply: 'Show Results',
@@ -56,12 +56,12 @@ export const microcopy = {
   urgency: {
     availability: {
       urgent: (spots: number, date?: string) => 
-        date ? `Only ${spots} spots left for ${date}` : `Only ${spots} spots left`,
-      moderate: 'Limited availability',
-      lastMinute: 'Last minute deal available',
-      fillingFast: (spots: number) => `Filling fast - ${spots} spots left`,
-      soldOut: 'Fully booked',
-      almostGone: 'Almost gone!',
+        date ? `⚡ Only ${spots} spots left for ${date}` : `⚡ Only ${spots} spots remaining`,
+      moderate: '🔥 Limited availability - book soon',
+      lastMinute: '⏰ Last-minute availability',
+      fillingFast: (spots: number) => `🚀 Filling fast - ${spots} spots left`,
+      soldOut: '❌ Fully booked - join waitlist',
+      almostGone: '⚠️ Almost sold out!',
     },
     social: {
       viewing: (count: number) => `${count} travelers viewing now`,
@@ -82,15 +82,15 @@ export const microcopy = {
   // ============================================
   trust: {
     verification: {
-      partner: 'Verified Partner',
-      secure: 'Verified Operator',
-      protected: 'Trusted Partner',
+      partner: '✓ Verified Local Partner',
+      secure: '✓ Licensed & Insured Operator',
+      protected: '✓ Trusted Since 2020',
     },
     guarantees: {
-      price: 'Best Price Direct',
-      satisfaction: 'Satisfaction Guaranteed',
-      cancellation: 'Free cancellation available',
-      instant: 'Instant Confirmation',
+      price: '💰 Direct Pricing - No Hidden Fees',
+      satisfaction: '🚀 100% Satisfaction Promise',
+      cancellation: '❌ Free Cancellation on Most Tours',
+      instant: '⚡ Instant Confirmation Available',
     },
     ratings: {
       excellent: (rating: number) => `Excellent ${rating}/5`,
@@ -105,11 +105,11 @@ export const microcopy = {
   forms: {
     labels: {
       name: 'Your full name',
-      email: 'Email for booking confirmation',
-      phone: 'Phone (optional)',
-      date: 'When do you want to go?',
-      groupSize: 'How many adventurers?',
-      message: 'Any special requests?',
+      email: 'Email address',
+      phone: 'Phone number (optional)',
+      date: 'Preferred travel date',
+      groupSize: 'Group size',
+      message: 'Tell us about your adventure goals',
     },
     placeholders: {
       name: 'John Smith',
@@ -148,15 +148,15 @@ export const microcopy = {
       expired: 'This offer has expired',
     },
     network: {
-      connection: 'Connection issue. Trying again...',
-      timeout: 'Taking longer than usual...',
-      failed: 'Something went wrong. Please try again.',
-      offline: 'You\'re offline. Check your connection.',
+      connection: 'Connection hiccup. Reconnecting now...',
+      timeout: 'Almost there! Just a moment longer...',
+      failed: 'Oops! Let\'s try that again together.',
+      offline: 'No internet connection. We\'ll wait for you!',
     },
     form: {
-      incomplete: (fields: string[]) => `Almost there! Please complete: ${fields.join(', ')}`,
-      invalid: 'Please check the highlighted fields',
-      submission: 'Could not submit. Please try again.',
+      incomplete: (fields: string[]) => `You\'re almost done! Just need: ${fields.join(', ')}`,
+      invalid: 'Quick check needed on the highlighted fields',
+      submission: 'Submission failed. Let\'s give it another try!',
     },
   },
 

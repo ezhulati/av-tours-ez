@@ -26,6 +26,62 @@
     --radius: 0.5rem;
   }
   
+  /* FilterBar Animations */
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .animate-slide-down {
+    animation: slide-down 0.3s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
+  
+  /* Touch-friendly tap targets */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .focus\:ring-accent\/20:focus {
+      outline: 3px solid;
+      outline-offset: 2px;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-slide-down,
+    .animate-fade-in,
+    .animate-spin,
+    .transition-all,
+    .transition-colors,
+    .transition-transform {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
   /* Fix date inputs on iOS and mobile browsers */
   input[type="date"] {
     -webkit-appearance: none;

@@ -121,10 +121,10 @@ export default function RedirectModal({
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  View Tour Details
+                  Continue to Partner Site
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
-                  Browse dates, prices & availability - no commitment
+                  Check live availability & book directly with operator
                 </p>
               </div>
             </div>
@@ -157,7 +157,7 @@ export default function RedirectModal({
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p><span className="font-medium">Just browsing!</span> Check availability and prices with no obligation</p>
+                <p><span className="font-medium">No charges today!</span> Just checking availability</p>
               </div>
               
               <div className="flex items-start gap-2">
@@ -174,7 +174,7 @@ export default function RedirectModal({
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>Compare dates and group sizes before deciding</p>
+                <p>See real-time availability for your dates</p>
               </div>
               
               <div className="flex items-start gap-2">
@@ -191,7 +191,7 @@ export default function RedirectModal({
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>Book only when you're ready - no payment required now</p>
+                <p>Book directly with the tour operator when ready</p>
               </div>
             </div>
 
@@ -205,7 +205,7 @@ export default function RedirectModal({
                   className="rounded border-gray-300 text-accent focus:ring-accent"
                 />
                 <span className="text-xs text-gray-600">
-                  I understand I'm viewing tours from our partner{' '}
+                  I understand there's no payment or commitment right now{' '}
                   <a href="/terms" target="_blank" className="text-accent hover:underline">terms</a>
                 </span>
               </label>

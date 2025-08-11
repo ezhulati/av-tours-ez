@@ -46,6 +46,7 @@ export interface TourFilters {
   priceMax?: number
   durationMin?: number
   durationMax?: number
+  groupSize?: 'small' | 'large' | 'any'
   featured?: boolean
 }
 
