@@ -56,7 +56,13 @@ export default function FilterBar({
 
       try {
         console.log('FilterBar: Fetching tours with params:', params.toString())
-        const response = await fetch(`/api/tours?${params.toString()}`)
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+        
+        const response = await fetch(`/api/tours?${params.toString()}`, {
+          signal: controller.signal
+        })
+        clearTimeout(timeoutId)
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)

@@ -3,14 +3,28 @@ import { TABLES, mapToTourCard, mapToTourDetail } from './adapters/dbMapper'
 import type { TourCardDTO, TourDetailDTO, TourFilters, PaginationParams, PaginatedResponse } from './dto'
 
 export async function getAllSlugs(): Promise<{ slug: string }[]> {
-  const { data, error } = await supabaseServer
-    .from(TABLES.tours)
-    .select('slug')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
+  try {
+    if (!isSupabaseConfigured() || !supabaseServer) {
+      console.warn('Supabase not configured - returning empty slugs')
+      return []
+    }
+    
+    const { data, error } = await supabaseServer
+      .from(TABLES.tours)
+      .select('slug')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
 
-  if (error) throw error
-  return data || []
+    if (error) {
+      console.error('Error fetching slugs:', error)
+      throw new Error(`Failed to fetch tour slugs: ${error.message}`)
+    }
+    return data || []
+  } catch (error) {
+    console.error('getAllSlugs error:', error)
+    // Return empty array on error to prevent build failure
+    return []
+  }
 }
 
 export async function getTourCardPage(

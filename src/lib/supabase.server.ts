@@ -15,14 +15,40 @@ const supabaseKey = import.meta.env?.SUPABASE_SERVICE_ROLE_KEY ||
   import.meta.env?.PUBLIC_SUPABASE_ANON_KEY ||
   PROD_SUPABASE_ANON_KEY
 
-// Create the client only if we have the env vars
-export const supabaseServer = supabaseUrl && supabaseKey 
-  ? createClient(supabaseUrl, supabaseKey, { 
+// Create the client with error handling
+let supabaseServer: ReturnType<typeof createClient> | null = null
+
+try {
+  if (supabaseUrl && supabaseKey) {
+    supabaseServer = createClient(supabaseUrl, supabaseKey, { 
       auth: { 
         persistSession: false 
-      } 
+      },
+      global: {
+        fetch: async (url, options) => {
+          try {
+            const response = await fetch(url, {
+              ...options,
+              signal: AbortSignal.timeout(10000) // 10 second timeout
+            })
+            if (!response.ok && response.status >= 500) {
+              throw new Error(`Supabase server error: ${response.status}`)
+            }
+            return response
+          } catch (error) {
+            console.error('Fetch error in Supabase client:', error)
+            throw new Error(`Failed to connect to Supabase: ${error instanceof Error ? error.message : 'Unknown error'}`)
+          }
+        }
+      }
     })
-  : null as any // Return null if no env vars, but typed as any to avoid breaking existing code
+  }
+} catch (error) {
+  console.error('Failed to initialize Supabase client:', error)
+  supabaseServer = null
+}
+
+export { supabaseServer }
 
 // Helper to check if Supabase is configured
 export function isSupabaseConfigured(): boolean {
