@@ -487,4 +487,41 @@
       overflow-y: auto;
     }
   }
+  
+  /* Modal-specific button styles for perfect alignment */
+  .modal-footer-buttons {
+    @apply flex flex-col sm:flex-row gap-3 sm:gap-4;
+  }
+  
+  .modal-footer-buttons button {
+    @apply w-full sm:flex-1;
+  }
+  
+  /* Prevent button text overflow on desktop */
+  @media (min-width: 640px) {
+    .modal-footer-buttons button {
+      min-width: 140px;
+      max-width: 200px;
+    }
+    
+    .modal-footer-buttons button span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  
+  /* Checkbox alignment fix */
+  .modal-checkbox-wrapper {
+    @apply flex items-center gap-3;
+  }
+  
+  .modal-checkbox-wrapper input[type="checkbox"] {
+    @apply flex-shrink-0 mt-0;
+  }
+  
+  .modal-checkbox-wrapper span {
+    @apply leading-relaxed;
+  }
 }

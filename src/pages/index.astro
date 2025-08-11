@@ -5,6 +5,7 @@ import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSc
 import BookingButton from '@/components/tours/BookingButton'
 import ContactForm from '@/components/ContactForm'
 import { getHomepageHeroImages } from '@/data/heroImages'
+import HeroImageOptimized from '@/components/HeroImageOptimized.astro'
 
 const featuredTours = await getFeaturedTours(6)
 const totalTourCount = await getTotalTourCount()
@@ -24,17 +25,17 @@ const breadcrumbSchema = generateBreadcrumbSchema([
 >
   <!-- Hero Section with Brand Design - Mobile Optimized -->
   <section class="relative h-screen min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
-    <!-- Premium Hero Slideshow - Adventure & Action -->
+    <!-- Premium Hero Slideshow - Ultra-Sharp Next-Gen Images -->
     <div class="absolute inset-0">
       <div class="hero-slideshow">
         {heroImages.map((image, index) => (
           <div class={`slide ${index === 0 ? 'active' : ''}`}>
-            <img 
-              src={image.src} 
-              alt={image.alt} 
+            <HeroImageOptimized
+              src={image.src}
+              alt={image.alt}
               class="slide-image"
               loading={index < 2 ? "eager" : "lazy"}
-              fetchpriority={index === 0 ? "high" : "auto"}
+              priority={index === 0}
             />
           </div>
         ))}

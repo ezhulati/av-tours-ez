@@ -14,20 +14,45 @@ export interface HeroImage {
 }
 
 // Curated list of the absolute best images for hero sections
-// Carefully selected based on resolution, quality, and visual impact
+// Mountain/hiking priority - NO ANIMALS - Ultra high resolution only
 export const heroImages: HeroImage[] = [
-  // === HIGHEST SCORING IMAGES - VERIFIED TO EXIST ===
+  // === MAJESTIC MOUNTAINS FIRST - HIGHEST RESOLUTION ===
+  {
+    src: '/Assets/Albania/Accursed_Mountains.jpeg',
+    alt: 'Accursed Mountains dramatic peaks and rugged terrain',
+    title: 'Accursed Mountains',
+    category: 'signature'
+  },
+  {
+    src: '/Assets/Albania/Valbona_to_Theth_Trail.jpg',
+    alt: 'Valbona to Theth trail - iconic mountain hiking path with dramatic peaks',
+    title: 'Valbona Trail',
+    category: 'adventure'
+  },
+  {
+    src: '/Assets/Albania/Valbona_Valley_502379574.jpeg',
+    alt: 'Valbona Valley dramatic mountain landscape and pristine wilderness',
+    title: 'Valbona Valley',
+    category: 'adventure'
+  },
+  {
+    src: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg',
+    alt: 'Gjeravica Peak - Kosovo highest summit with panoramic mountain views',
+    title: 'Gjeravica Peak',
+    category: 'adventure'
+  },
+  {
+    src: '/Assets/Albania/Valbona_Accursed_Mountains.jpg',
+    alt: 'Valbona Accursed Mountains majestic peaks towering above valley',
+    title: 'Valbona Mountains',
+    category: 'adventure'
+  },
+  // === STUNNING WATER/NATURE SCENES ===
   {
     src: '/Assets/Albania/Albania_Lake_Koman.jpeg',
     alt: 'Lake Koman dramatic fjord-like scenery with emerald waters',
     title: 'Lake Koman',
     category: 'signature'
-  },
-  {
-    src: '/Assets/Albania/Albania_Hiking.jpeg',
-    alt: 'Mountain hiking adventure in Albanian Alps',
-    title: 'Mountain Hiking',
-    category: 'adventure'
   },
   {
     src: '/Assets/Albania/Northern_Albania_Shala_River.jpeg',
@@ -36,46 +61,23 @@ export const heroImages: HeroImage[] = [
     category: 'destination'
   },
   {
-    src: '/Assets/Albania/albanian-riviera-5.jpg',
-    alt: 'Albanian Riviera stunning coastal views and blue waters',
-    title: 'Albanian Riviera',
-    category: 'destination'
-  },
-  {
-    src: '/Assets/Albania/Valbona_to_Theth_Trail.jpg',
-    alt: 'Valbona to Theth trail - iconic mountain hiking path',
-    title: 'Valbona Trail',
-    category: 'adventure'
-  },
-  {
     src: '/Assets/Albania/Lake_Prespa_Albania.jpeg',
     alt: 'Lake Prespa serene waters with mountain backdrop',
     title: 'Lake Prespa',
     category: 'destination'
   },
+  // === COASTAL BEAUTY ===
   {
-    src: '/Assets/Albania/Accursed_Mountains.jpeg',
-    alt: 'Accursed Mountains dramatic peaks and rugged terrain',
-    title: 'Accursed Mountains',
-    category: 'signature'
-  },
-  {
-    src: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg',
-    alt: 'Gjeravica Peak - Kosovo highest summit with panoramic views',
-    title: 'Gjeravica Peak',
-    category: 'adventure'
+    src: '/Assets/Albania/albanian-riviera-5.jpg',
+    alt: 'Albanian Riviera stunning coastal views and azure waters',
+    title: 'Albanian Riviera',
+    category: 'destination'
   },
   {
     src: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg',
     alt: 'Pristine beach along Albanian Riviera with turquoise waters',
     title: 'Riviera Beach',
     category: 'destination'
-  },
-  {
-    src: '/Assets/Albania/Valbona_Valley_502379574.jpeg',
-    alt: 'Valbona Valley dramatic mountain landscape',
-    title: 'Valbona Valley',
-    category: 'adventure'
   }
 ]
 

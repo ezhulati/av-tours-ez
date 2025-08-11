@@ -1,6 +1,7 @@
 import type { TourDetailDTO } from './dto'
+import { reviewStats } from '@/data/partnerReviews'
 
-export function generateTouristTripSchema(tour: TourDetailDTO, url: string) {
+export function generateTouristTripSchema(tour: TourDetailDTO, url: string, includeRatings = true) {
   const images = tour.images?.map(img => img.url) || [tour.primaryImageUrl]
   
   return {
@@ -34,7 +35,7 @@ export function generateTouristTripSchema(tour: TourDetailDTO, url: string) {
       validFrom: new Date().toISOString(),
       seller: {
         '@type': 'Organization',
-        name: tour.operator?.name || 'Tour Operator',
+        name: tour.operator?.name || 'BNAdventure',
         url: tour.affiliateUrl
       }
     } : undefined,
@@ -43,13 +44,13 @@ export function generateTouristTripSchema(tour: TourDetailDTO, url: string) {
       '@id': 'https://tours.albaniavisit.com/#organization',
       name: 'AlbaniaVisit'
     },
-    aggregateRating: {
+    aggregateRating: includeRatings ? {
       '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      reviewCount: Math.floor(Math.random() * 50) + 20,
+      ratingValue: reviewStats.averageRating.toFixed(1),
+      reviewCount: reviewStats.totalReviews,
       bestRating: '5',
       worstRating: '1'
-    },
+    } : undefined,
     duration: tour.durationDays ? `P${tour.durationDays}D` : undefined,
     activityLevel: tour.difficulty,
     category: tour.categories?.join(', '),
@@ -60,9 +61,13 @@ export function generateTouristTripSchema(tour: TourDetailDTO, url: string) {
 }
 
 export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
+  // Generate @id from the last item's URL (current page)
+  const currentPageUrl = items[items.length - 1]?.url || 'https://tours.albaniavisit.com'
+  
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': `${currentPageUrl}#breadcrumb`,
     itemListElement: items.map((item, index) => ({
       '@type': 'ListItem',
       position: index + 1,

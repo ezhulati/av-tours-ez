@@ -1,0 +1,67 @@
+---
+export interface Props {
+  src: string
+  alt: string
+  class?: string
+  loading?: 'eager' | 'lazy'
+  priority?: boolean
+}
+
+const { src, alt, class: className = '', loading = 'lazy', priority = false } = Astro.props
+
+// Generate optimized URLs using Weserv.nl with maximum quality settings
+function getOptimizedUrl(originalSrc: string, width: number, format: 'webp' | 'jpg' = 'webp') {
+  // For local images, use the full URL
+  const fullUrl = originalSrc.startsWith('/') 
+    ? `https://tours.albaniavisit.com${originalSrc}`
+    : originalSrc
+    
+  const params = new URLSearchParams({
+    url: fullUrl,
+    w: width.toString(),
+    q: '95', // Ultra high quality for hero images
+    output: format,
+    sharp: '2', // Extra sharpening for crisp mountain details
+    af: '', // Auto enhance
+    il: '', // Progressive loading
+    n: '-1' // No cache expiry
+  })
+  
+  return `https://images.weserv.nl/?${params.toString()}`
+}
+
+// Generate srcset for different screen sizes
+const sizes = [640, 768, 1024, 1366, 1920, 2560, 3840] // Including 4K
+const formats = ['webp', 'jpg'] as const
+---
+
+<picture class={className}>
+  {/* WebP - Best compression (25-35% smaller than JPEG) */}
+  <source
+    type="image/webp"
+    srcset={sizes.map(w => `${getOptimizedUrl(src, w, 'webp')} ${w}w`).join(', ')}
+    sizes="100vw"
+  />
+  
+  {/* JPEG fallback for older browsers */}
+  <img
+    src={getOptimizedUrl(src, 1920, 'jpg')}
+    srcset={sizes.map(w => `${getOptimizedUrl(src, w, 'jpg')} ${w}w`).join(', ')}
+    sizes="100vw"
+    alt={alt}
+    loading={loading}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding="async"
+    class={className}
+  />
+</picture>
+
+<style>
+  /* Ensure images are crisp on high-DPI displays */
+  picture img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>

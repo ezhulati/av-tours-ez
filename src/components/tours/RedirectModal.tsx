@@ -95,7 +95,7 @@ export default function RedirectModal({
             borderRadius: '1rem',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
             width: '100%',
-            maxWidth: '28rem',
+            maxWidth: '32rem',
             maxHeight: '85vh',
             overflowY: 'auto',
             zIndex: 1000000
@@ -178,14 +178,14 @@ export default function RedirectModal({
               </div>
             </div>
 
-            {/* Subtle legal acknowledgment */}
+            {/* Subtle legal acknowledgment - Perfect alignment */}
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <label className="flex items-start gap-2 cursor-pointer">
+              <label className="modal-checkbox-wrapper cursor-pointer">
                 <input 
                   type="checkbox" 
                   checked={accepted}
                   onChange={(e) => setAccepted(e.target.checked)}
-                  className="mt-1 rounded border-gray-300 text-accent focus:ring-accent"
+                  className="rounded border-gray-300 text-accent focus:ring-accent"
                 />
                 <span className="text-xs text-gray-600">
                   I understand I'm booking with an independent operator and have reviewed the{' '}
@@ -195,19 +195,19 @@ export default function RedirectModal({
             </div>
           </div>
 
-          {/* Footer with actions */}
+          {/* Footer with actions - Perfect responsive layout */}
           <div className="bg-gray-50 px-6 py-4">
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="modal-footer-buttons">
               <button
                 onClick={onClose}
-                className="btn-outline w-full sm:flex-1"
+                className="btn-outline"
               >
                 Cancel
               </button>
               <button
                 onClick={handleContinue}
                 disabled={!accepted}
-                className={`btn-primary w-full sm:flex-1 flex items-center justify-center gap-1 text-sm px-3 ${
+                className={`btn-primary flex items-center justify-center gap-2 ${
                   !accepted ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
