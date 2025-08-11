@@ -44,10 +44,15 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
+  webServer: process.env.CI ? {
+    // In CI, we start the server manually in the workflow
+    url: baseURL,
+    reuseExistingServer: true,
+  } : {
+    // In local development, let Playwright manage the server
     command: 'pnpm dev',
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120 * 1000,
   },
 })
