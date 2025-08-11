@@ -129,9 +129,9 @@ export default function RedirectModalOptimized({
           {/* Body */}
           <div className="px-6 py-4">
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <p className="text-sm text-gray-600 mb-2">{microcopy.redirect.redirectingTo}:</p>
+              <p className="text-sm text-gray-600 mb-2">{microcopy.redirect.partnerLabel}</p>
               <p className="font-semibold text-gray-900">
-                {partnerName || microcopy.redirect.partnerSite}
+                {partnerName || 'BNAdventure'}
               </p>
               <p className="text-xs text-gray-500 mt-1 font-mono">
                 {displayDomain}

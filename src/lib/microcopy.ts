@@ -252,18 +252,39 @@ export const microcopy = {
   // REDIRECT MODAL
   // ============================================
   redirect: {
-    title: 'Complete booking with our trusted partner',
-    subtitle: 'You\'ll be redirected to finish your booking',
-    benefits: [
-      'Secure booking with verified operator',
-      'Best price guaranteed',
-      'Real-time availability',
+    title: 'You\'re almost there!',
+    titleVariants: ['One more step to book', 'Checking live availability...', 'Connecting you to book'],
+    subtitle: 'We\'ll take you to BNAdventure to see dates and complete your booking',
+    subtitleVariants: [
+      'Opening BNAdventure\'s booking page in a new tab',
+      'See real-time availability and secure your spot',
+      'BNAdventure handles the booking - we found them for you'
     ],
-    buttons: {
-      continue: 'Continue to Book',
-      back: 'Back to Tour',
+    partnerLabel: 'Booking partner:',
+    redirectingTo: 'Taking you to',
+    benefits: [
+      'No payment needed to check availability',
+      'Free cancellation on most tours',
+      'Secure booking with verified operator',
+    ],
+    checkbox: {
+      label: 'I\'m leaving AlbaniaVisit.com',
+      labelVariants: ['Continue to partner site', 'Open BNAdventure.com', 'I understand I\'m leaving this site'],
+      helper: 'Check this box to continue',
+      helperError: 'Please check the box above to continue',
     },
-    footer: 'AlbaniaVisit helps you find and connect with trusted tour operators',
+    buttons: {
+      continue: 'Continue to BNAdventure →',
+      continueVariants: ['Check Availability →', 'View on BNAdventure', 'Open Booking Page'],
+      back: 'Stay here',
+      backVariants: ['Not yet', 'Go back', 'Return to tour'],
+    },
+    footer: 'AlbaniaVisit partners with trusted local operators',
+    footerVariants: [
+      'We connect you with Albania\'s best tour operators',
+      'Trusted partners since 2020'
+    ],
+    partnerSite: 'Partner Site',
   },
 
   // ============================================

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
+import { microcopy } from '@/lib/microcopy'
 
 interface RedirectModalProps {
   isOpen: boolean
@@ -121,10 +122,10 @@ export default function RedirectModal({
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Continue to Partner Site
+                  {microcopy.redirect.title}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
-                  Check live availability & book directly with operator
+                  {microcopy.redirect.subtitle}
                 </p>
               </div>
             </div>
@@ -133,7 +134,7 @@ export default function RedirectModal({
           {/* Body */}
           <div className="px-6 py-4">
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <p className="text-sm text-gray-600 mb-2">Booking partner:</p>
+              <p className="text-sm text-gray-600 mb-2">{microcopy.redirect.partnerLabel}</p>
               <p className="font-semibold text-gray-900">
                 {partnerName || 'BNAdventure'}
               </p>
@@ -157,7 +158,7 @@ export default function RedirectModal({
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p><span className="font-medium">No charges today!</span> Just checking availability</p>
+                <p>{microcopy.redirect.benefits[0]}</p>
               </div>
               
               <div className="flex items-start gap-2">
@@ -174,7 +175,7 @@ export default function RedirectModal({
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>See real-time availability for your dates</p>
+                <p>{microcopy.redirect.benefits[1]}</p>
               </div>
               
               <div className="flex items-start gap-2">
@@ -191,24 +192,32 @@ export default function RedirectModal({
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>Book directly with the tour operator when ready</p>
+                <p>{microcopy.redirect.benefits[2]}</p>
               </div>
             </div>
 
-            {/* Subtle legal acknowledgment - Perfect alignment */}
+            {/* Acknowledgment checkbox with helper text */}
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <label className="modal-checkbox-wrapper cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={accepted}
-                  onChange={(e) => setAccepted(e.target.checked)}
-                  className="rounded border-gray-300 text-accent focus:ring-accent"
-                />
-                <span className="text-xs text-gray-600">
-                  I understand there's no payment or commitment right now{' '}
-                  <a href="/terms" target="_blank" className="text-accent hover:underline">terms</a>
-                </span>
-              </label>
+              <div className="bg-gray-50 rounded-lg p-3">
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <input 
+                    type="checkbox" 
+                    checked={accepted}
+                    onChange={(e) => setAccepted(e.target.checked)}
+                    className="mt-0.5 rounded border-gray-300 text-accent focus:ring-accent focus:ring-2 transition-all"
+                  />
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                      {microcopy.redirect.checkbox.label}
+                    </span>
+                    {!accepted && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        {microcopy.redirect.checkbox.helper}
+                      </p>
+                    )}
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
 
@@ -219,7 +228,7 @@ export default function RedirectModal({
                 onClick={onClose}
                 className="btn-outline"
               >
-                Cancel
+                {microcopy.redirect.buttons.back}
               </button>
               <button
                 onClick={handleContinue}
@@ -229,7 +238,7 @@ export default function RedirectModal({
                 }`}
                 style={{ minWidth: '220px' }}
               >
-                <span>View on {partnerName || 'Partner Site'}</span>
+                <span>{microcopy.redirect.buttons.continue}</span>
                 <svg 
                   className="w-4 h-4 flex-shrink-0" 
                   fill="none" 
