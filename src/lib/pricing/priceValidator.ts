@@ -39,6 +39,15 @@ export function validateTourPrice(priceString: string | null | undefined): Price
       reason: 'No price available'
     }
   }
+  
+  // Check if it's our placeholder text
+  if (priceString === 'Check availability') {
+    return {
+      isValid: false,
+      displayPrice: 'Check availability',
+      reason: 'Placeholder price'
+    }
+  }
 
   // Clean the price string
   const cleaned = priceString.trim()
