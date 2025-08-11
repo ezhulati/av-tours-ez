@@ -28,7 +28,13 @@ export function getOptimizedImageUrl(
   
   // Check if we're in development
   // In Astro SSR, we need to check import.meta.env instead of window
-  const isDev = typeof import !== 'undefined' && import.meta?.env?.DEV === true
+  let isDev = false
+  try {
+    isDev = import.meta.env.DEV === true
+  } catch {
+    // If import.meta is not available, we're not in dev
+    isDev = false
+  }
   
   // In development, always return original
   if (isDev) {
@@ -135,7 +141,12 @@ export function generateResponsiveSrcSet(
   format?: 'webp' | 'avif' | 'jpg'
 ): string {
   // For development or problematic URLs, return simple srcset
-  const isDev = typeof import !== 'undefined' && import.meta?.env?.DEV === true
+  let isDev = false
+  try {
+    isDev = import.meta.env.DEV === true
+  } catch {
+    isDev = false
+  }
   if (isDev || !originalUrl || originalUrl.startsWith('data:')) {
     return `${originalUrl} ${sizes[sizes.length - 1]}w`
   }
@@ -218,7 +229,15 @@ export function isNetlifyImageCDNAvailable(): boolean {
  * Get the best optimization method for current environment
  */
 export function getBestOptimizationMethod(): 'netlify' | 'weserv' | 'none' {
-  const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+  let isDev = false
+  try {
+    isDev = import.meta.env.DEV === true
+  } catch {
+    // Check if window is available as fallback
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      isDev = true
+    }
+  }
   
   if (isDev) return 'none'
   if (isNetlifyImageCDNAvailable()) return 'netlify'
