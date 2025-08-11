@@ -20,7 +20,7 @@ interface ImageOptimizationOptions {
 }
 
 // Cloudinary configuration (can use free tier or upgrade as needed)
-const CLOUDINARY_CLOUD_NAME = 'albaniavisit' // You'll need to create an account
+const CLOUDINARY_CLOUD_NAME = 'dwnmuolg8' // Your Cloudinary cloud name
 const CLOUDINARY_BASE_URL = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch`
 
 /**
@@ -156,8 +156,6 @@ export function generatePictureElement(
   alt: string,
   className: string = ''
 ): string {
-  const webpUrl = getOptimizedImageUrl(originalUrl, { format: 'webp' })
-  const avifUrl = getOptimizedImageUrl(originalUrl, { format: 'avif' })
   const fallbackUrl = getOptimizedImageUrl(originalUrl, { format: 'jpg' })
   
   return `
