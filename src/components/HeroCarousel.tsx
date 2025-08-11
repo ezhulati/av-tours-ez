@@ -76,8 +76,8 @@ export default function HeroCarousel({
               className="w-full h-full object-cover"
               loading={index === 0 ? "eager" : "lazy"}
             />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            {/* Gradient Overlay - Consistent across all screen sizes */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
           </div>
         ))}
       </div>

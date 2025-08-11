@@ -107,15 +107,39 @@ export default function SEOLandingLinks() {
       </div>
       
       <div className="mt-6 pt-4 border-t border-gray-200">
-        <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-sm text-gray-600">Trending searches:</span>
-          <a href="/tours/filter/challenging" className="text-sm text-accent hover:underline">challenging hikes</a>
-          <span className="text-gray-400">•</span>
-          <a href="/tours/filter/cultural" className="text-sm text-accent hover:underline">cultural tours</a>
-          <span className="text-gray-400">•</span>
-          <a href="/tours/filter/hiking" className="text-sm text-accent hover:underline">all hiking tours</a>
-          <span className="text-gray-400">•</span>
-          <a href="/tours/filter/week-long" className="text-sm text-accent hover:underline">week-long tours</a>
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+          <span className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
+            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+            Trending now:
+          </span>
+          <div className="flex flex-wrap gap-2">
+            <a 
+              href="/tours/filter/challenging" 
+              className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-accent hover:text-white transition-all duration-200 hover:scale-105"
+            >
+              challenging hikes
+            </a>
+            <a 
+              href="/tours/filter/cultural" 
+              className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-accent hover:text-white transition-all duration-200 hover:scale-105"
+            >
+              cultural tours
+            </a>
+            <a 
+              href="/tours/filter/hiking" 
+              className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-accent hover:text-white transition-all duration-200 hover:scale-105"
+            >
+              all hiking tours
+            </a>
+            <a 
+              href="/tours/filter/week-long" 
+              className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-accent hover:text-white transition-all duration-200 hover:scale-105"
+            >
+              week-long tours
+            </a>
+          </div>
         </div>
       </div>
     </div>

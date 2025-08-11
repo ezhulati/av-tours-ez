@@ -153,7 +153,7 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
           />
           
           {/* Gradient Overlay - Exact same size as image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
           
           {/* Navigation Arrows - Enhanced for mobile touch */}
           {allImages.length > 1 && (

@@ -1,14 +1,36 @@
 import { http, HttpResponse } from 'msw'
-import { tourFactory } from '../factories/tourFactory'
+import { createMockTourCard, createMockTourDetail } from '../factories/tourFactory'
 
 export const handlers = [
   // Mock tour API endpoints
+  http.get('http://localhost:3000/api/tours', ({ request }) => {
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1')
+    const limit = parseInt(url.searchParams.get('limit') || '12')
+    
+    const tours = Array.from({ length: 10 }, () => createMockTourCard())
+    return HttpResponse.json({ 
+      items: tours,
+      pagination: {
+        page,
+        limit,
+        total: tours.length,
+        totalPages: Math.ceil(tours.length / limit)
+      }
+    })
+  }),
+
+  http.get('http://localhost:3000/api/tours/:slug', ({ params }) => {
+    const tour = createMockTourDetail({ slug: params.slug as string })
+    return HttpResponse.json(tour)
+  }),
+
   http.get('/api/tours', ({ request }) => {
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page') || '1')
     const limit = parseInt(url.searchParams.get('limit') || '12')
     
-    const tours = Array.from({ length: 10 }, () => tourFactory.build())
+    const tours = Array.from({ length: 10 }, () => createMockTourCard())
     return HttpResponse.json({ 
       items: tours,
       pagination: {
@@ -21,7 +43,7 @@ export const handlers = [
   }),
 
   http.get('/api/tours/:slug', ({ params }) => {
-    const tour = tourFactory.build({ slug: params.slug as string })
+    const tour = createMockTourDetail({ slug: params.slug as string })
     return HttpResponse.json(tour)
   }),
 
@@ -30,7 +52,7 @@ export const handlers = [
     const url = new URL(request.url)
     const query = url.searchParams.get('q')
     const tours = Array.from({ length: 5 }, () => 
-      tourFactory.build({ title: `${query} Tour` })
+      createMockTourCard({ tourName: `${query} Tour` })
     )
     return HttpResponse.json({ tours, total: tours.length })
   }),

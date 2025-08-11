@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Filters</title>
+</head>
+<body>
+    <h1>Filter Test</h1>
+    <button id="test-albania">Test Albania Filter</button>
+    <button id="test-easy">Test Easy Filter</button>
+    <button id="test-price">Test Price Filter</button>
+    <div id="results"></div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        async function testFilter(params) {
+            const url = `http://localhost:4321/api/tours?${params}`;
+            resultsDiv.innerHTML = `<p>Testing: ${url}</p>`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                resultsDiv.innerHTML += `
+                    <p>Success! Found ${data.pagination.total} tours</p>
+                    <p>Returned ${data.items.length} items</p>
+                    <ul>${data.items.map(t => `<li>${t.title}</li>`).join('')}</ul>
+                `;
+            } catch (error) {
+                resultsDiv.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        document.getElementById('test-albania').addEventListener('click', () => {
+            testFilter('country=Albania&limit=5');
+        });
+        
+        document.getElementById('test-easy').addEventListener('click', () => {
+            testFilter('difficulty=easy&limit=5');
+        });
+        
+        document.getElementById('test-price').addEventListener('click', () => {
+            testFilter('price_max=100&limit=5');
+        });
+    </script>
+</body>
+</html>

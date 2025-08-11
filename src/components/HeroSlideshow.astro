@@ -21,10 +21,11 @@ const {
 // Generate unique ID for this slideshow instance
 const slideshowId = `slideshow-${Math.random().toString(36).substr(2, 9)}`;
 
+// Consistent overlay gradients across all screen sizes for better text readability
 const overlayClasses = {
-  light: 'from-gray-900/50 via-gray-800/40 to-gray-900/45',
-  medium: 'from-gray-900/60 via-gray-800/50 to-gray-900/55',
-  dark: 'from-gray-900/70 via-gray-800/60 to-gray-900/65'
+  light: 'from-black/40 via-black/30 to-black/60',
+  medium: 'from-black/50 via-black/40 to-black/70',
+  dark: 'from-black/60 via-black/50 to-black/80'
 };
 ---
 
@@ -40,7 +41,7 @@ const overlayClasses = {
   <!-- Dark overlay with gradient -->
   <div class={`absolute inset-0 bg-gradient-to-br ${overlayClasses[overlayIntensity]}`}></div>
   <!-- Additional gradient for better text readability -->
-  <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
   
   <!-- Subtle Image Captions - Bottom Center -->
   {showCaptions && (
