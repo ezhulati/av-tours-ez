@@ -27,3 +27,7 @@
 
 [functions."monthly-report"]
   schedule = "0 9 1 * *"  # First day of each month at 9 AM UTC
+
+# Price Synchronization - Daily
+[functions."scheduled-price-sync"]
+  schedule = "0 3 * * *"  # Every day at 3 AM UTC

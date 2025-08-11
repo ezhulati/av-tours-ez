@@ -1,0 +1,188 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+
+// This page should be protected in production with proper authentication
+// For now, it's a simple admin interface for price synchronization
+
+const adminKey = import.meta.env.ADMIN_API_KEY
+---
+
+<BaseLayout title="Price Sync Admin - AlbaniaVisit">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-3xl font-bold mb-8">Price Synchronization Dashboard</h1>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-4">Last Sync Status</h2>
+      <div id="last-sync-status" class="text-gray-600">
+        <p>Loading...</p>
+      </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-4">Manual Sync</h2>
+      <div class="space-y-4">
+        <div class="flex items-center space-x-4">
+          <button 
+            id="dry-run-btn"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Run Dry Test
+          </button>
+          <button 
+            id="sync-btn"
+            class="px-6 py-2 bg-accent text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Sync Prices Now
+          </button>
+        </div>
+        <div id="sync-status" class="hidden">
+          <div class="animate-pulse text-blue-600">Synchronizing prices...</div>
+        </div>
+        <div id="sync-results" class="hidden mt-4 p-4 bg-gray-50 rounded-lg">
+          <!-- Results will be displayed here -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Automation Status</h2>
+      <div class="space-y-2 text-gray-600">
+        <p class="flex items-center">
+          <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+          Daily sync scheduled at 3:00 AM UTC
+        </p>
+        <p class="text-sm">
+          The system automatically checks and updates prices every day. 
+          Price discrepancies are logged and corrected automatically.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <script define:vars={{ adminKey }}>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Fetch last sync status
+      async function fetchLastSyncStatus() {
+        try {
+          const response = await fetch('/api/admin/sync-prices', {
+            headers: {
+              'Authorization': `Bearer ${adminKey}`
+            }
+          })
+          
+          if (response.ok) {
+            const data = await response.json()
+            const statusEl = document.getElementById('last-sync-status')
+            
+            if (data.lastSync) {
+              const syncDate = new Date(data.lastSync)
+              const hoursAgo = Math.floor((Date.now() - syncDate.getTime()) / (1000 * 60 * 60))
+              
+              statusEl.innerHTML = `
+                <div class="space-y-2">
+                  <p><strong>Last sync:</strong> ${syncDate.toLocaleString()} (${hoursAgo} hours ago)</p>
+                  <p><strong>Tours checked:</strong> ${data.summary.totalChecked}</p>
+                  <p><strong>Successful extractions:</strong> ${data.summary.successfulExtractions}</p>
+                  <p><strong>Failed extractions:</strong> ${data.summary.failedExtractions}</p>
+                  <p><strong>Tours updated:</strong> ${data.summary.toursUpdated}</p>
+                  ${data.summary.dryRun ? '<p class="text-yellow-600">⚠️ Last run was a dry run (no updates made)</p>' : ''}
+                </div>
+              `
+            } else {
+              statusEl.innerHTML = '<p>No sync history found</p>'
+            }
+          }
+        } catch (error) {
+          console.error('Failed to fetch sync status:', error)
+        }
+      }
+      
+      // Initial load
+      fetchLastSyncStatus()
+      
+      // Manual sync handlers
+      async function runSync(dryRun = false) {
+        const statusEl = document.getElementById('sync-status')
+        const resultsEl = document.getElementById('sync-results')
+        const buttons = document.querySelectorAll('button')
+        
+        // Show loading state
+        statusEl.classList.remove('hidden')
+        resultsEl.classList.add('hidden')
+        buttons.forEach(btn => btn.disabled = true)
+        
+        try {
+          const response = await fetch('/api/admin/sync-prices', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${adminKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dryRun })
+          })
+          
+          const data = await response.json()
+          
+          if (response.ok) {
+            // Show results
+            resultsEl.innerHTML = `
+              <h3 class="font-semibold mb-2">${dryRun ? 'Dry Run' : 'Sync'} Complete</h3>
+              <div class="space-y-1 text-sm">
+                <p>✓ Checked ${data.summary.totalChecked} tours</p>
+                <p>✓ Successfully extracted ${data.summary.successfulExtractions} prices</p>
+                ${data.summary.failedExtractions > 0 ? `<p>⚠️ Failed to extract ${data.summary.failedExtractions} prices</p>` : ''}
+                <p>${dryRun ? 'Would update' : 'Updated'} ${data.summary.toursNeedingUpdate} tour prices</p>
+              </div>
+              ${data.results && data.results.length > 0 ? `
+                <div class="mt-4">
+                  <h4 class="font-semibold mb-2">Price Changes:</h4>
+                  <div class="space-y-1 text-sm max-h-60 overflow-y-auto">
+                    ${data.results.map(r => `
+                      <div class="border-b pb-1">
+                        <p class="font-medium">${r.title}</p>
+                        <p class="text-gray-600">${r.currentPrice || 'No price'} → ${r.bnAdventurePrice}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+            `
+            resultsEl.classList.remove('hidden')
+            
+            // Refresh status if not dry run
+            if (!dryRun) {
+              setTimeout(fetchLastSyncStatus, 1000)
+            }
+          } else {
+            resultsEl.innerHTML = `
+              <div class="text-red-600">
+                <h3 class="font-semibold mb-2">Sync Failed</h3>
+                <p>${data.error || 'Unknown error occurred'}</p>
+              </div>
+            `
+            resultsEl.classList.remove('hidden')
+          }
+        } catch (error) {
+          resultsEl.innerHTML = `
+            <div class="text-red-600">
+              <h3 class="font-semibold mb-2">Sync Failed</h3>
+              <p>Network error: ${error.message}</p>
+            </div>
+          `
+          resultsEl.classList.remove('hidden')
+        } finally {
+          statusEl.classList.add('hidden')
+          buttons.forEach(btn => btn.disabled = false)
+        }
+      }
+      
+      // Button handlers
+      document.getElementById('dry-run-btn').addEventListener('click', () => runSync(true))
+      document.getElementById('sync-btn').addEventListener('click', () => {
+        if (confirm('This will update tour prices in the database. Continue?')) {
+          runSync(false)
+        }
+      })
+    })
+  </script>
+</BaseLayout>

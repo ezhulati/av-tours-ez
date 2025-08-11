@@ -1,0 +1,646 @@
+{
+  "timestamp": "2025-08-11T02:24:44.615Z",
+  "summary": {
+    "totalChecked": 72,
+    "successfulExtractions": 14,
+    "failedExtractions": 58,
+    "needingUpdates": 13,
+    "updated": 13
+  },
+  "results": [
+    {
+      "tourId": "6e1d487d-4a62-4ab5-ad18-44c3fc48a533",
+      "slug": "rock-climbing",
+      "title": "Rock Climbing",
+      "currentPrice": "€45-80",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "aa008a7e-3bfa-495c-8993-87762dce66a1",
+      "slug": "6-days-guided-peaks-balkans-2025",
+      "title": "6 Days Guided - Peaks of the Balkans 2025",
+      "currentPrice": "€765",
+      "bnAdventurePrice": "€19",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "8f3a2fc8-8169-4460-a2ac-01bf5c8cbb72",
+      "slug": "10-days-self-guided-peaks-balkans",
+      "title": "10 Days Self-Guided Peaks of the Balkans",
+      "currentPrice": "€850",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "5813afbc-f295-458b-92e3-7756be433652",
+      "slug": "south-albania-zagori-valley",
+      "title": "South Albania Hike - Zagori Valley",
+      "currentPrice": "€960",
+      "bnAdventurePrice": "€10",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "c3605c2f-f166-4c08-bd52-40344d49e5a5",
+      "slug": "guided-high-scardus-2025",
+      "title": "Guided - High Scardus 2025",
+      "currentPrice": "€900",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "1734aba8-daf4-4e97-aeae-b70192f1cb74",
+      "slug": "ski-touring-accursed-mountains",
+      "title": "Ski Touring in the Accursed Mountains",
+      "currentPrice": "€1450",
+      "bnAdventurePrice": "€1450",
+      "needsUpdate": false
+    },
+    {
+      "tourId": "a9053325-7ee1-45a9-a014-92308b99bd0c",
+      "slug": "theth-albania-destination",
+      "title": "Theth Albania - Destination Guide",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": "€1",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "89bd62e2-72b5-4691-bcde-950d06dfac38",
+      "slug": "5-days-self-guided-peaks-balkans",
+      "title": "5 Days Self-Guided Peaks of the Balkans",
+      "currentPrice": "€480",
+      "bnAdventurePrice": "€980",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "e59ac8dc-d270-4a82-9a5c-815e10d95236",
+      "slug": "e-biking-peaks-of-balkans",
+      "title": "E-biking in Peaks of the Balkans",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "87244915-1106-45d7-8363-61d2beb663fc",
+      "slug": "6-days-self-guided-peaks-balkans",
+      "title": "6 Days Self-Guided Peaks of the Balkans",
+      "currentPrice": "€520",
+      "bnAdventurePrice": "€980",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "f15c389b-430c-4ea0-9c60-21ec2dc3d9c2",
+      "slug": "zip-line-kosovo",
+      "title": "Zip Line Kosovo",
+      "currentPrice": "€10-22",
+      "bnAdventurePrice": "€14",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "70c7e300-91c3-42a9-9d13-493c930b7084",
+      "slug": "10-days-guided-peaks-balkans-2025",
+      "title": "10 Days Guided - Peaks of the Balkans 2025",
+      "currentPrice": "€980",
+      "bnAdventurePrice": "€7-20",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "4424058d-06d3-4750-afd8-d7f49bc43eb9",
+      "slug": "great-canyon-cave",
+      "title": "Great Canyon Cave",
+      "currentPrice": "€35-60",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "4e14d5b6-1be9-4196-972e-089f26ea3c4d",
+      "slug": "paragliding-above-peja",
+      "title": "Paragliding Above Peja",
+      "currentPrice": "€80-120",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "355ccd3a-51e9-44e3-b456-6376ab05c37d",
+      "slug": "hike-hajla-peak",
+      "title": "Hike the Hajla Peak",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "0dda5c55-fd87-4637-97c1-7e45ee175ce0",
+      "slug": "hiking-sharr-mountains",
+      "title": "Hiking in Sharr Mountains",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "d930522f-ac3a-49e4-b537-e211c99ceb7f",
+      "slug": "temple-visit-religious-patrimony",
+      "title": "Temple Visit - Religious Patrimony",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "0584f2e7-1a86-4b0d-8858-c10c85e28393",
+      "slug": "snowshoeing-kosovo",
+      "title": "Snowshoeing in Kosovo",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": "€10",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "85e9b111-2800-404a-88e1-ace882979ef7",
+      "slug": "downhill-biking",
+      "title": "Downhill Biking",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "2aab61bb-9dcc-4c4c-9a21-e3e99e8c7f5e",
+      "slug": "weekend-in-valbona",
+      "title": "Weekend in Valbona",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "4ec60339-6123-4d73-ad2d-4ec4d92541dd",
+      "slug": "guest-house-to-guest-house",
+      "title": "Guest House to Guest House",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "54daa709-0e5a-4ea6-96d6-6fb8daf26483",
+      "slug": "wildlife-tour-accursed-mountains",
+      "title": "Wildlife Tour in Accursed Mountains",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "7c595fd6-7714-4151-8403-77f79f24d9a3",
+      "slug": "kosovo-daily-excursions",
+      "title": "Kosovo Daily Excursions",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "dab7c123-c972-49b5-8ecc-c4841ca6f235",
+      "slug": "hiking-archery-kosovo",
+      "title": "Hiking and Archery in Kosovo",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "33665eab-1fbc-454a-b663-1f36c0198f1a",
+      "slug": "maja-jezerce-three-countries",
+      "title": "Maja Jezerce - Climb from Three Countries",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "64e74e0f-190d-4025-92c8-ae8809c74131",
+      "slug": "climbing-zla-kollata",
+      "title": "Climbing Zla Kollata",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "2f989c54-2f4f-4ab1-9ee6-8674ee75ab6d",
+      "slug": "maja-rosit-2533m",
+      "title": "Maja e Rosit (Rosin Vrh) - 2533m",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "fff7c8bf-0a5b-44bc-aace-245204e85c1b",
+      "slug": "maja-arapit-albanian-matterhorn",
+      "title": "Maja Arapit - The Albanian Matterhorn",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "477dde26-a6b4-4abc-876a-20b8ccc5bac2",
+      "slug": "guided-self-guided-hiking-albania",
+      "title": "Guided and Self-Guided Hiking Tours Albania",
+      "currentPrice": "Various",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "40efc697-c4b1-4a7d-8968-ad429d561880",
+      "slug": "hasans-peak-maja-hasanit",
+      "title": "Hasan's Peak (Maja e Hasanit)",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "5fa0829c-8d23-46b5-bb52-ab50f01aed6b",
+      "slug": "high-scardus-trail",
+      "title": "High Scardus Trail",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "73e4f481-1c70-43dd-833c-1be372c849b6",
+      "slug": "ski-touring-kosovo-albania",
+      "title": "Ski Touring in Kosovo and Albania",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "b339c0d7-c148-4eae-a475-4937d4a8eff2",
+      "slug": "ski-sport-balkans",
+      "title": "Ski Sport in the Balkans",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "19737014-0c93-4c8b-b3d3-fad958a72d95",
+      "slug": "kosovo-weekend-tours",
+      "title": "Kosovo Weekend Tours",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "1eeab54d-6fcc-4356-a881-e42f49c07479",
+      "slug": "unesco-kosovo-weekend",
+      "title": "UNESCO Kosovo Weekend",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "4ceca912-9246-4716-b994-bda5bf60df8e",
+      "slug": "weekend-prishtina-western-kosovo",
+      "title": "Weekend Trip to Prishtina and Western Kosovo",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "0de1bf13-9c86-4571-8e32-cca52b1b3d07",
+      "slug": "northern-kosovo-political-tour",
+      "title": "Northern Kosovo Political Tour",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "fb9125fe-ff74-4b29-9417-71f390370c3e",
+      "slug": "weekend-cultural-wine-tasting",
+      "title": "Weekend Cultural Tour and Wine Tasting",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": "€13",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "36cbe2fe-d9e3-4f35-99e2-cd2a1d8f8e9c",
+      "slug": "shkodra-one-day-city-visit",
+      "title": "Shkodra One Day City Visit",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "408807bb-5e08-4d25-9823-9808c1a89ff6",
+      "slug": "albania-kosovo-10-days",
+      "title": "Albania and Kosovo in 10 Days",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "96065037-7b01-4c86-88ad-da0f7050a6ae",
+      "slug": "kosovo-cultural-sites-one-week",
+      "title": "Kosovo Cultural Sites in One Week",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "e5aa6949-15a5-4f3f-bdf9-a734994a686b",
+      "slug": "weekend-peaks-balkans-section",
+      "title": "A Weekend in Peaks of the Balkans Section",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": "€12",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "564c82c9-6298-4a91-ae5a-bcc8bedd71a6",
+      "slug": "cultural-weekend-albania",
+      "title": "Cultural Weekend in Albania",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "ccc8e115-075d-4f34-9b3c-7c1a6a93eaec",
+      "slug": "self-guided-peaks-balkans",
+      "title": "Self-Guided Tour in the Peaks of the Balkans",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": "€5",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "427946c9-929f-4ac5-b4bd-baa042900620",
+      "slug": "short-break-accursed-mountains",
+      "title": "Short Break in the Accursed Mountains",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "bbec3e7a-9aa2-4861-8714-db6abca2ff1d",
+      "slug": "peaks-balkans-trail-complete",
+      "title": "Peaks of the Balkans Trail - Complete",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "0850455c-4c13-49f2-ba0f-496dd43c25cf",
+      "slug": "highest-peaks-4-countries",
+      "title": "Highest Peaks of 4 Countries",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "1df26364-72fa-4608-833f-c43a0e546d83",
+      "slug": "albania-bird-watching-cultural",
+      "title": "Albania Bird Watching and Cultural Tour",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "9cf57408-e9a4-4c0b-9a50-70d75ce42f03",
+      "slug": "unesco-albania-weekend",
+      "title": "UNESCO Albania Weekend",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "6d93d126-27a1-4f23-ac5f-bc386e7409fe",
+      "slug": "zagori-valley-albania-hike",
+      "title": "Zagori Valley Albania Hike",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "9cafbeb1-1eba-4c73-8305-5de596571344",
+      "slug": "prishtina-cultural-tour",
+      "title": "Prishtina Cultural Tour",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "2d32abc2-017b-437c-abdf-b3a89eef4767",
+      "slug": "prizren-kosovo",
+      "title": "Prizren Kosovo",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": "€1566",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "6b8f01de-fb46-44b9-8c5b-274e246141b7",
+      "slug": "albania-kosovo-8-days",
+      "title": "Albania and Kosovo in 8 Days",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "6c77787a-4fd7-44cf-bef6-e0daeec357a3",
+      "slug": "5-cultural-days-kosovo",
+      "title": "5 Cultural Days in Kosovo",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "4c625f17-57f5-48ba-8df5-df4b85870732",
+      "slug": "via-ferrata-groups-weekends",
+      "title": "Via Ferrata in Groups - Weekends",
+      "currentPrice": "€15-22",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "482dd1e6-0126-4d19-9469-b9bf7bbe6e88",
+      "slug": "border-crossing-permits",
+      "title": "Border Crossing Permits",
+      "currentPrice": "€45",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "e7ceffdc-0134-4580-8add-7884f6c68bfe",
+      "slug": "trek-peaks-balkans",
+      "title": "Trek Peaks of the Balkans",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "0b63c567-812e-451e-8c43-f0347638a3a4",
+      "slug": "5-days-biking-peaks-balkans",
+      "title": "5 Days Biking Through Peaks of the Balkans",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "3fdbba7b-24d2-4b48-9f31-034d2c388179",
+      "slug": "peaks-balkans-from-kosovo",
+      "title": "Peaks of the Balkans Starting from Kosovo",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": "€7",
+      "needsUpdate": true
+    },
+    {
+      "tourId": "73035df1-f627-4ca8-9cef-c20991bbcf98",
+      "slug": "via-dinarica-kosovo",
+      "title": "Hiking the Via Dinarica in Kosovo",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "2df185a1-c9b8-4653-80bf-17c895da2f44",
+      "slug": "via-ferrata-marimangat",
+      "title": "Via Ferrata Marimangat",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "0cad44b9-fa3c-43e7-9f4e-4dd08ec881d3",
+      "slug": "via-ferrata-shpellat-caves",
+      "title": "Via Ferrata Shpellat (Caves)",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "f12f841d-e922-42dd-a27a-ff5de24c6eba",
+      "slug": "kosovo-guide-petit-fute",
+      "title": "Kosovo Guide - Petit Futé",
+      "currentPrice": "€24.90",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "806871d9-930f-4d40-a99a-283fb797b703",
+      "slug": "via-ferrata-mat-ari",
+      "title": "Via Ferrata Mat and Ari",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "f22551b2-e74c-4975-b62b-54d37736cd4c",
+      "slug": "hiking-rugova-mountains",
+      "title": "Hiking in Rugova Mountains",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "b9790c1a-1e33-4ff0-b610-85c6c70803b9",
+      "slug": "lake-liqenat-swim-border",
+      "title": "Hiking in Lake Liqenat - Swim Across the Border",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "8b15268f-be99-47b2-a381-5d502c105870",
+      "slug": "gjeravica-kosovo-highest",
+      "title": "Gjeravica - Kosovo's Highest",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "c7df6f15-0920-4ee4-af78-5f2d3245c919",
+      "slug": "peaks-balkans-booking",
+      "title": "Peaks of the Balkans Booking",
+      "currentPrice": "From €50",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "7e756633-ece3-4409-b38f-3d04b2165873",
+      "slug": "peja-kosovo-destination",
+      "title": "Peja Kosovo - Destination Guide",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "f61ed2d5-d753-4b30-896a-cd515ff594cf",
+      "slug": "hiking-kosovo-overview",
+      "title": "Hiking in Kosovo - Overview",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "264cb767-d090-40d4-8525-03f7cef316fd",
+      "slug": "maja-rosit-peak-adventure-2",
+      "title": "Maja e Rosit Peak Adventure",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    },
+    {
+      "tourId": "302c7f08-64ce-4ab7-9c91-4998f7b52c36",
+      "slug": "unesco-albania-heritage-weekend-2",
+      "title": "UNESCO Albania Heritage Weekend",
+      "currentPrice": "Price on request",
+      "bnAdventurePrice": null,
+      "needsUpdate": false,
+      "error": "Could not extract price"
+    }
+  ]
+}
