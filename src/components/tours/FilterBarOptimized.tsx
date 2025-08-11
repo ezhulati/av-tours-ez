@@ -60,7 +60,7 @@ const CountryFilter = memo(({ value, onChange }: {
       <option value="Montenegro">Montenegro</option>
       <option value="North Macedonia">North Macedonia</option>
     </select>
-    <span id="country-filter-desc" className="sr-only">Select a country to filter tours</span>
+    <span id="country-filter-desc" className="sr-only">Filter tours by country</span>
   </div>
 ))
 CountryFilter.displayName = 'CountryFilter'
@@ -84,7 +84,7 @@ const DifficultyFilter = memo(({ value, onChange }: {
       <option value="challenging">Challenging</option>
       <option value="difficult">Difficult</option>
     </select>
-    <span id="difficulty-filter-desc" className="sr-only">Select difficulty level for tours</span>
+    <span id="difficulty-filter-desc" className="sr-only">Filter tours by difficulty level</span>
   </div>
 ))
 DifficultyFilter.displayName = 'DifficultyFilter'
@@ -180,7 +180,7 @@ const GroupSizeFilter = memo(({ value, onChange }: {
       <option value="small">Small Group</option>
       <option value="large">Large Group</option>
     </select>
-    <span id="group-filter-desc" className="sr-only">Select preferred group size for tours</span>
+    <span id="group-filter-desc" className="sr-only">Filter tours by group size</span>
   </div>
 ))
 GroupSizeFilter.displayName = 'GroupSizeFilter'
@@ -203,7 +203,7 @@ const SortFilter = memo(({ value, onChange }: {
       <option value="price">Price: Low to High</option>
       <option value="duration">Duration: Short to Long</option>
     </select>
-    <span id="sort-filter-desc" className="sr-only">Change the order of tour results</span>
+    <span id="sort-filter-desc" className="sr-only">Sort tour results</span>
   </div>
 ))
 SortFilter.displayName = 'SortFilter'
@@ -385,8 +385,7 @@ function FilterBarOptimized({
   useEffect(() => {
     if (isInitialMount) {
       setIsInitialMount(false)
-      // Trigger initial fetch to sync with server state
-      fetchTours(filters, pagination)
+      // Don't fetch on initial mount - tours are already server-rendered
       return
     }
     debouncedFetch(filters, pagination)
