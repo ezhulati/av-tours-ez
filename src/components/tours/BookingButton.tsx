@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import RedirectModal from './RedirectModal'
-import DisclaimerModal from './DisclaimerModal'
 import { buildAffiliateUrl, trackBookingClick } from '@/lib/affiliateTracking'
 import { getEnhancedTour } from '@/data/enhancedTours'
 
@@ -32,7 +31,6 @@ export default function BookingButton({
   children 
 }: BookingButtonProps) {
   const [affiliateUrl, setAffiliateUrl] = useState<string>('')
-  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false)
   const [showRedirectModal, setShowRedirectModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   
@@ -61,24 +59,16 @@ export default function BookingButton({
     }
     
     try {
-      // Show disclaimer modal first
+      // Show redirect modal directly - no disclaimer modal first
       setIsLoading(true)
       setTimeout(() => {
-        setShowDisclaimerModal(true)
+        setShowRedirectModal(true)
         setIsLoading(false)
       }, 100) // Small delay for better UX
     } catch (error) {
       console.error('Error in handleClick:', error)
       setIsLoading(false)
     }
-  }
-
-  const handleDisclaimerAccept = () => {
-    // Close disclaimer and show redirect modal
-    setShowDisclaimerModal(false)
-    setTimeout(() => {
-      setShowRedirectModal(true)
-    }, 300) // Small delay for smooth transition
   }
 
   const handleContinueToPartner = () => {
@@ -126,13 +116,6 @@ export default function BookingButton({
           )}
         </button>
         
-        <DisclaimerModal
-          isOpen={showDisclaimerModal}
-          onClose={() => setShowDisclaimerModal(false)}
-          onAccept={handleDisclaimerAccept}
-          tourTitle={tour.title}
-        />
-        
         <RedirectModal
           isOpen={showRedirectModal}
           onClose={() => setShowRedirectModal(false)}
@@ -176,13 +159,6 @@ export default function BookingButton({
           </>
         )}
       </button>
-      
-      <DisclaimerModal
-        isOpen={showDisclaimerModal}
-        onClose={() => setShowDisclaimerModal(false)}
-        onAccept={handleDisclaimerAccept}
-        tourTitle={tour.title}
-      />
       
       <RedirectModal
         isOpen={showRedirectModal}

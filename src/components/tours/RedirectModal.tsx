@@ -16,8 +16,8 @@ export default function RedirectModal({
   partnerName,
   partnerUrl 
 }: RedirectModalProps) {
-  const [countdown, setCountdown] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [accepted, setAccepted] = useState(false)
   
   useEffect(() => {
     setMounted(true)
@@ -26,8 +26,7 @@ export default function RedirectModal({
   
   useEffect(() => {
     if (isOpen) {
-      // Reset countdown when modal opens (no auto-redirect)
-      setCountdown(null)
+      setAccepted(false) // Reset acceptance when modal opens
       // Lock body scroll when modal is open
       document.body.style.overflow = 'hidden'
       document.body.style.position = 'fixed'
@@ -39,6 +38,12 @@ export default function RedirectModal({
       }
     }
   }, [isOpen])
+
+  const handleContinue = () => {
+    if (accepted) {
+      onContinue()
+    }
+  }
 
   if (!isOpen || !mounted) return null
 
@@ -116,10 +121,10 @@ export default function RedirectModal({
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Continue to Tour Operator
+                  Continue to Booking
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
-                  You'll be redirected to book directly with the tour operator
+                  You'll be redirected to complete your booking
                 </p>
               </div>
             </div>
@@ -128,9 +133,9 @@ export default function RedirectModal({
           {/* Body */}
           <div className="px-6 py-4">
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <p className="text-sm text-gray-600 mb-2">You'll be redirected to:</p>
+              <p className="text-sm text-gray-600 mb-2">Booking partner:</p>
               <p className="font-semibold text-gray-900">
-                {partnerName || 'Partner Site'}
+                {partnerName || 'BNAdventure'}
               </p>
               <p className="text-xs text-gray-500 mt-1 font-mono">
                 {displayDomain}
@@ -140,7 +145,7 @@ export default function RedirectModal({
             <div className="space-y-3 text-sm text-gray-600">
               <div className="flex items-start gap-2">
                 <svg 
-                  className="w-5 h-5 text-gray-700 flex-shrink-0 mt-0.5" 
+                  className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -152,14 +157,12 @@ export default function RedirectModal({
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>
-                  <strong className="text-gray-700">Secure & Trusted:</strong> We only feature verified tour operators
-                </p>
+                <p>Book directly with the tour operator for best rates</p>
               </div>
               
               <div className="flex items-start gap-2">
                 <svg 
-                  className="w-5 h-5 text-gray-700 flex-shrink-0 mt-0.5" 
+                  className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -168,32 +171,27 @@ export default function RedirectModal({
                     strokeLinecap="round" 
                     strokeLinejoin="round" 
                     strokeWidth="2" 
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>
-                  <strong className="text-gray-700">Check Availability:</strong> View real-time dates and pricing on the operator's site
-                </p>
+                <p>Secure checkout on operator's site</p>
               </div>
+            </div>
 
-              <div className="flex items-start gap-2">
-                <svg 
-                  className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth="2" 
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <p>
-                  <strong className="text-gray-700">Direct Booking:</strong> You'll book directly with the operator at their best available rates
-                </p>
-              </div>
+            {/* Subtle legal acknowledgment */}
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={accepted}
+                  onChange={(e) => setAccepted(e.target.checked)}
+                  className="mt-1 rounded border-gray-300 text-accent focus:ring-accent"
+                />
+                <span className="text-xs text-gray-600">
+                  I understand I'm booking with an independent operator and have reviewed the{' '}
+                  <a href="/terms" target="_blank" className="text-accent hover:underline">terms</a>
+                </span>
+              </label>
             </div>
           </div>
 
@@ -204,13 +202,16 @@ export default function RedirectModal({
                 onClick={onClose}
                 className="btn-outline w-full sm:flex-1"
               >
-                Stay on AlbaniaVisit
+                Cancel
               </button>
               <button
-                onClick={onContinue}
-                className="btn-primary w-full sm:flex-1 flex items-center justify-center gap-1 text-sm px-3"
+                onClick={handleContinue}
+                disabled={!accepted}
+                className={`btn-primary w-full sm:flex-1 flex items-center justify-center gap-1 text-sm px-3 ${
+                  !accepted ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
-                <span>Continue</span>
+                <span>Continue to {partnerName || 'Booking'}</span>
                 <svg 
                   className="w-4 h-4 flex-shrink-0" 
                   fill="none" 
@@ -226,10 +227,6 @@ export default function RedirectModal({
                 </svg>
               </button>
             </div>
-            
-            <p className="text-xs text-center text-gray-500 mt-3">
-              AlbaniaVisit helps you find and connect with trusted tour operators
-            </p>
           </div>
         </div>
       </div>
