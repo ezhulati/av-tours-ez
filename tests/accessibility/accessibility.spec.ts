@@ -427,7 +427,7 @@ test.describe('Form Accessibility', () => {
     
     const errorHandling = await page.evaluate(() => {
       const errors = document.querySelectorAll('[role="alert"], .error-message, .field-error')
-      const properly Associated: boolean[] = []
+      const properlyAssociated: boolean[] = []
       
       errors.forEach(error => {
         const id = error.getAttribute('id')

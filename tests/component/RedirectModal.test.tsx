@@ -25,12 +25,12 @@ describe('RedirectModal Component', () => {
   describe('Rendering', () => {
     it('should render when isOpen is true', () => {
       render(<RedirectModal {...defaultProps} />)
-      expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
+      expect(screen.getByText(/you're almost there/i)).toBeInTheDocument()
     })
 
     it('should not render when isOpen is false', () => {
       render(<RedirectModal {...defaultProps} isOpen={false} />)
-      expect(screen.queryByText(/continue to partner site/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/you're almost there/i)).not.toBeInTheDocument()
     })
 
     it('should display partner name', () => {
@@ -45,15 +45,15 @@ describe('RedirectModal Component', () => {
 
     it('should display all trust indicators', () => {
       render(<RedirectModal {...defaultProps} />)
-      expect(screen.getByText(/no charges today/i)).toBeInTheDocument()
-      expect(screen.getByText(/real-time availability/i)).toBeInTheDocument()
-      expect(screen.getByText(/book directly with the tour operator/i)).toBeInTheDocument()
+      expect(screen.getByText(/no payment needed to check availability/i)).toBeInTheDocument()
+      expect(screen.getByText(/free cancellation on most tours/i)).toBeInTheDocument()
+      expect(screen.getByText(/secure booking with verified operator/i)).toBeInTheDocument()
     })
 
     it('should show both action buttons', () => {
       render(<RedirectModal {...defaultProps} />)
-      expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-      expect(screen.getByText(/view on/i)).toBeInTheDocument()
+      expect(screen.getByText(/stay here/i)).toBeInTheDocument()
+      expect(screen.getByText(/continue to/i)).toBeInTheDocument()
     })
   })
 
@@ -63,10 +63,10 @@ describe('RedirectModal Component', () => {
       
       // Since backdrop clicking is hard to test with inline styles,
       // let's just verify the modal structure is correct and onClose works
-      expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
+      expect(screen.getByText(/you're almost there/i)).toBeInTheDocument()
       
       // Test that we can close via Cancel button (which we know works)
-      const cancelButton = screen.getByText(/cancel/i)
+      const cancelButton = screen.getByText(/stay here/i)
       await user.click(cancelButton)
       
       expect(defaultProps.onClose).toHaveBeenCalledTimes(1)
@@ -74,7 +74,7 @@ describe('RedirectModal Component', () => {
 
     it('should call onClose when clicking Cancel button', async () => {
       render(<RedirectModal {...defaultProps} />)
-      const cancelButton = screen.getByText(/cancel/i)
+      const cancelButton = screen.getByText(/stay here/i)
       
       await user.click(cancelButton)
       
@@ -88,7 +88,7 @@ describe('RedirectModal Component', () => {
       const checkbox = screen.getByRole('checkbox')
       await user.click(checkbox)
       
-      const continueButton = screen.getByText(/view on/i)
+      const continueButton = screen.getByText(/continue to/i)
       await user.click(continueButton)
       
       expect(defaultProps.onContinue).toHaveBeenCalledTimes(1)
@@ -129,7 +129,7 @@ describe('RedirectModal Component', () => {
     it('should be keyboard navigable', async () => {
       render(<RedirectModal {...defaultProps} />)
       
-      const cancelButton = screen.getByText(/cancel/i)
+      const cancelButton = screen.getByText(/stay here/i)
       const checkbox = screen.getByRole('checkbox')
       
       // Focus the cancel button
@@ -145,7 +145,7 @@ describe('RedirectModal Component', () => {
     it('should trap focus within modal', () => {
       render(<RedirectModal {...defaultProps} />)
       
-      const modalContent = screen.getByText(/continue to partner site/i).closest('div')
+      const modalContent = screen.getByText(/you're almost there/i).closest('div')
       expect(modalContent).toBeInTheDocument()
       
       // Modal should be in focus trap
@@ -157,9 +157,9 @@ describe('RedirectModal Component', () => {
       render(<RedirectModal {...defaultProps} />)
       
       // Check that modal contains expected elements
-      expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
+      expect(screen.getByText(/you're almost there/i)).toBeInTheDocument()
       expect(screen.getByRole('checkbox')).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /stay here/i })).toBeInTheDocument()
     })
   })
 
@@ -168,7 +168,7 @@ describe('RedirectModal Component', () => {
       render(<RedirectModal {...defaultProps} />)
       
       // Check that modal elements are present
-      expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
+      expect(screen.getByText(/you're almost there/i)).toBeInTheDocument()
     })
 
     it('should apply correct styling for modal container', () => {
@@ -193,8 +193,8 @@ describe('RedirectModal Component', () => {
       render(<RedirectModal {...defaultProps} />)
       
       // Check that action buttons are present
-      expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-      expect(screen.getByText(/view on/i)).toBeInTheDocument()
+      expect(screen.getByText(/stay here/i)).toBeInTheDocument()
+      expect(screen.getByText(/continue to/i)).toBeInTheDocument()
     })
 
     it('should have full width buttons on mobile', () => {
@@ -212,7 +212,7 @@ describe('RedirectModal Component', () => {
       rerender(<RedirectModal {...defaultProps} isOpen={true} />)
       
       await waitFor(() => {
-        expect(screen.getByText(/continue to partner site/i)).toBeInTheDocument()
+        expect(screen.getByText(/you're almost there/i)).toBeInTheDocument()
       })
       
       // No countdown should be visible
