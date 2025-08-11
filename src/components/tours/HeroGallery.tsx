@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+import OptimizedImage from '../OptimizedImage'
 
 interface HeroGalleryProps {
   images: string[]
@@ -143,13 +144,13 @@ export default function HeroGallery({ images, title }: HeroGalleryProps) {
               </svg>
             </div>
           )}
-          <img
+          <OptimizedImage
             src={currentImage}
-            srcSet={generateSrcSet(currentImage)}
             alt={`${title} - Image ${selectedIndex + 1}`}
-            className={`w-full h-full object-cover transition-opacity duration-300 ${imagesLoaded.has(selectedIndex) ? 'opacity-100' : 'opacity-0'}`}
-            fetchPriority={selectedIndex === 0 ? "high" : "low"}
-            loading={selectedIndex === 0 ? "eager" : "lazy"}
+            context="hero"
+            className="w-full h-full object-cover"
+            priority={selectedIndex === 0}
+            aspectRatio="16/9"
           />
           
           {/* Gradient Overlay - Exact same size as image */}

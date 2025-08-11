@@ -35,6 +35,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Test affiliate redirects: `http://localhost:4321/out/[slug]`
 - Test API endpoints: `http://localhost:4321/api/tours`
 
+### Data Synchronization Scripts
+- `pnpm sync:prices` - Sync tour prices with BNAdventure (validated)
+- `pnpm sync:images` - Sync featured images from BNAdventure
+- `pnpm agent` - Run image validation agent
+- `pnpm agent:once` - Run image validation agent once
+
 ## Architecture Overview
 
 ### Tech Stack
@@ -199,3 +205,16 @@ Database Mapping -> Transforms affiliate_tours table to app DTOs
 ### Vite Aliases (for testing)
 - Same path mappings configured in `vitest.config.ts`
 - Ensures consistent imports across runtime and test environments
+
+## Database Schema
+
+### Primary Table: `affiliate_tours`
+- Contains all tour data fetched from BNAdventure
+- Key fields: `title`, `slug`, `price_from`, `difficulty_level`, `locations` (JSON array), `activity_type`
+- Enhanced with `featured_image_url` for optimized images
+- Affiliate tracking: `affiliate_url`, `affiliate_partner_id`, `affiliate_product_id`
+
+### Analytics Table: `affiliate_clicks`
+- Tracks all outbound clicks to partner sites
+- Records: `tour_slug`, `timestamp`, `referrer`, `user_agent`, UTM parameters
+- Used for conversion tracking and reporting

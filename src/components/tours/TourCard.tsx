@@ -1,5 +1,6 @@
 import React from 'react'
 import type { TourCardDTO } from '@/lib/dto'
+import OptimizedImage from '@/components/OptimizedImage'
 
 interface TourCardProps {
   tour: TourCardDTO
@@ -26,15 +27,16 @@ export default function TourCard({ tour, loading = false }: TourCardProps) {
 
   return (
     <article className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-      <div className="aspect-[4/3] relative">
-        <img 
-          src={tour.primaryImageUrl} 
+      <div className="relative">
+        <OptimizedImage
+          src={tour.primaryImageUrl}
           alt={tour.title}
-          loading="lazy"
-          className="w-full h-full object-cover"
+          context="card"
+          className="aspect-[4/3]"
+          aspectRatio="4/3"
         />
         {tour.featured && (
-          <span className="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <span className="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-semibold z-10">
             Featured
           </span>
         )}
