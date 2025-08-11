@@ -32,6 +32,9 @@ jobs:
       
       - name: Run unit tests
         run: pnpm test:coverage
+        env:
+          NODE_ENV: test
+          CI: true
       
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
@@ -75,6 +78,8 @@ jobs:
       - name: Build application
         run: pnpm build
         env:
+          NODE_ENV: test
+          CI: true
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
@@ -122,6 +127,8 @@ jobs:
       - name: Build application
         run: pnpm build
         env:
+          NODE_ENV: test
+          CI: true
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
@@ -160,6 +167,8 @@ jobs:
       - name: Build application
         run: pnpm build
         env:
+          NODE_ENV: test
+          CI: true
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
@@ -205,6 +214,8 @@ jobs:
       - name: Build application
         run: pnpm build
         env:
+          NODE_ENV: test
+          CI: true
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
@@ -250,6 +261,8 @@ jobs:
       - name: Build application
         run: pnpm build
         env:
+          NODE_ENV: test
+          CI: true
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
