@@ -27,7 +27,8 @@ export function getOptimizedImageUrl(
   }
   
   // Check if we're in development
-  const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+  // In Astro SSR, we need to check import.meta.env instead of window
+  const isDev = typeof import !== 'undefined' && import.meta?.env?.DEV === true
   
   // In development, always return original
   if (isDev) {
@@ -134,7 +135,7 @@ export function generateResponsiveSrcSet(
   format?: 'webp' | 'avif' | 'jpg'
 ): string {
   // For development or problematic URLs, return simple srcset
-  const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+  const isDev = typeof import !== 'undefined' && import.meta?.env?.DEV === true
   if (isDev || !originalUrl || originalUrl.startsWith('data:')) {
     return `${originalUrl} ${sizes[sizes.length - 1]}w`
   }
