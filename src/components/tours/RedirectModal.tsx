@@ -121,10 +121,10 @@ export default function RedirectModal({
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Continue to Booking
+                  View Tour Details
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
-                  You'll be redirected to complete your booking
+                  Browse dates, prices & availability - no commitment
                 </p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export default function RedirectModal({
             <div className="space-y-3 text-sm text-gray-600">
               <div className="flex items-start gap-2">
                 <svg 
-                  className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" 
+                  className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -154,10 +154,10 @@ export default function RedirectModal({
                     strokeLinecap="round" 
                     strokeLinejoin="round" 
                     strokeWidth="2" 
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>Book directly with the tour operator for best rates</p>
+                <p><span className="font-medium">Just browsing!</span> Check availability and prices with no obligation</p>
               </div>
               
               <div className="flex items-start gap-2">
@@ -174,7 +174,24 @@ export default function RedirectModal({
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>Secure checkout on operator's site</p>
+                <p>Compare dates and group sizes before deciding</p>
+              </div>
+              
+              <div className="flex items-start gap-2">
+                <svg 
+                  className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="2" 
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p>Book only when you're ready - no payment required now</p>
               </div>
             </div>
 
@@ -188,7 +205,7 @@ export default function RedirectModal({
                   className="rounded border-gray-300 text-accent focus:ring-accent"
                 />
                 <span className="text-xs text-gray-600">
-                  I understand I'm booking with an independent operator and have reviewed the{' '}
+                  I understand I'm viewing tours from our partner{' '}
                   <a href="/terms" target="_blank" className="text-accent hover:underline">terms</a>
                 </span>
               </label>
@@ -212,7 +229,7 @@ export default function RedirectModal({
                 }`}
                 style={{ minWidth: '220px' }}
               >
-                <span>Continue to {partnerName || 'Booking'}</span>
+                <span>View on {partnerName || 'Partner Site'}</span>
                 <svg 
                   className="w-4 h-4 flex-shrink-0" 
                   fill="none" 
