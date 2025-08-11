@@ -14,59 +14,41 @@ export interface HeroImage {
 }
 
 // Curated list of the absolute best images for hero sections
-// These are action-packed, high-quality, sharp images that showcase adventure
+// Using local assets to ensure they load properly
 export const heroImages: HeroImage[] = [
   // === TOP ADVENTURE/ACTION SHOTS ===
   {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/11/Via-Ferrata-Mat-1-1-scaled.jpg',
-    alt: 'Via Ferrata climbing adventure in Albanian mountains',
-    title: 'Via Ferrata Mat',
+    src: '/Assets/Albania/Albanian_Alps.jpg',
+    alt: 'Albanian Alps dramatic mountain peaks',
+    title: 'Albanian Alps',
     category: 'adventure'
   },
   {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/11/kosovi-skitour-SSchoepf-1.jpg',
-    alt: 'Ski touring in the Accursed Mountains',
-    title: 'Ski Touring',
+    src: '/Assets/Albania/Valbona_to_Theth_Trail.jpg',
+    alt: 'Valbona to Theth hiking trail through mountains',
+    title: 'Valbona Trail',
     category: 'adventure'
   },
   {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/09/Qafa-e-Valbones-photo-by-Mentor-Vokshi.jpg',
-    alt: 'Peaks of the Balkans trail panoramic view',
-    title: 'Peaks of the Balkans',
+    src: '/Assets/Albania/Accursed_Mountains.jpeg',
+    alt: 'Accursed Mountains dramatic peaks and valleys',
+    title: 'Accursed Mountains',
     category: 'signature'
   },
   {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/09/20230801_170835-scaled.jpg',
-    alt: 'High Scardus Trail mountain ridge',
-    title: 'High Scardus Trail',
+    src: '/Assets/Albania/Albania_Hiking.jpeg',
+    alt: 'Mountain hiking trails in Albania',
+    title: 'Mountain Hiking',
     category: 'adventure'
   },
   {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/09/View-from-Kollata-Peak-scaled-e1637588560888-1348x476-min.jpg',
-    alt: 'View from Zla Kollata peak summit',
-    title: 'Zla Kollata Summit',
-    category: 'adventure'
-  },
-  {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/11/DB__8436-1-scaled.jpg',
-    alt: 'Via Ferrata Shpellat caves adventure',
-    title: 'Via Ferrata Caves',
+    src: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg',
+    alt: 'Gjeravica Peak - highest point in Kosovo',
+    title: 'Gjeravica Peak',
     category: 'adventure'
   },
   
   // === STUNNING DESTINATION SHOTS ===
-  {
-    src: 'https://bnadventure.com/wp-content/uploads/2024/01/Zagori-9-scaled.jpg',
-    alt: 'Zagori Valley Albania scenic landscape',
-    title: 'Zagori Valley',
-    category: 'destination'
-  },
-  {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/09/liqeni-liqunatit-kufini-1348x476-min.jpg',
-    alt: 'Lake Liqenat crystal clear alpine waters',
-    title: 'Lake Liqenat',
-    category: 'destination'
-  },
   {
     src: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg',
     alt: 'Albanian Riviera turquoise waters and beaches',
@@ -79,33 +61,52 @@ export const heroImages: HeroImage[] = [
     title: 'Lake Koman',
     category: 'destination'
   },
+  {
+    src: '/Assets/Montenegro/Lovcen Mountains National park Montenegro_165889777.jpeg',
+    alt: 'Lovćen Mountains National Park Montenegro',
+    title: 'Lovćen Mountains',
+    category: 'destination'
+  },
+  {
+    src: '/Assets/Albania/Lake_Prespa_Albania.jpeg',
+    alt: 'Lake Prespa tranquil waters and mountains',
+    title: 'Lake Prespa',
+    category: 'destination'
+  },
   
   // === ADDITIONAL HIGH-QUALITY SHOTS ===
   {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/09/2I6A7056-1-1348x476-min.jpg',
-    alt: 'Highest peaks of 4 countries expedition',
-    title: 'Four Country Peaks',
+    src: '/Assets/North Macedonia/North Macedonia_456949808.jpeg',
+    alt: 'North Macedonia mountain landscapes',
+    title: 'Macedonia Mountains',
     category: 'adventure'
   },
   {
-    src: 'https://bnadventure.com/wp-content/uploads/2023/09/adriatik-top-white-1348x476-min.jpg',
-    alt: 'Mountain summit view across Kosovo',
-    title: 'Kosovo Summit',
-    category: 'adventure'
+    src: '/Assets/Albania/Northern_Albania_Shala_River.jpeg',
+    alt: 'Shala River crystal clear waters Northern Albania',
+    title: 'Shala River',
+    category: 'destination'
   }
 ]
 
 // Generate optimized versions of all images
-export const optimizedHeroImages = heroImages.map(image => ({
-  ...image,
-  optimizedSrc: getOptimizedImageUrl(image.src, {
-    width: 1920,
-    height: 1080,
-    quality: 'auto:best',
-    format: 'auto',
-    enhance: true
-  })
-}))
+export const optimizedHeroImages = heroImages.map(image => {
+  // For local images, convert to full URL for CDN optimization
+  const fullUrl = image.src.startsWith('/') 
+    ? `https://tours.albaniavisit.com${image.src}`
+    : image.src
+    
+  return {
+    ...image,
+    optimizedSrc: getOptimizedImageUrl(fullUrl, {
+      width: 1920,
+      height: 1080,
+      quality: 'auto:best',
+      format: 'auto',
+      enhance: true
+    })
+  }
+})
 
 // Get images by category
 export const getHeroImagesByCategory = (category: 'adventure' | 'destination' | 'signature') => {

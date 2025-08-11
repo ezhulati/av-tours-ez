@@ -29,19 +29,13 @@ const breadcrumbSchema = generateBreadcrumbSchema([
       <div class="hero-slideshow">
         {heroImages.map((image, index) => (
           <div class={`slide ${index === 0 ? 'active' : ''}`}>
-            <picture>
-              <source 
-                srcset={image.optimizedSrc} 
-                type="image/webp"
-              />
-              <img 
-                src={image.src} 
-                alt={image.alt} 
-                class="slide-image"
-                loading={index < 2 ? "eager" : "lazy"}
-                fetchpriority={index === 0 ? "high" : "auto"}
-              />
-            </picture>
+            <img 
+              src={image.src} 
+              alt={image.alt} 
+              class="slide-image"
+              loading={index < 2 ? "eager" : "lazy"}
+              fetchpriority={index === 0 ? "high" : "auto"}
+            />
           </div>
         ))}
       </div>
