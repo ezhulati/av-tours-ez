@@ -2,7 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getTourCardPage } from '@/lib/queries'
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/seo'
-import HeroSlideshow from '@/components/HeroSlideshow.astro'
+import HeroSlideshowOptimized from '@/components/HeroSlideshowOptimized.astro'
 import PhotoGallery from '@/components/PhotoGallery'
 import ContactForm from '@/components/ContactForm'
 
@@ -77,7 +77,7 @@ tours.items.forEach(tour => {
     })
   }
 })
-const smartCategoryImages = Array.from(uniqueSlideshowMap.values()).slice(0, 6)
+const smartCategoryImages = Array.from(uniqueSlideshowMap.values()).slice(0, 8)
 
 // Fallback category-specific images
 const categoryFallbacks = {
@@ -164,7 +164,12 @@ const ogImage = categoryImages[slug] || '/Assets/Albania/Albanian_Alps.jpg'
 >
   <!-- Hero Section -->
   <section class="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
-    <HeroSlideshow images={slideImages} overlayIntensity="medium" />
+    <HeroSlideshowOptimized 
+      images={slideImages} 
+      overlayIntensity="medium"
+      slideDuration={5000}
+      showCaptions={true}
+    />
     
     <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
       <h1 class="text-[clamp(3rem,9vw,5rem)] md:text-[clamp(4rem,8vw,6rem)] font-bold leading-[1.1] tracking-wide mb-6" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.6), 1px 1px 3px rgba(0,0,0,1); letter-spacing: 0.02em;">{category.name}</h1>

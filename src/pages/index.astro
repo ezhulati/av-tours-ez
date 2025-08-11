@@ -5,7 +5,8 @@ import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSc
 import BookingButton from '@/components/tours/BookingButton'
 import ContactForm from '@/components/ContactForm'
 import { getHomepageHeroImages } from '@/data/heroImages'
-import HeroImageOptimized from '@/components/HeroImageOptimized.astro'
+import HeroSlideshowOptimized from '@/components/HeroSlideshowOptimized.astro'
+import TourCardOptimized from '@/components/tours/TourCardOptimized'
 
 const featuredTours = await getFeaturedTours(6)
 const totalTourCount = await getTotalTourCount()
@@ -24,27 +25,15 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   jsonLd={[organizationSchema, websiteSchema, breadcrumbSchema]}
 >
   <!-- Hero Section with Brand Design - Mobile Optimized -->
-  <section class="relative h-[100vh] h-[100dvh] flex items-center justify-center overflow-hidden">
+  <section class="relative h-[100vh] h-[100dvh] min-h-[600px] flex items-center justify-center overflow-hidden">
     <!-- Premium Hero Slideshow - Full Viewport Coverage -->
-    <div class="absolute inset-0 w-full h-full">
-      <div class="hero-slideshow w-full h-full">
-        {heroImages.map((image, index) => (
-          <div class={`slide ${index === 0 ? 'active' : ''} w-full h-full`}>
-            <HeroImageOptimized
-              src={image.src}
-              alt={image.alt}
-              class="slide-image w-full h-full object-cover"
-              loading={index < 2 ? "eager" : "lazy"}
-              priority={index === 0}
-            />
-          </div>
-        ))}
-      </div>
-      <!-- Consistent gradient overlay across all screen sizes for better text readability -->
-      <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/70"></div>
-      <!-- Additional text protection gradient at bottom where content appears -->
-      <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-    </div>
+    <HeroSlideshowOptimized
+      images={heroImages.map(img => ({ url: img.src, alt: img.alt }))}
+      overlayIntensity="medium"
+      slideDuration={6000}
+      kenBurnsDuration={15000}
+      showCaptions={false}
+    />
     
     <!-- Animated mountain icon - hidden on mobile to prevent overlap -->
     <div class="absolute bottom-10 left-0 right-0 hidden md:flex justify-center animate-bounce-slow">
@@ -129,56 +118,12 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {featuredTours.map((tour) => (
-        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1">
-          <div class="aspect-[4/3] relative overflow-hidden">
-            <img 
-              src={tour.primaryImageUrl} 
-              alt={tour.title}
-              loading="lazy"
-              class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-            />
-            {tour.featured && (
-              <span class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-bold">
-                ⭐ Featured
-              </span>
-            )}
-            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity"></div>
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-2 text-gray-900">
-              <a href={`/tours/${tour.slug}`} class="hover:text-accent transition-colors">
-                {tour.title}
-              </a>
-            </h3>
-            <p class="text-gray-600 mb-4 line-clamp-2">
-              {tour.shortDescription}
-            </p>
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex gap-2">
-                {tour.durationDisplay && (
-                  <span class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
-                    {tour.durationDisplay}
-                  </span>
-                )}
-                {tour.difficulty && (
-                  <span class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full capitalize font-medium">
-                    {tour.difficulty}
-                  </span>
-                )}
-              </div>
-              <span class={tour.priceMin ? "font-bold text-lg text-gray-900" : "text-sm text-gray-600"}>
-                {tour.priceMin ? `From €${tour.priceMin}` : 'Check availability'}
-              </span>
-            </div>
-            <a 
-              href={`/tours/${tour.slug}`}
-              class="flex items-center justify-center w-full bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-all font-semibold transform hover:scale-105 whitespace-nowrap min-h-[48px]"
-            >
-              View Details
-            </a>
-          </div>
-        </article>
+      {featuredTours.map((tour, index) => (
+        <TourCardOptimized
+          tour={tour}
+          priority={index < 3}
+          client:visible
+        />
       ))}
     </div>
     

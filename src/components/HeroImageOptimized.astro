@@ -11,7 +11,13 @@ const { src, alt, class: className = '', loading = 'lazy', priority = false } = 
 
 // Generate optimized URLs using Weserv.nl with maximum quality settings
 function getOptimizedUrl(originalSrc: string, width: number, format: 'webp' | 'jpg' = 'webp') {
-  // For local images, use the full URL
+  // In development, return original URL
+  const isDev = import.meta.env.DEV
+  if (isDev) {
+    return originalSrc
+  }
+  
+  // For production, use the full URL
   const fullUrl = originalSrc.startsWith('/') 
     ? `https://tours.albaniavisit.com${originalSrc}`
     : originalSrc

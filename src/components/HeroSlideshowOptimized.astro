@@ -1,0 +1,264 @@
+---
+import { getOptimizedImageUrl, generateResponsiveSrcSet } from '@/lib/imageOptimizationHelper'
+
+export interface Props {
+  images: Array<{
+    url: string;
+    alt: string;
+  }>;
+  overlayIntensity?: 'light' | 'medium' | 'dark';
+  slideDuration?: number;
+  kenBurnsDuration?: number;
+  showCaptions?: boolean;
+}
+
+const { 
+  images, 
+  overlayIntensity = 'medium',
+  slideDuration = 6000,
+  kenBurnsDuration = 15000,
+  showCaptions = false
+} = Astro.props;
+
+// Generate unique ID for this slideshow instance
+const slideshowId = `slideshow-${Math.random().toString(36).substr(2, 9)}`;
+
+// WCAG AA compliant overlay gradients for proper text contrast (4.5:1 ratio)
+const overlayClasses = {
+  light: 'from-black/60 via-black/50 to-black/75',
+  medium: 'from-black/70 via-black/60 to-black/85',
+  dark: 'from-black/80 via-black/70 to-black/90'
+};
+
+// Use environment-aware helper
+const isDev = import.meta.env.DEV
+
+// Generate responsive sizes for hero images
+const heroSizes = [640, 768, 1024, 1366, 1920, 2560]
+
+// Preload first image for better LCP
+const firstImage = images[0]
+const preloadSrcset = generateResponsiveSrcSet(firstImage.url, heroSizes, 'webp', isDev)
+---
+
+<!-- Preload critical first image -->
+<link 
+  rel="preload" 
+  as="image" 
+  imagesrcset={preloadSrcset}
+  imagesizes="100vw"
+  fetchpriority="high"
+/>
+
+<!-- Slideshow Background with fixed dimensions to prevent CLS -->
+<div class="absolute inset-0 overflow-hidden">
+  <div class={`hero-slideshow ${slideshowId} w-full h-full`}>
+    {images.map((image, index) => (
+      <div class={`slide absolute inset-0 w-full h-full ${index === 0 ? 'active' : ''}`} data-slide-index={index}>
+        <picture>
+          <!-- AVIF - Best compression (50% smaller than JPEG) -->
+          <source
+            type="image/avif"
+            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'avif', isDev)}
+            sizes="100vw"
+          />
+          <!-- WebP - Good compression (25-35% smaller than JPEG) -->
+          <source
+            type="image/webp"
+            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'webp', isDev)}
+            sizes="100vw"
+          />
+          <!-- JPEG fallback -->
+          <img
+            src={isDev ? image.url : getOptimizedImageUrl(image.url, 1920, 'jpg', isDev)}
+            srcset={generateResponsiveSrcSet(image.url, heroSizes, 'jpg', isDev)}
+            sizes="100vw"
+            alt={image.alt}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            fetchpriority={index === 0 ? 'high' : 'low'}
+            decoding={index === 0 ? 'sync' : 'async'}
+            class="slide-image w-full h-full object-cover"
+            width="1920"
+            height="1080"
+          />
+        </picture>
+      </div>
+    ))}
+  </div>
+  
+  <!-- Primary WCAG compliant overlay -->
+  <div class={`absolute inset-0 bg-gradient-to-br ${overlayClasses[overlayIntensity]} pointer-events-none`}></div>
+  <!-- Secondary gradient for enhanced text areas -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
+  <!-- Mobile-specific additional darkening -->
+  <div class="absolute inset-0 bg-black/10 md:bg-transparent pointer-events-none"></div>
+  
+  <!-- Subtle Image Captions - Bottom Center -->
+  {showCaptions && (
+    <div class={`caption-container absolute bottom-4 md:bottom-6 left-0 right-0 z-10 ${slideshowId}-captions pointer-events-none`}>
+      <div class="flex justify-center px-4 md:px-8">
+        {images.map((image, index) => (
+          <div class={`caption fade-caption absolute transition-all duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}`}>
+            <div class="bg-black/30 backdrop-blur-sm rounded-full px-3 py-1.5 md:px-4 md:py-2">
+              <p class="text-xs md:text-sm text-white/90 font-medium text-center whitespace-nowrap max-w-[280px] md:max-w-none truncate">
+                {image.alt}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+<style define:vars={{ slideDuration: `${slideDuration}ms`, kenBurnsDuration: `${kenBurnsDuration}ms`, slideshowId }}>
+  .hero-slideshow {
+    position: relative;
+    contain: layout style paint;
+    will-change: contents;
+  }
+
+  .slide {
+    opacity: 0;
+    transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
+    contain: layout style paint;
+  }
+
+  .slide.active {
+    opacity: 1;
+  }
+
+  .slide-image {
+    transform: scale(1.05);
+    animation: kenBurns var(--kenBurnsDuration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    will-change: transform;
+  }
+
+  @keyframes kenBurns {
+    0% {
+      transform: scale(1.05) translate(0, 0);
+    }
+    33% {
+      transform: scale(1.1) translate(-1%, -0.5%);
+    }
+    66% {
+      transform: scale(1.08) translate(0.5%, -1%);
+    }
+    100% {
+      transform: scale(1.05) translate(0, 0);
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .slide-image {
+      animation: none;
+      transform: scale(1);
+    }
+    .slide {
+      transition: opacity 0.5s;
+    }
+  }
+
+  /* Stagger animations for variety */
+  .slide:nth-child(2) .slide-image {
+    animation-delay: -3s;
+  }
+  .slide:nth-child(3) .slide-image {
+    animation-delay: -6s;
+    animation-direction: reverse;
+  }
+  .slide:nth-child(4) .slide-image {
+    animation-delay: -9s;
+  }
+  .slide:nth-child(5) .slide-image {
+    animation-delay: -12s;
+    animation-direction: reverse;
+  }
+
+  /* Pause animation on hover */
+  .hero-slideshow:hover .slide-image {
+    animation-play-state: paused;
+  }
+</style>
+
+<script define:vars={{ slideshowId, slideDuration, showCaptions }}>
+  (() => {
+    // Use requestIdleCallback for non-critical initialization
+    const initSlideshow = () => {
+      let currentSlide = 0;
+      let isHovered = false;
+      const slides = document.querySelectorAll(`.${slideshowId} .slide`);
+      const captions = document.querySelectorAll(`.${slideshowId}-captions .caption`);
+      const totalSlides = slides.length;
+      
+      if (totalSlides <= 1) return;
+      
+      function nextSlide() {
+        if (isHovered) return;
+        
+        // Use requestAnimationFrame for smooth transitions
+        requestAnimationFrame(() => {
+          slides[currentSlide].classList.remove('active');
+          if (showCaptions && captions[currentSlide]) {
+            captions[currentSlide].classList.remove('opacity-100');
+            captions[currentSlide].classList.add('opacity-0');
+          }
+          
+          currentSlide = (currentSlide + 1) % totalSlides;
+          slides[currentSlide].classList.add('active');
+          
+          if (showCaptions && captions[currentSlide]) {
+            captions[currentSlide].classList.remove('opacity-0');
+            captions[currentSlide].classList.add('opacity-100');
+          }
+        });
+      }
+
+      // Auto-advance
+      const interval = setInterval(nextSlide, slideDuration);
+
+      // Pause on hover (use passive listeners for better performance)
+      const heroSection = document.querySelector(`.${slideshowId}`);
+      if (heroSection) {
+        heroSection.addEventListener('mouseenter', () => {
+          isHovered = true;
+        }, { passive: true });
+        
+        heroSection.addEventListener('mouseleave', () => {
+          isHovered = false;
+        }, { passive: true });
+      }
+
+      // Preload next image when current one is showing
+      let preloadedIndexes = new Set([0]);
+      function preloadNextImage() {
+        const nextIndex = (currentSlide + 1) % totalSlides;
+        if (!preloadedIndexes.has(nextIndex)) {
+          const nextSlide = slides[nextIndex];
+          const img = nextSlide?.querySelector('img');
+          if (img && img.loading === 'lazy') {
+            img.loading = 'eager';
+            preloadedIndexes.add(nextIndex);
+          }
+        }
+      }
+      
+      // Start preloading after first image is visible
+      setTimeout(preloadNextImage, 2000);
+      setInterval(preloadNextImage, slideDuration);
+
+      // Clean up on page unload
+      window.addEventListener('beforeunload', () => {
+        clearInterval(interval);
+      });
+    };
+
+    // Initialize slideshow when idle or after 100ms
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initSlideshow, { timeout: 100 });
+    } else {
+      setTimeout(initSlideshow, 100);
+    }
+  })();
+</script>
