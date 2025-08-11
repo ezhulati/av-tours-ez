@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import RedirectModal from './RedirectModal'
+import DisclaimerModal from './DisclaimerModal'
 import { buildAffiliateUrl, trackBookingClick } from '@/lib/affiliateTracking'
 import { getEnhancedTour } from '@/data/enhancedTours'
 
@@ -31,7 +32,8 @@ export default function BookingButton({
   children 
 }: BookingButtonProps) {
   const [affiliateUrl, setAffiliateUrl] = useState<string>('')
-  const [showModal, setShowModal] = useState(false)
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false)
+  const [showRedirectModal, setShowRedirectModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   
   // Get enhanced copy for this tour
@@ -59,10 +61,10 @@ export default function BookingButton({
     }
     
     try {
-      // Always show modal for all booking buttons
+      // Show disclaimer modal first
       setIsLoading(true)
       setTimeout(() => {
-        setShowModal(true)
+        setShowDisclaimerModal(true)
         setIsLoading(false)
       }, 100) // Small delay for better UX
     } catch (error) {
@@ -71,13 +73,21 @@ export default function BookingButton({
     }
   }
 
+  const handleDisclaimerAccept = () => {
+    // Close disclaimer and show redirect modal
+    setShowDisclaimerModal(false)
+    setTimeout(() => {
+      setShowRedirectModal(true)
+    }, 300) // Small delay for smooth transition
+  }
+
   const handleContinueToPartner = () => {
     try {
       // Navigate via server-side redirect for proper affiliate tracking
       window.open(`/out/${tour.slug}`, '_blank', 'noopener,noreferrer')
       
       // Close modal
-      setShowModal(false)
+      setShowRedirectModal(false)
     } catch (error) {
       console.error('Error in handleContinueToPartner:', error)
     }
@@ -116,15 +126,20 @@ export default function BookingButton({
           )}
         </button>
         
-        {showModal && (
-          <RedirectModal
-            isOpen={showModal}
-            onClose={() => setShowModal(false)}
-            onContinue={handleContinueToPartner}
-            partnerName={tour.operator?.name || 'Partner Operator'}
-            partnerUrl={affiliateUrl}
-          />
-        )}
+        <DisclaimerModal
+          isOpen={showDisclaimerModal}
+          onClose={() => setShowDisclaimerModal(false)}
+          onAccept={handleDisclaimerAccept}
+          tourTitle={tour.title}
+        />
+        
+        <RedirectModal
+          isOpen={showRedirectModal}
+          onClose={() => setShowRedirectModal(false)}
+          onContinue={handleContinueToPartner}
+          partnerName={tour.operator?.name || 'Partner Operator'}
+          partnerUrl={affiliateUrl}
+        />
       </>
     )
   }
@@ -162,15 +177,20 @@ export default function BookingButton({
         )}
       </button>
       
-      {showModal && (
-        <RedirectModal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          onContinue={handleContinueToPartner}
-          partnerName={tour.operator?.name || 'Partner Operator'}
-          partnerUrl={affiliateUrl}
-        />
-      )}
+      <DisclaimerModal
+        isOpen={showDisclaimerModal}
+        onClose={() => setShowDisclaimerModal(false)}
+        onAccept={handleDisclaimerAccept}
+        tourTitle={tour.title}
+      />
+      
+      <RedirectModal
+        isOpen={showRedirectModal}
+        onClose={() => setShowRedirectModal(false)}
+        onContinue={handleContinueToPartner}
+        partnerName={tour.operator?.name || 'Partner Operator'}
+        partnerUrl={affiliateUrl}
+      />
     </>
   )
 }

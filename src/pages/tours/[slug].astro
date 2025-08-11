@@ -5,6 +5,7 @@ import { generateTouristTripSchema, generateBreadcrumbSchema, generateMetaTags }
 import { getEnhancedTour, hasEnhancedCopy, getBadgeEmoji } from '@/data/enhancedTours'
 import InquiryForm from '@/components/tours/InquiryForm'
 import BookingButton from '@/components/tours/BookingButton'
+import TourDisclaimer from '@/components/tours/TourDisclaimer'
 import ContactForm from '@/components/ContactForm'
 
 // SSR mode - no getStaticPaths needed
@@ -395,6 +396,11 @@ const breadcrumbSchema = generateBreadcrumbSchema([
                 <p class="text-2xl font-bold text-gray-900">{tour.countries.length}</p>
                 <p class="text-sm text-gray-500">Countries</p>
               </div>
+            </div>
+            
+            <!-- Tour Disclaimer -->
+            <div class="mt-6">
+              <TourDisclaimer variant="compact" client:load />
             </div>
             
             <!-- CTA Buttons -->
