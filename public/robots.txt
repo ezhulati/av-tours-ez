@@ -13,4 +13,4 @@ Disallow: /api/
 Allow: /out/
 
 # Sitemap
-Sitemap: https://tours.albaniavisit.com/sitemap-index.xml
+Sitemap: https://tours.albaniavisit.com/sitemap.xml

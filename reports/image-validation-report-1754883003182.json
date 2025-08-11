@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-08-11T03:29:44.902Z",
+  "summary": {
+    "totalTours": 2,
+    "toursWithImages": 0,
+    "toursWithoutImages": 2,
+    "toursFailed": 2,
+    "totalImagesFound": 0,
+    "averageImagesPerTour": 0,
+    "successRate": 0
+  },
+  "tourDetails": [
+    {
+      "id": "6e1d487d-4a62-4ab5-ad18-44c3fc48a533",
+      "title": "Rock Climbing",
+      "url": "https://bnadventure.com/products/rock-climbing/",
+      "status": "failed",
+      "imageCount": 0,
+      "imageTypes": {
+        "hero": 0,
+        "gallery": 0,
+        "content": 0,
+        "background": 0
+      },
+      "validation": {
+        "hasHeroImage": false,
+        "hasGalleryImages": false,
+        "minimumImagesMet": false,
+        "allImagesAccessible": true
+      },
+      "issues": [
+        "Scraping failed: page.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:291:30), <anonymous>:1:409)\n    at UtilityScript.evaluate (<anonymous>:293:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      ],
+      "scrapeTime": 7236
+    },
+    {
+      "id": "aa008a7e-3bfa-495c-8993-87762dce66a1",
+      "title": "6 Days Guided - Peaks of the Balkans 2025",
+      "url": "https://bnadventure.com/products/6-days-guided-peaks-of-the-balkans-2025/",
+      "status": "failed",
+      "imageCount": 0,
+      "imageTypes": {
+        "hero": 0,
+        "gallery": 0,
+        "content": 0,
+        "background": 0
+      },
+      "validation": {
+        "hasHeroImage": false,
+        "hasGalleryImages": false,
+        "minimumImagesMet": false,
+        "allImagesAccessible": true
+      },
+      "issues": [
+        "Scraping failed: page.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:291:30), <anonymous>:1:409)\n    at UtilityScript.evaluate (<anonymous>:293:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      ],
+      "scrapeTime": 8666
+    }
+  ],
+  "recommendations": [
+    "Average image count is low. Consider implementing more comprehensive image extraction strategies.",
+    "Success rate is below 80%. Review failed tours and adjust scraping strategies.",
+    "2 tours lack hero images. Consider fallback strategies for hero image selection."
+  ],
+  "criticalIssues": [
+    "2 tours completely failed to scrape."
+  ]
+}

@@ -1,5 +1,22 @@
-import { supabaseServer } from '../supabase.server'
+import { createClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import crypto from 'crypto'
+
+// Function to get or create the Supabase client
+function getSupabaseClient(): SupabaseClient {
+  const supabaseUrl = process.env.SUPABASE_URL || (typeof import.meta !== 'undefined' && import.meta.env?.SUPABASE_URL)
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || (typeof import.meta !== 'undefined' && import.meta.env?.SUPABASE_SERVICE_ROLE_KEY)
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables')
+  }
+  
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: false
+    }
+  })
+}
 
 interface ScrapedImage {
   url: string
@@ -212,6 +229,7 @@ export async function syncTourImages(
   tourId: string,
   affiliateUrl: string
 ): Promise<{ added: number; updated: number; duplicates: number; error?: string }> {
+  const supabaseServer = getSupabaseClient()
   try {
     // Scrape images from BNAdventure
     const scrapedImages = await scrapeTourImages(affiliateUrl)
@@ -308,6 +326,7 @@ export async function syncTourImages(
  * Sync images for all tours
  */
 export async function syncAllTourImages(): Promise<ImageSyncResult> {
+  const supabaseServer = getSupabaseClient()
   const result: ImageSyncResult = {
     toursProcessed: 0,
     imagesFound: 0,
@@ -407,6 +426,7 @@ export async function syncAllTourImages(): Promise<ImageSyncResult> {
  * Validate all images (check if URLs are still accessible)
  */
 export async function validateAllImages(): Promise<{ validated: number; invalid: number }> {
+  const supabaseServer = getSupabaseClient()
   let validated = 0
   let invalid = 0
   

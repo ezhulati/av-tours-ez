@@ -22,9 +22,12 @@
     "test:all": "pnpm test:coverage && pnpm test:e2e",
     "test:ci": "vitest run && playwright test",
     "sync:prices": "tsx src/scripts/syncPrices.ts",
-    "sync:images": "tsx scripts/sync-images.ts",
-    "sync:images:all": "tsx scripts/sync-images.ts all",
-    "sync:images:stats": "tsx scripts/sync-images.ts stats"
+    "sync:images": "tsx sync-images.ts",
+    "sync:images:test": "tsx sync-images.ts test",
+    "sync:images:validate": "tsx sync-images.ts validate",
+    "sync:images:sync": "tsx sync-images.ts sync",
+    "agent": "tsx src/lib/scraping/imageValidationAgent.ts",
+    "agent:once": "tsx src/lib/scraping/imageValidationAgent.ts once"
   },
   "dependencies": {
     "@astrojs/netlify": "^6.5.6",
