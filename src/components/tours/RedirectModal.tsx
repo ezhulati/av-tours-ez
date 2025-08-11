@@ -207,9 +207,10 @@ export default function RedirectModal({
               <button
                 onClick={handleContinue}
                 disabled={!accepted}
-                className={`btn-primary flex items-center justify-center gap-2 ${
+                className={`btn-primary flex items-center justify-center gap-2 whitespace-nowrap ${
                   !accepted ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
+                style={{ minWidth: '220px' }}
               >
                 <span>Continue to {partnerName || 'Booking'}</span>
                 <svg 

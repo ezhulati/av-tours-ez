@@ -497,17 +497,17 @@
     @apply w-full sm:flex-1;
   }
   
-  /* Prevent button text overflow on desktop */
+  /* Ensure buttons are wide enough for content on desktop */
   @media (min-width: 640px) {
     .modal-footer-buttons button {
       min-width: 140px;
-      max-width: 200px;
+    }
+    
+    .modal-footer-buttons button:last-child {
+      min-width: 220px; /* Wider for "Continue to BNAdventure" */
     }
     
     .modal-footer-buttons button span {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
       white-space: nowrap;
     }
   }
