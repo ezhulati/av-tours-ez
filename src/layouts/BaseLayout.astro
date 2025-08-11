@@ -261,111 +261,53 @@ const GA4_ID = import.meta.env.GA4_ID
             
             <!-- Left Column - Proverb & Description -->
             <div class="text-left">
-              <!-- Albanian Proverb - Beautiful Single Line Layout -->
+              <!-- Albanian Proverb -->
               <div class="mb-8">
-                <!-- Quotation Mark -->
-                <div class="text-white/40 text-6xl md:text-8xl font-serif leading-none mb-2">"</div>
-                
-                <!-- Albanian Quote with Phonetic Spelling -->
-                <div class="font-serif italic overflow-x-auto">
-                  <div class="flex flex-wrap justify-start items-start gap-x-3 md:gap-x-4 lg:gap-x-6 gap-y-6 min-w-max">
-                    <!-- Shtëpia -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        Shtëpia
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        shtuh-PEE-ah
-                      </div>
-                    </div>
-                    
-                    <!-- e -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        e
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        eh
-                      </div>
-                    </div>
-                    
-                    <!-- shqiptarit -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        shqiptarit
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        shchip-TAR-eet
-                      </div>
-                    </div>
-                    
-                    <!-- është -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        është
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        UHSH-tuh
-                      </div>
-                    </div>
-                    
-                    <!-- e -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        e
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        eh
-                      </div>
-                    </div>
-                    
-                    <!-- mikut -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        mikut
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        MEE-koot
-                      </div>
-                    </div>
-                    
-                    <!-- dhe -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        dhe
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        dheh
-                      </div>
-                    </div>
-                    
-                    <!-- e -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        e
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        eh
-                      </div>
-                    </div>
-                    
-                    <!-- Zotit -->
-                    <div class="text-center flex-shrink-0">
-                      <div class="text-[clamp(1.25rem,4vw,2.25rem)] md:text-3xl lg:text-4xl text-white leading-none">
-                        Zotit
-                      </div>
-                      <div class="text-[clamp(0.625rem,1.5vw,0.875rem)] text-accent/80 mt-1 font-sans not-italic">
-                        ZOH-teet
-                      </div>
-                    </div>
+                <!-- Albanian text with word-by-word pronunciation -->
+                <div class="font-serif italic">
+                  <!-- Main quote line with proper wrapping -->
+                  <div class="flex flex-wrap items-baseline gap-x-2 md:gap-x-3 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white">
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>Shtëpia</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">shtuh-PEE-ah</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>e</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">eh</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>shqiptarit</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">shchip-TAR-eet</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>është</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">UHSH-tuh</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>e</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">eh</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>mikut</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">MEE-koot</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>dhe</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">dheh</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>e</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">eh</span>
+                    </span>
+                    <span class="inline-flex flex-col items-center gap-0">
+                      <span>Zotit</span>
+                      <span class="text-[0.5em] text-accent/70 font-sans not-italic mt-0.5">ZOH-teet</span>
+                    </span>
                   </div>
                 </div>
                 
-                <!-- Closing Quotation Mark -->
-                <div class="text-white/40 text-6xl md:text-8xl font-serif leading-none mt-4 text-right">"</div>
-                
                 <!-- English Translation -->
-                <p class="text-[clamp(1rem,2.8vw,1.5rem)] md:text-xl lg:text-2xl text-gray-300 font-light mt-6 italic text-center">
+                <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 font-light mt-6 italic">
                   "The house of an Albanian belongs to the guest and to God."
                 </p>
               </div>
