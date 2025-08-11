@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import BookingButton from './BookingButton'
 import { TourCardSkeleton } from '../ui/SkeletonLoader'
 import { formatPriceDisplay } from '@/lib/pricing/priceValidator'
+import OptimizedImage from '../OptimizedImage'
 
 interface Tour {
   id: string
@@ -96,33 +97,15 @@ const OptimizedTourCard: React.FC<OptimizedTourCardProps> = ({ tour, priority = 
         className="block focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-xl"
         aria-label={`View details for ${tour.title}`}
       >
-        {/* Image Container */}
-        <div className="relative h-56 bg-gray-100 overflow-hidden">
-          {/* Image Loading Placeholder */}
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-              <svg 
-                className="w-12 h-12 text-gray-300" 
-                fill="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path d="M20 5a2 2 0 00-2-2H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5zm-2 14H6V5h12v14zm-3-7l-3 4-2-2-3 4h10l-2-6z" />
-              </svg>
-            </div>
-          )}
-          
-          {/* Main Image */}
-          <img
-            src={imageError ? '/placeholder.jpg' : mainImage}
+        {/* Optimized Image Container */}
+        <div className="relative h-56 overflow-hidden">
+          <OptimizedImage
+            src={mainImage}
             alt={tour.title}
-            className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : "low"}
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-            itemProp="image"
+            context="card"
+            className="w-full h-full group-hover:scale-110 transition-transform duration-500"
+            priority={priority}
+            aspectRatio="4/3"
           />
           
           {/* Badges */}
