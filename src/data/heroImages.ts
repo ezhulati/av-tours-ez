@@ -14,78 +14,68 @@ export interface HeroImage {
 }
 
 // Curated list of the absolute best images for hero sections
-// Using local assets to ensure they load properly
+// Carefully selected based on resolution, quality, and visual impact
 export const heroImages: HeroImage[] = [
-  // === TOP ADVENTURE/ACTION SHOTS ===
+  // === HIGHEST SCORING IMAGES - VERIFIED TO EXIST ===
   {
-    src: '/Assets/Albania/Albanian_Alps.jpg',
-    alt: 'Albanian Alps dramatic mountain peaks',
-    title: 'Albanian Alps',
-    category: 'adventure'
-  },
-  {
-    src: '/Assets/Albania/Valbona_to_Theth_Trail.jpg',
-    alt: 'Valbona to Theth hiking trail through mountains',
-    title: 'Valbona Trail',
-    category: 'adventure'
-  },
-  {
-    src: '/Assets/Albania/Accursed_Mountains.jpeg',
-    alt: 'Accursed Mountains dramatic peaks and valleys',
-    title: 'Accursed Mountains',
+    src: '/Assets/Albania/Albania_Lake_Koman.jpeg',
+    alt: 'Lake Koman dramatic fjord-like scenery with emerald waters',
+    title: 'Lake Koman',
     category: 'signature'
   },
   {
     src: '/Assets/Albania/Albania_Hiking.jpeg',
-    alt: 'Mountain hiking trails in Albania',
+    alt: 'Mountain hiking adventure in Albanian Alps',
     title: 'Mountain Hiking',
     category: 'adventure'
   },
   {
-    src: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg',
-    alt: 'Gjeravica Peak - highest point in Kosovo',
-    title: 'Gjeravica Peak',
-    category: 'adventure'
+    src: '/Assets/Albania/Northern_Albania_Shala_River.jpeg',
+    alt: 'Shala River crystal clear turquoise waters surrounded by mountains',
+    title: 'Shala River',
+    category: 'destination'
   },
-  
-  // === STUNNING DESTINATION SHOTS ===
   {
-    src: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg',
-    alt: 'Albanian Riviera turquoise waters and beaches',
+    src: '/Assets/Albania/albanian-riviera-5.jpg',
+    alt: 'Albanian Riviera stunning coastal views and blue waters',
     title: 'Albanian Riviera',
     category: 'destination'
   },
   {
-    src: '/Assets/Albania/Albania_Lake_Koman.jpeg',
-    alt: 'Lake Koman ferry through dramatic fjords',
-    title: 'Lake Koman',
-    category: 'destination'
-  },
-  {
-    src: '/Assets/Montenegro/Lovcen Mountains National park Montenegro_165889777.jpeg',
-    alt: 'Lovćen Mountains National Park Montenegro',
-    title: 'Lovćen Mountains',
-    category: 'destination'
-  },
-  {
-    src: '/Assets/Albania/Lake_Prespa_Albania.jpeg',
-    alt: 'Lake Prespa tranquil waters and mountains',
-    title: 'Lake Prespa',
-    category: 'destination'
-  },
-  
-  // === ADDITIONAL HIGH-QUALITY SHOTS ===
-  {
-    src: '/Assets/North Macedonia/North Macedonia_456949808.jpeg',
-    alt: 'North Macedonia mountain landscapes',
-    title: 'Macedonia Mountains',
+    src: '/Assets/Albania/Valbona_to_Theth_Trail.jpg',
+    alt: 'Valbona to Theth trail - iconic mountain hiking path',
+    title: 'Valbona Trail',
     category: 'adventure'
   },
   {
-    src: '/Assets/Albania/Northern_Albania_Shala_River.jpeg',
-    alt: 'Shala River crystal clear waters Northern Albania',
-    title: 'Shala River',
+    src: '/Assets/Albania/Lake_Prespa_Albania.jpeg',
+    alt: 'Lake Prespa serene waters with mountain backdrop',
+    title: 'Lake Prespa',
     category: 'destination'
+  },
+  {
+    src: '/Assets/Albania/Accursed_Mountains.jpeg',
+    alt: 'Accursed Mountains dramatic peaks and rugged terrain',
+    title: 'Accursed Mountains',
+    category: 'signature'
+  },
+  {
+    src: '/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg',
+    alt: 'Gjeravica Peak - Kosovo highest summit with panoramic views',
+    title: 'Gjeravica Peak',
+    category: 'adventure'
+  },
+  {
+    src: '/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg',
+    alt: 'Pristine beach along Albanian Riviera with turquoise waters',
+    title: 'Riviera Beach',
+    category: 'destination'
+  },
+  {
+    src: '/Assets/Albania/Valbona_Valley_502379574.jpeg',
+    alt: 'Valbona Valley dramatic mountain landscape',
+    title: 'Valbona Valley',
+    category: 'adventure'
   }
 ]
 
