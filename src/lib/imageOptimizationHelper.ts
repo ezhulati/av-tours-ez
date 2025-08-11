@@ -8,6 +8,11 @@ export function getOptimizedImageUrl(
   format: 'webp' | 'avif' | 'jpg' = 'webp',
   isDevelopment: boolean = false
 ) {
+  // For now, ALWAYS return original images to fix production
+  // We'll enable optimization after testing
+  return originalSrc
+  
+  /* Optimization code - disabled temporarily
   // In development, return original images without optimization
   if (isDevelopment) {
     return originalSrc
@@ -29,6 +34,7 @@ export function getOptimizedImageUrl(
   })
   
   return `https://images.weserv.nl/?${params.toString()}`
+  */
 }
 
 /**
@@ -40,6 +46,10 @@ export function generateResponsiveSrcSet(
   format: 'webp' | 'avif' | 'jpg' = 'webp',
   isDevelopment: boolean = false
 ): string {
+  // For now, just return the original image to fix production
+  return `${originalSrc} ${sizes[sizes.length - 1]}w`
+  
+  /* Optimization code - disabled temporarily
   if (isDevelopment) {
     // In development, just return single src
     return `${originalSrc} ${sizes[sizes.length - 1]}w`
@@ -51,4 +61,5 @@ export function generateResponsiveSrcSet(
       return `${url} ${width}w`
     })
     .join(', ')
+  */
 }

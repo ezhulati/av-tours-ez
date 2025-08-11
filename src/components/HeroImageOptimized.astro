@@ -11,6 +11,10 @@ const { src, alt, class: className = '', loading = 'lazy', priority = false } = 
 
 // Generate optimized URLs using Weserv.nl with maximum quality settings
 function getOptimizedUrl(originalSrc: string, width: number, format: 'webp' | 'jpg' = 'webp') {
+  // TEMPORARILY DISABLED - just return original to fix production
+  return originalSrc
+  
+  /* Optimization code - will re-enable after testing
   // In development, return original URL
   const isDev = import.meta.env.DEV
   if (isDev) {
@@ -34,6 +38,7 @@ function getOptimizedUrl(originalSrc: string, width: number, format: 'webp' | 'j
   })
   
   return `https://images.weserv.nl/?${params.toString()}`
+  */
 }
 
 // Generate srcset for different screen sizes
