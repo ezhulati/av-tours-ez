@@ -1,0 +1,91 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { generateBreadcrumbSchema } from '@/lib/seo'
+
+const breadcrumbSchema = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' },
+  { name: 'Cookie Policy', url: 'https://tours.albaniavisit.com/cookie-policy' }
+])
+---
+
+<BaseLayout 
+  title="Cookie Policy - AlbaniaVisit"
+  description="Learn about how AlbaniaVisit uses cookies to improve your browsing experience and provide better service."
+  jsonLd={breadcrumbSchema}
+>
+  <div class="container mx-auto px-4 py-12 max-w-4xl">
+    <h1 class="text-4xl font-bold mb-8">Cookie Policy</h1>
+    
+    <div class="prose prose-lg max-w-none">
+      <p class="text-gray-600 mb-6">Last updated: January 2025</p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">What Are Cookies</h2>
+      <p>
+        Cookies are small text files that are placed on your device when you visit our website. 
+        They help us provide you with a better experience by remembering your preferences and 
+        understanding how you use our site.
+      </p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">How We Use Cookies</h2>
+      <p>AlbaniaVisit uses cookies for the following purposes:</p>
+      <ul class="list-disc pl-6 space-y-2">
+        <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
+        <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website</li>
+        <li><strong>Performance Cookies:</strong> Allow us to improve site performance and user experience</li>
+        <li><strong>Functional Cookies:</strong> Remember your preferences and settings</li>
+      </ul>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Third-Party Cookies</h2>
+      <p>
+        We may use third-party services that also set cookies on our behalf:
+      </p>
+      <ul class="list-disc pl-6 space-y-2">
+        <li><strong>Microsoft Clarity:</strong> For understanding user behavior and improving user experience</li>
+        <li><strong>Analytics Services:</strong> To measure and analyze site traffic</li>
+      </ul>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Managing Cookies</h2>
+      <p>
+        You can control and manage cookies through your browser settings. Most browsers allow you to:
+      </p>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>View what cookies are stored on your device</li>
+        <li>Delete cookies individually or all at once</li>
+        <li>Block third-party cookies</li>
+        <li>Block all cookies from specific websites</li>
+        <li>Block all cookies from being set</li>
+      </ul>
+      <p class="mt-4">
+        Please note that blocking cookies may impact your experience on our website, 
+        and some features may not function properly.
+      </p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Your Consent</h2>
+      <p>
+        By continuing to use our website, you consent to our use of cookies as described in this policy. 
+        You can withdraw your consent at any time by adjusting your browser settings.
+      </p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Updates to This Policy</h2>
+      <p>
+        We may update this Cookie Policy from time to time. Any changes will be posted on this page 
+        with an updated revision date.
+      </p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Contact Us</h2>
+      <p>
+        If you have any questions about our Cookie Policy, please contact us at:
+      </p>
+      <p>
+        Email: <a href="mailto:info@albaniavisit.com" class="text-accent hover:underline">info@albaniavisit.com</a>
+      </p>
+      
+      <div class="mt-12 p-6 bg-gray-50 rounded-lg">
+        <p class="text-sm text-gray-600">
+          This website is operated by AlbaniaVisit. For more information about how we handle your data, 
+          please see our <a href="/privacy" class="text-accent hover:underline">Privacy Policy</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

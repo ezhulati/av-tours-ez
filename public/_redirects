@@ -36,6 +36,6 @@
 # Multi-country
 /tours/balkans /tours/filter/balkans 301
 
-# Seasonal
-/tours/summer /tours/filter/summer 301
-/tours/winter /tours/filter/winter 301
+# Seasonal - Redirect to main tours page for now
+/tours/summer /tours 301
+/tours/winter /tours 301

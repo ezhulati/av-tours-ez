@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { generateBreadcrumbSchema } from '@/lib/seo'
+
+const breadcrumbSchema = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' },
+  { name: 'About', url: 'https://tours.albaniavisit.com/about' }
+])
+---
+
+<BaseLayout 
+  title="About AlbaniaVisit - Your Adventure Travel Partner"
+  description="Learn about AlbaniaVisit, your trusted partner for authentic mountain adventures across Albania and the Balkans. Discover our mission and values."
+  jsonLd={breadcrumbSchema}
+>
+  <div class="container mx-auto px-4 py-12 max-w-4xl">
+    <h1 class="text-4xl font-bold mb-8">About AlbaniaVisit</h1>
+    
+    <div class="prose prose-lg max-w-none">
+      <p class="text-xl text-gray-700 mb-6">
+        Welcome to AlbaniaVisit, your gateway to authentic mountain adventures across Albania and the Balkans.
+      </p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Our Mission</h2>
+      <p>
+        We connect adventurous travelers with the most spectacular mountain experiences in Albania, Kosovo, Montenegro, and North Macedonia. 
+        Our carefully curated selection of tours showcases the natural beauty, rich culture, and warm hospitality of the Balkans.
+      </p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Why Choose AlbaniaVisit</h2>
+      <ul class="space-y-3 list-disc pl-6">
+        <li>Expertly curated mountain adventures and cultural tours</li>
+        <li>Partnership with trusted local operators</li>
+        <li>Comprehensive tour information and transparent pricing</li>
+        <li>Support for sustainable and responsible tourism</li>
+        <li>Deep knowledge of Albania and the Balkans region</li>
+      </ul>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Our Partners</h2>
+      <p>
+        We work exclusively with BNAdventure, a leading tour operator specializing in Balkan mountain adventures. 
+        This partnership ensures you receive professional service, experienced guides, and unforgettable experiences.
+      </p>
+      
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Discover the Balkans</h2>
+      <p>
+        From the dramatic peaks of the Accursed Mountains to the crystal-clear waters of the Albanian Riviera, 
+        from ancient UNESCO heritage sites to vibrant local cultures - we help you discover the best of this 
+        extraordinary region.
+      </p>
+      
+      <div class="mt-12 p-6 bg-gray-50 rounded-lg">
+        <h3 class="text-xl font-semibold mb-3">Ready to Start Your Adventure?</h3>
+        <p class="mb-4">
+          Browse our collection of carefully selected tours and find your perfect Balkan adventure.
+        </p>
+        <a href="/tours" class="inline-block bg-accent text-white px-6 py-3 rounded-lg hover:bg-accent-600 transition-colors">
+          Explore Tours
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

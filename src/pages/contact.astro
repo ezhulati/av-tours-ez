@@ -1,0 +1,84 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import ContactForm from '@/components/ContactForm'
+import { generateBreadcrumbSchema } from '@/lib/seo'
+
+const breadcrumbSchema = generateBreadcrumbSchema([
+  { name: 'Home', url: 'https://tours.albaniavisit.com' },
+  { name: 'Contact', url: 'https://tours.albaniavisit.com/contact' }
+])
+---
+
+<BaseLayout 
+  title="Contact AlbaniaVisit - Get in Touch"
+  description="Contact AlbaniaVisit for questions about tours, travel planning, or partnership opportunities. We're here to help plan your Balkan adventure."
+  jsonLd={breadcrumbSchema}
+>
+  <div class="container mx-auto px-4 py-12 max-w-4xl">
+    <h1 class="text-4xl font-bold mb-8">Contact Us</h1>
+    
+    <div class="grid md:grid-cols-2 gap-12">
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">Get in Touch</h2>
+        <p class="text-gray-700 mb-6">
+          Have questions about our tours? Need help planning your Albanian adventure? 
+          We're here to help you discover the best of the Balkans.
+        </p>
+        
+        <div class="space-y-4">
+          <div>
+            <h3 class="font-semibold mb-2">Email</h3>
+            <p class="text-gray-600">
+              <a href="mailto:info@albaniavisit.com" class="text-accent hover:underline">
+                info@albaniavisit.com
+              </a>
+            </p>
+          </div>
+          
+          <div>
+            <h3 class="font-semibold mb-2">Tour Bookings</h3>
+            <p class="text-gray-600">
+              For tour bookings and availability, please visit our 
+              <a href="/tours" class="text-accent hover:underline ml-1">tours page</a> 
+              and click on any tour for booking information.
+            </p>
+          </div>
+          
+          <div>
+            <h3 class="font-semibold mb-2">Partner Operator</h3>
+            <p class="text-gray-600">
+              All tours are operated by our trusted partner 
+              <span class="font-semibold">BNAdventure</span>, 
+              specialists in Balkan mountain adventures.
+            </p>
+          </div>
+        </div>
+        
+        <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+          <h3 class="font-semibold mb-3">Response Time</h3>
+          <p class="text-gray-600">
+            We typically respond to inquiries within 24-48 hours. 
+            For urgent travel matters, please contact the tour operator directly through the booking links.
+          </p>
+        </div>
+      </div>
+      
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">Send us a Message</h2>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <ContactForm client:load />
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-12 text-center">
+      <h3 class="text-xl font-semibold mb-4">Ready to Book Your Adventure?</h3>
+      <p class="text-gray-600 mb-6">
+        Browse our collection of mountain tours and cultural experiences across Albania and the Balkans.
+      </p>
+      <a href="/tours" class="inline-block bg-accent text-white px-8 py-3 rounded-lg hover:bg-accent-600 transition-colors">
+        View All Tours
+      </a>
+    </div>
+  </div>
+</BaseLayout>
