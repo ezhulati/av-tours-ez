@@ -175,9 +175,7 @@ export function generateCollectionPageSchema(
     isPartOf: {
       '@id': 'https://tours.albaniavisit.com/#website'
     },
-    breadcrumb: {
-      '@id': `${pageUrl}#breadcrumb`
-    },
+    // Removed breadcrumb reference - using separate BreadcrumbList schema instead
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: tours.length,
