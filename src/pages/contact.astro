@@ -71,14 +71,26 @@ const breadcrumbSchema = generateBreadcrumbSchema([
       </div>
     </div>
     
-    <div class="mt-12 text-center">
-      <h3 class="text-xl font-semibold mb-4">Ready to Book Your Adventure?</h3>
-      <p class="text-gray-600 mb-6">
-        Browse our collection of mountain tours and cultural experiences across Albania and the Balkans.
-      </p>
-      <a href="/tours" class="inline-block bg-accent text-white px-8 py-3 rounded-lg hover:bg-accent-600 transition-colors">
-        View All Tours
-      </a>
+    <div class="mt-12 grid md:grid-cols-2 gap-8">
+      <div class="text-center">
+        <h3 class="text-xl font-semibold mb-4">Learn More About Us</h3>
+        <p class="text-gray-600 mb-6">
+          Discover our mission, values, and why AlbaniaVisit is your trusted partner for authentic Balkan adventures.
+        </p>
+        <a href="/about" class="inline-block bg-white text-accent border-2 border-accent px-8 py-3 rounded-lg hover:bg-accent hover:text-white transition-colors">
+          About AlbaniaVisit
+        </a>
+      </div>
+      
+      <div class="text-center">
+        <h3 class="text-xl font-semibold mb-4">Ready to Book Your Adventure?</h3>
+        <p class="text-gray-600 mb-6">
+          Browse our collection of mountain tours and cultural experiences across Albania and the Balkans.
+        </p>
+        <a href="/tours" class="inline-block bg-accent text-white px-8 py-3 rounded-lg hover:bg-accent-600 transition-colors">
+          View All Tours
+        </a>
+      </div>
     </div>
   </div>
 </BaseLayout>
