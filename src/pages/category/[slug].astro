@@ -5,6 +5,7 @@ import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/se
 import HeroSlideshowOptimized from '@/components/HeroSlideshowOptimized.astro'
 import PhotoGallery from '@/components/PhotoGallery'
 import ContactForm from '@/components/ContactForm'
+import { Image } from 'astro:assets'
 
 export const prerender = false
 
@@ -204,11 +205,14 @@ const ogImage = categoryImages[slug] || '/Assets/Albania/Albanian_Alps.jpg'
         {tours.items.map((tour) => (
           <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
             <div class="aspect-[4/3] relative">
-              <img 
+              <Image 
                 src={tour.primaryImageUrl} 
                 alt={tour.title}
                 loading="lazy"
                 class="w-full h-full object-cover"
+                width={400}
+                height={300}
+                format="webp"
               />
               {tour.featured && (
                 <span class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-semibold">

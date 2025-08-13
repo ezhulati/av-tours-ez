@@ -236,6 +236,8 @@ export default function RedirectModal({
               <button
                 onClick={onClose}
                 className="btn-outline"
+                type="button"
+                aria-label="Go back to tour details"
               >
                 {microcopy.redirect.buttons.back}
               </button>
@@ -246,6 +248,9 @@ export default function RedirectModal({
                   !accepted ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
                 style={{ minWidth: '220px' }}
+                type="button"
+                aria-label="Continue to partner booking site"
+                aria-disabled={!accepted}
               >
                 <span>{microcopy.redirect.buttons.continue}</span>
                 <svg 

@@ -135,7 +135,10 @@ const GA4_ID = import.meta.env.GA4_ID
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
           </a>
           <div class="relative group">
-            <button class="text-gray-700 hover:text-accent transition-colors flex items-center gap-1">
+            <button class="text-gray-700 hover:text-accent transition-colors flex items-center gap-1"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Destinations menu">
               Destinations
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -149,7 +152,10 @@ const GA4_ID = import.meta.env.GA4_ID
             </div>
           </div>
           <div class="relative group">
-            <button class="text-gray-700 hover:text-accent transition-colors flex items-center gap-1">
+            <button class="text-gray-700 hover:text-accent transition-colors flex items-center gap-1"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Activities menu">
               Activities
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>

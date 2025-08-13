@@ -89,7 +89,8 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
             <button
               onClick={() => setIsOpen(false)}
               className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
-              aria-label="Close"
+              type="button"
+              aria-label="Close inquiry form"
             >
               <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -230,6 +231,7 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                   type="button"
                   onClick={() => setIsOpen(false)}
                   className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  aria-label="Cancel inquiry form"
                 >
                   Cancel
                 </button>
@@ -238,6 +240,8 @@ export default function InquiryForm({ tourId, tourSlug, tourTitle, tourOperator,
                   form="tour-inquiry-form"
                   disabled={state.submitting}
                   className="flex-1 px-3 py-2 text-sm font-medium text-white bg-accent rounded-lg hover:bg-accent-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Send tour inquiry"
+                  aria-disabled={state.submitting}
                 >
                   {state.submitting ? 'Sending...' : 'Send Inquiry'}
                 </button>

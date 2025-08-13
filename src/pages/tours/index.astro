@@ -12,6 +12,7 @@ import ContactForm from '@/components/ContactForm'
 import EUConsumerRights from '@/components/EUConsumerRights'
 import SEOLandingLinks from '@/components/tours/SEOLandingLinks'
 import { getHeroImagesByCategory } from '@/data/heroImages'
+import { Image } from 'astro:assets'
 
 // Get initial tours (SSG)
 const initialData = await getTourCardPage({}, { page: 1, limit: 12 })
@@ -120,11 +121,14 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
           <article class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-accent/20 transition-all duration-300 transform hover:-translate-y-2 flex flex-col h-full">
             {/* Image Container */}
             <div class="aspect-[4/3] relative overflow-hidden flex-shrink-0">
-              <img 
+              <Image 
                 src={tour.primaryImageUrl} 
                 alt={tour.title}
                 loading="lazy"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                width={400}
+                height={300}
+                format="webp"
               />
               
               {/* Enhanced Badges - Smaller on Mobile */}
@@ -240,6 +244,8 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
           class="px-8 py-4 bg-accent text-white rounded-lg font-semibold hover:bg-accent-600 transition-all duration-300 transform hover:scale-105"
           data-page="1"
           data-total-pages={initialData.pagination.totalPages}
+          type="button"
+          aria-label="Load more tours"
         >
           Load More Tours
         </button>
@@ -267,6 +273,8 @@ const galleryImages = Array.from(uniqueTourImages.values()).slice(0, 12) // Limi
       <button 
         id="custom-recommendations-btn"
         class="inline-block bg-accent text-white px-8 py-4 rounded-lg font-semibold hover:bg-accent-600 transition-all duration-300 transform hover:scale-105"
+        type="button"
+        aria-label="Get custom tour recommendations"
       >
         Get Custom Recommendations
       </button>

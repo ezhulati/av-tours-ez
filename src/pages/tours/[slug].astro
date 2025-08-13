@@ -11,6 +11,7 @@ import ContactForm from '@/components/ContactForm'
 import ReviewsSection from '@/components/tours/ReviewsSection'
 import TrustIndicator from '@/components/tours/TrustIndicator'
 import OptimizedImage from '@/components/OptimizedImage.astro'
+import { Image } from 'astro:assets'
 
 // SSR mode - no getStaticPaths needed
 const { slug } = Astro.params
@@ -94,12 +95,15 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   <section class="relative h-[70vh] md:h-screen max-h-[600px] md:max-h-[900px] min-h-[400px] md:min-h-[600px]">
     <!-- Hero Image Container -->
     <div class="absolute inset-0">
-      <img
+      <Image
         id="hero-image"
         src={tour.images[0]?.url || '/placeholder.jpg'}
         alt={tour.title}
         class="w-full h-full object-cover"
         loading="eager"
+        width={1200}
+        height={800}
+        format="webp"
       />
       <div class="hero-gradient absolute inset-0"></div>
     </div>
@@ -107,13 +111,23 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     <!-- Navigation Arrows - Smaller on Mobile -->
     {tour.images.length > 1 && (
       <>
-        <button id="prev-image" class="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all">
-          <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button 
+          id="prev-image" 
+          class="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all"
+          type="button"
+          aria-label="Previous image"
+        >
+          <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
-        <button id="next-image" class="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all">
-          <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button 
+          id="next-image" 
+          class="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all"
+          type="button"
+          aria-label="Next image"
+        >
+          <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
           </svg>
         </button>
@@ -201,6 +215,8 @@ const breadcrumbSchema = generateBreadcrumbSchema([
     <button 
       id="open-lightbox"
       class="absolute top-4 right-4 md:top-8 md:right-8 bg-white/10 backdrop-blur-sm rounded-full px-3 py-2 md:px-6 md:py-3 flex items-center gap-2 md:gap-3 text-white hover:bg-white/20 transition-all text-sm md:text-base"
+      type="button"
+      aria-label="Open photo gallery"
     >
       <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
@@ -276,6 +292,8 @@ const breadcrumbSchema = generateBreadcrumbSchema([
               class={`thumbnail-btn flex-shrink-0 rounded-lg overflow-hidden transition-all hover:scale-105 ${index === 0 ? 'ring-2 ring-offset-2 ring-accent' : ''}`}
               style="width: 100px; height: 75px;"
               data-index={index}
+              type="button"
+              aria-label={`View image ${index + 1} of ${tour.images.length}`}
             >
               <OptimizedImage
                 src={image.url}
@@ -287,7 +305,12 @@ const breadcrumbSchema = generateBreadcrumbSchema([
             </button>
           ))}
           {tour.images.length > 10 && (
-            <button id="show-all-images" class="flex-shrink-0 w-[100px] h-[75px] bg-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-600 hover:bg-gray-300 transition-colors">
+            <button 
+              id="show-all-images" 
+              class="flex-shrink-0 w-[100px] h-[75px] bg-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-600 hover:bg-gray-300 transition-colors"
+              type="button"
+              aria-label={`Show all ${tour.images.length} images`}
+            >
               <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
               </svg>
@@ -627,12 +650,14 @@ const breadcrumbSchema = generateBreadcrumbSchema([
           {similarTours.map((similarTour) => (
             <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-2">
               <div class="aspect-[4/3] relative overflow-hidden">
-                <OptimizedImage
+                <Image
                   src={similarTour.primaryImageUrl}
                   alt={similarTour.title}
                   loading="lazy"
                   class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  width={300}
+                  height={225}
+                  format="webp"
                 />
                 {similarTour.featured && (
                   <span class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-full text-xs font-bold">
