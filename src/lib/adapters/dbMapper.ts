@@ -67,10 +67,24 @@ export function mapToTourDetail(row: any, images: any[], operator: any): TourDet
     height: undefined
   }))
 
-  // Combine primary image with gallery
-  const allImages = row.primary_image ? 
-    [{ url: getImageUrl(row.primary_image), alt: row.title }].concat(galleryImages) : 
-    galleryImages
+  // Combine primary image with gallery, removing duplicates
+  const primaryImageUrl = row.primary_image ? getImageUrl(row.primary_image) : null
+  const imageUrls = new Set<string>()
+  const uniqueImages: Array<{url: string, alt: string, width?: number, height?: number}> = []
+  
+  // Add primary image first if it exists
+  if (primaryImageUrl && !imageUrls.has(primaryImageUrl)) {
+    imageUrls.add(primaryImageUrl)
+    uniqueImages.push({ url: primaryImageUrl, alt: row.title })
+  }
+  
+  // Add gallery images, skipping duplicates
+  for (const img of galleryImages) {
+    if (!imageUrls.has(img.url)) {
+      imageUrls.add(img.url)
+      uniqueImages.push(img)
+    }
+  }
 
   return {
     ...card,
@@ -78,7 +92,7 @@ export function mapToTourDetail(row: any, images: any[], operator: any): TourDet
     inclusions: parseJsonArray(row.inclusions),
     exclusions: parseJsonArray(row.exclusions),
     departureNotes: row.starting_point || row.ending_point,
-    images: allImages.length > 0 ? allImages : [{ url: '/placeholder.jpg', alt: 'Tour' }],
+    images: uniqueImages.length > 0 ? uniqueImages : [{ url: '/placeholder.jpg', alt: 'Tour' }],
     operator: {
       id: row.source_provider || 'partner',
       name: row.source_provider || 'Partner',
