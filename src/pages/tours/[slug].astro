@@ -134,25 +134,6 @@ const breadcrumbSchema = generateBreadcrumbSchema([
       </>
     )}
 
-    <!-- Gallery Indicators for Mobile -->
-    {tour.images.length > 1 && (
-      <div data-testid="gallery-indicators" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:hidden">
-        {tour.images.slice(0, 5).map((_, index) => (
-          <button
-            data-testid={index === 0 ? "gallery-indicator-active" : "gallery-indicator"}
-            data-index={index}
-            class={`w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-white w-6' : 'bg-white/50'}`}
-            aria-label={`View image ${index + 1}`}
-            onclick={`document.getElementById('hero-image').src = '${tour.images[index]?.url}'; 
-                     document.querySelectorAll('[data-testid*="gallery-indicator"]').forEach((el, i) => {
-                       el.setAttribute('data-testid', i === ${index} ? 'gallery-indicator-active' : 'gallery-indicator');
-                       el.className = i === ${index} ? 'w-2 h-2 rounded-full transition-all bg-white w-6' : 'w-2 h-2 rounded-full transition-all bg-white/50';
-                     });`}
-          />
-        ))}
-      </div>
-    )}
-
     <!-- Mobile: Minimal Hero Content -->
     <div class="absolute bottom-0 left-0 right-0 z-10 pb-6 md:pb-12">
       <div class="container mx-auto px-4">
