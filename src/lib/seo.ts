@@ -6,25 +6,17 @@ export function generateTouristTripSchema(tour: TourDetailDTO, url: string, incl
   
   return {
     '@context': 'https://schema.org',
-    '@type': 'TouristTrip',
-    '@id': `${url}#trip`,
+    '@type': 'Product',
+    '@id': `${url}#product`,
     name: tour.title,
     description: tour.shortDescription || tour.fullDescription,
     url,
     image: images,
-    touristType: tour.difficulty ? `${tour.difficulty} level` : undefined,
-    itinerary: {
-      '@type': 'ItemList',
-      numberOfItems: tour.durationDays || undefined,
-      itemListElement: tour.countries?.map((country, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        item: {
-          '@type': 'Country',
-          name: country
-        }
-      }))
+    brand: {
+      '@type': 'Organization',
+      name: 'AlbaniaVisit'
     },
+    category: 'Tour Package',
     offers: tour.priceMin ? {
       '@type': 'AggregateOffer',
       lowPrice: tour.priceMin,
@@ -39,11 +31,6 @@ export function generateTouristTripSchema(tour: TourDetailDTO, url: string, incl
         url: tour.affiliateUrl
       }
     } : undefined,
-    provider: {
-      '@type': 'TravelAgency',
-      '@id': 'https://tours.albaniavisit.com/#organization',
-      name: 'AlbaniaVisit'
-    },
     aggregateRating: includeRatings ? {
       '@type': 'AggregateRating',
       ratingValue: reviewStats.averageRating.toFixed(1),
@@ -51,12 +38,33 @@ export function generateTouristTripSchema(tour: TourDetailDTO, url: string, incl
       bestRating: '5',
       worstRating: '1'
     } : undefined,
-    duration: tour.durationDays ? `P${tour.durationDays}D` : undefined,
-    activityLevel: tour.difficulty,
-    category: tour.categories?.join(', '),
-    isAccessibleForFree: false,
-    maximumAttendeeCapacity: tour.groupSize?.max || 12,
-    minimumAttendeeCapacity: tour.groupSize?.min || 2
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'Duration',
+        value: tour.durationDays ? `${tour.durationDays} days` : 'Variable'
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Difficulty Level',
+        value: tour.difficulty || 'Moderate'
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Group Size',
+        value: `${tour.groupSize?.min || 2}-${tour.groupSize?.max || 12} people`
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Countries',
+        value: tour.countries?.join(', ') || 'Albania'
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Activity Type',
+        value: tour.categories?.join(', ') || 'Adventure Tour'
+      }
+    ]
   }
 }
 
