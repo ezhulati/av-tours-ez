@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 8
+      "actualWorkers": 5
     },
     "preserveOutput": "always",
     "reporter": [
@@ -47,7 +47,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 5
         },
         "id": "chromium",
         "name": "chromium",
@@ -63,7 +63,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 5
         },
         "id": "firefox",
         "name": "firefox",
@@ -79,7 +79,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 5
         },
         "id": "webkit",
         "name": "webkit",
@@ -95,7 +95,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 5
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -111,7 +111,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 5
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -137,20 +137,20 @@
   },
   "suites": [
     {
-      "title": "mobile.spec.ts",
-      "file": "mobile.spec.ts",
+      "title": "basic.spec.ts",
+      "file": "basic.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Mobile Experience",
-          "file": "mobile.spec.ts",
-          "line": 5,
+          "title": "Basic E2E Tests",
+          "file": "basic.spec.ts",
+          "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should have responsive navigation menu",
+              "title": "homepage loads successfully",
               "ok": false,
               "tags": [],
               "tests": [
@@ -165,100 +165,108 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 1765,
+                      "duration": 3359,
                       "error": {
-                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n",
-                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59",
+                        "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n",
+                        "stack": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38",
                         "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 59,
-                          "line": 17
+                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                          "column": 38,
+                          "line": 7
                         },
-                        "snippet": "  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })"
+                        "snippet": "   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 59,
-                            "line": 17
+                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                            "column": 38,
+                            "line": 7
                           },
-                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n\n  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59"
+                          "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n\n\n   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.415Z",
+                      "startTime": "2025-08-13T06:07:09.094Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/test-failed-1.png"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-chromium/test-failed-1.png"
                         },
                         {
                           "name": "video",
                           "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/video.webm"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-chromium/video.webm"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/error-context.md"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-chromium/error-context.md"
                         }
                       ],
                       "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 59,
-                        "line": 17
+                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                        "column": 38,
+                        "line": 7
                       }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "e79c838550b25e92508e-a147f6a8dfd452502210",
-              "file": "mobile.spec.ts",
-              "line": 6,
+              "id": "8946741c555a0c4515d8-d6fbe448a3115e5bbd2c",
+              "file": "basic.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "should display tour cards in mobile layout",
-              "ok": true,
+              "title": "homepage loads successfully",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
                   "results": [
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1864,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 1,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at /Users/mbp-ez/Library/Caches/ms-playwright/firefox-1489/firefox/Nightly.app/Contents/MacOS/firefox\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     pnpm exec playwright install                                        ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at /Users/mbp-ez/Library/Caches/ms-playwright/firefox-1489/firefox/Nightly.app/Contents/MacOS/firefox\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     pnpm exec playwright install                                        ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at /Users/mbp-ez/Library/Caches/ms-playwright/firefox-1489/firefox/Nightly.app/Contents/MacOS/firefox\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     pnpm exec playwright install                                        ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.412Z",
+                      "startTime": "2025-08-13T06:07:09.094Z",
                       "annotations": [],
                       "attachments": []
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "e79c838550b25e92508e-9fc82e214debda47013a",
-              "file": "mobile.spec.ts",
-              "line": 22,
+              "id": "8946741c555a0c4515d8-90f73277603ed51984c5",
+              "file": "basic.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "should have collapsible filters on mobile",
+              "title": "homepage loads successfully",
               "ok": false,
               "tags": [],
               "tests": [
@@ -266,65 +274,73 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
                   "results": [
                     {
                       "workerIndex": 2,
                       "parallelIndex": 2,
-                      "status": "timedOut",
-                      "duration": 30123,
+                      "status": "failed",
+                      "duration": 5142,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n",
+                        "stack": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38",
+                        "location": {
+                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                          "column": 38,
+                          "line": 7
+                        },
+                        "snippet": "   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
                           "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 16,
-                            "line": 55
+                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                            "column": 38,
+                            "line": 7
                           },
-                          "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Adventure\")')\u001b[22m\n\n\n  53 |     \n  54 |     // Apply a filter\n> 55 |     await page.click('button:has-text(\"Adventure\")')\n     |                ^\n  56 |     \n  57 |     // Filters should auto-collapse after applying\n  58 |     await expect(filterPanel).not.toBeVisible()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16"
+                          "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\n\n   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.417Z",
+                      "startTime": "2025-08-13T06:07:09.094Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/test-failed-1.png"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-webkit/test-failed-1.png"
                         },
                         {
                           "name": "video",
                           "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/video.webm"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-webkit/video.webm"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/error-context.md"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-webkit/error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                        "column": 38,
+                        "line": 7
+                      }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "e79c838550b25e92508e-19af20bf40496bf13784",
-              "file": "mobile.spec.ts",
-              "line": 39,
+              "id": "8946741c555a0c4515d8-76675e6a180ca06a784c",
+              "file": "basic.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "should have touch-friendly booking button",
+              "title": "homepage loads successfully",
               "ok": false,
               "tags": [],
               "tests": [
@@ -332,65 +348,73 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
                   "results": [
                     {
                       "workerIndex": 3,
                       "parallelIndex": 3,
-                      "status": "timedOut",
-                      "duration": 30181,
+                      "status": "failed",
+                      "duration": 4174,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n",
+                        "stack": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38",
+                        "location": {
+                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                          "column": 38,
+                          "line": 7
+                        },
+                        "snippet": "   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
                           "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 34,
-                            "line": 65
+                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                            "column": 38,
+                            "line": 7
                           },
-                          "message": "Error: locator.boundingBox: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Book Now\")')\u001b[22m\n\n\n  63 |     \n  64 |     const bookButton = page.locator('button:has-text(\"Book Now\")')\n> 65 |     const box = await bookButton.boundingBox()\n     |                                  ^\n  66 |     \n  67 |     // Button should be at least 44px tall (iOS touch target)\n  68 |     if (box) {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34"
+                          "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n\n\n   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.416Z",
+                      "startTime": "2025-08-13T06:07:09.094Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/test-failed-1.png"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-Mobile-Chrome/test-failed-1.png"
                         },
                         {
                           "name": "video",
                           "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/video.webm"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-Mobile-Chrome/video.webm"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/error-context.md"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-Mobile-Chrome/error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                        "column": 38,
+                        "line": 7
+                      }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "e79c838550b25e92508e-4ed9c8be9aebb1444cd4",
-              "file": "mobile.spec.ts",
-              "line": 61,
+              "id": "8946741c555a0c4515d8-c564387173f06273535a",
+              "file": "basic.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "should have optimized image gallery for mobile",
+              "title": "homepage loads successfully",
               "ok": false,
               "tags": [],
               "tests": [
@@ -398,2235 +422,69 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
                   "results": [
                     {
                       "workerIndex": 4,
                       "parallelIndex": 4,
                       "status": "failed",
-                      "duration": 6743,
+                      "duration": 3590,
                       "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27",
+                        "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n",
+                        "stack": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38",
                         "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 27,
-                          "line": 84
+                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                          "column": 38,
+                          "line": 7
                         },
-                        "snippet": "  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')"
+                        "snippet": "   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 27,
-                            "line": 84
+                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                            "column": 38,
+                            "line": 7
                           },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n\n  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27"
+                          "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 4 elements:\n    1) <h1 data-astro-cid-j7pv25f6=\"\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\">…</h1> aka getByRole('heading', { name: 'Discover Europe\\'s Last Wild' })\n    2) <h1>Audit</h1> aka locator('#header-left').getByText('Audit')\n    3) <h1>No accessibility or performance issues detected.</h1> aka getByText('No accessibility or')\n    4) <h1>…</h1> aka locator('h1').filter({ hasText: 'Settings' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    3 × locator resolved to <h1 data-astro-cid-j7pv25f6=\"\" data-astro-source-loc=\"52:89\" class=\"font-serif font-bold leading-[0.95] tracking-wide animate-fade-in\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/pages/index.astro\">…</h1>\u001b[22m\n\u001b[2m      - unexpected value \" \u001b[22m\n\u001b[2mDiscover Europe's\u001b[22m\n\u001b[2m \u001b[22m\n\u001b[2mLast Wild Frontier\u001b[22m\n\u001b[2m \"\u001b[22m\n\n\n   5 |     await page.goto('/')\n   6 |     await expect(page).toHaveTitle(/AlbaniaVisit/)\n>  7 |     await expect(page.locator('h1')).toContainText('Elevate')\n     |                                      ^\n   8 |   })\n   9 |\n  10 |   test('tours page loads successfully', async ({ page }) => {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts:7:38"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.419Z",
+                      "startTime": "2025-08-13T06:07:09.094Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/test-failed-1.png"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-Mobile-Safari/test-failed-1.png"
                         },
                         {
                           "name": "video",
                           "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/video.webm"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-Mobile-Safari/video.webm"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/error-context.md"
+                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/basic-Basic-E2E-Tests-homepage-loads-successfully-Mobile-Safari/error-context.md"
                         }
                       ],
                       "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 27,
-                        "line": 84
+                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/basic.spec.ts",
+                        "column": 38,
+                        "line": 7
                       }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "e79c838550b25e92508e-415e16757b44fdafcd25",
-              "file": "mobile.spec.ts",
-              "line": 79,
-              "column": 3
-            },
-            {
-              "title": "should have sticky booking bar on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 6699,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 30,
-                          "line": 106
-                        },
-                        "snippet": "  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 30,
-                            "line": 106
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n\n  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.412Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 30,
-                        "line": 106
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-39c3bacccfde0c9f4e75",
-              "file": "mobile.spec.ts",
-              "line": 98,
-              "column": 3
-            },
-            {
-              "title": "should have optimized font sizes for mobile",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
-                      "status": "passed",
-                      "duration": 1798,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.412Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-b01741d77079a4a21f41",
-              "file": "mobile.spec.ts",
-              "line": 117,
-              "column": 3
-            },
-            {
-              "title": "should handle offline gracefully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 7,
-                      "parallelIndex": 7,
-                      "status": "failed",
-                      "duration": 6776,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 62,
-                          "line": 149
-                        },
-                        "snippet": "  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 62,
-                            "line": 149
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n\n  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:06.411Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 62,
-                        "line": 149
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-c62c63b53b46dbd8793a",
-              "file": "mobile.spec.ts",
-              "line": 139,
-              "column": 3
-            },
-            {
-              "title": "should have responsive navigation menu",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 8,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 1055,
-                      "error": {
-                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n",
-                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 59,
-                          "line": 17
-                        },
-                        "snippet": "  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 59,
-                            "line": 17
-                          },
-                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n\n  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:08.701Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 59,
-                        "line": 17
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-11b5ef153a5530cbb608",
-              "file": "mobile.spec.ts",
-              "line": 6,
-              "column": 3
-            },
-            {
-              "title": "should display tour cards in mobile layout",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 9,
-                      "parallelIndex": 6,
-                      "status": "passed",
-                      "duration": 1120,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:08.720Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-beaf07747c17aa48f685",
-              "file": "mobile.spec.ts",
-              "line": 22,
-              "column": 3
-            },
-            {
-              "title": "should have collapsible filters on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 10,
-                      "parallelIndex": 1,
-                      "status": "timedOut",
-                      "duration": 30117,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 16,
-                            "line": 55
-                          },
-                          "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Adventure\")')\u001b[22m\n\n\n  53 |     \n  54 |     // Apply a filter\n> 55 |     await page.click('button:has-text(\"Adventure\")')\n     |                ^\n  56 |     \n  57 |     // Filters should auto-collapse after applying\n  58 |     await expect(filterPanel).not.toBeVisible()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:08.762Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-915765a776d6b23356d6",
-              "file": "mobile.spec.ts",
-              "line": 39,
-              "column": 3
-            },
-            {
-              "title": "should have touch-friendly booking button",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 11,
-                      "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 30185,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 34,
-                            "line": 65
-                          },
-                          "message": "Error: locator.boundingBox: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Book Now\")')\u001b[22m\n\n\n  63 |     \n  64 |     const bookButton = page.locator('button:has-text(\"Book Now\")')\n> 65 |     const box = await bookButton.boundingBox()\n     |                                  ^\n  66 |     \n  67 |     // Button should be at least 44px tall (iOS touch target)\n  68 |     if (box) {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:10.191Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-c20eb17d1b1ea221a28e",
-              "file": "mobile.spec.ts",
-              "line": 61,
-              "column": 3
-            },
-            {
-              "title": "should have optimized image gallery for mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 9,
-                      "parallelIndex": 6,
-                      "status": "failed",
-                      "duration": 5696,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 27,
-                          "line": 84
-                        },
-                        "snippet": "  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 27,
-                            "line": 84
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n\n  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:09.969Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 27,
-                        "line": 84
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-f62c7d6776fc1444ab3c",
-              "file": "mobile.spec.ts",
-              "line": 79,
-              "column": 3
-            },
-            {
-              "title": "should have sticky booking bar on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 12,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 5873,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 30,
-                          "line": 106
-                        },
-                        "snippet": "  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 30,
-                            "line": 106
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n\n  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:13.598Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 30,
-                        "line": 106
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-d84e4f77f35c8ad733fe",
-              "file": "mobile.spec.ts",
-              "line": 98,
-              "column": 3
-            },
-            {
-              "title": "should have optimized font sizes for mobile",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 13,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 1220,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:13.629Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-70345b8766cb30f1d4b1",
-              "file": "mobile.spec.ts",
-              "line": 117,
-              "column": 3
-            },
-            {
-              "title": "should handle offline gracefully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 14,
-                      "parallelIndex": 7,
-                      "status": "failed",
-                      "duration": 6166,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 62,
-                          "line": 149
-                        },
-                        "snippet": "  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 62,
-                            "line": 149
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n\n  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:13.658Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 62,
-                        "line": 149
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-43ad6630ffc0d184c884",
-              "file": "mobile.spec.ts",
-              "line": 139,
-              "column": 3
-            },
-            {
-              "title": "should have responsive navigation menu",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 15,
-                      "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 1031,
-                      "error": {
-                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n",
-                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 59,
-                          "line": 17
-                        },
-                        "snippet": "  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 59,
-                            "line": 17
-                          },
-                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n\n  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:15.259Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 59,
-                        "line": 17
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-40509aee42615d3462c6",
-              "file": "mobile.spec.ts",
-              "line": 6,
-              "column": 3
-            },
-            {
-              "title": "should display tour cards in mobile layout",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 16,
-                      "parallelIndex": 6,
-                      "status": "passed",
-                      "duration": 1190,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:15.936Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-f8290865bbe520c61d8b",
-              "file": "mobile.spec.ts",
-              "line": 22,
-              "column": 3
-            },
-            {
-              "title": "should have collapsible filters on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 17,
-                      "parallelIndex": 4,
-                      "status": "timedOut",
-                      "duration": 30126,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 16,
-                            "line": 55
-                          },
-                          "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Adventure\")')\u001b[22m\n\n\n  53 |     \n  54 |     // Apply a filter\n> 55 |     await page.click('button:has-text(\"Adventure\")')\n     |                ^\n  56 |     \n  57 |     // Filters should auto-collapse after applying\n  58 |     await expect(filterPanel).not.toBeVisible()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:16.704Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-fc513afec85e8c032904",
-              "file": "mobile.spec.ts",
-              "line": 39,
-              "column": 3
-            },
-            {
-              "title": "should have touch-friendly booking button",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 16,
-                      "parallelIndex": 6,
-                      "status": "timedOut",
-                      "duration": 30188,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 34,
-                            "line": 65
-                          },
-                          "message": "Error: locator.boundingBox: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Book Now\")')\u001b[22m\n\n\n  63 |     \n  64 |     const bookButton = page.locator('button:has-text(\"Book Now\")')\n> 65 |     const box = await bookButton.boundingBox()\n     |                                  ^\n  66 |     \n  67 |     // Button should be at least 44px tall (iOS touch target)\n  68 |     if (box) {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:17.276Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-bf70287753910f55e160",
-              "file": "mobile.spec.ts",
-              "line": 61,
-              "column": 3
-            },
-            {
-              "title": "should have optimized image gallery for mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 18,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 5785,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 27,
-                          "line": 84
-                        },
-                        "snippet": "  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 27,
-                            "line": 84
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n\n  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:19.887Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 27,
-                        "line": 84
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-f92e283817fe45b690c4",
-              "file": "mobile.spec.ts",
-              "line": 79,
-              "column": 3
-            },
-            {
-              "title": "should have sticky booking bar on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 19,
-                      "parallelIndex": 7,
-                      "status": "failed",
-                      "duration": 5717,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 30,
-                          "line": 106
-                        },
-                        "snippet": "  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 30,
-                            "line": 106
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n\n  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:20.252Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 30,
-                        "line": 106
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-60a63934eadecab2d194",
-              "file": "mobile.spec.ts",
-              "line": 98,
-              "column": 3
-            },
-            {
-              "title": "should have optimized font sizes for mobile",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 20,
-                      "parallelIndex": 5,
-                      "status": "passed",
-                      "duration": 1045,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:26.086Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-80777a8a418d2f6ac180",
-              "file": "mobile.spec.ts",
-              "line": 117,
-              "column": 3
-            },
-            {
-              "title": "should handle offline gracefully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 21,
-                      "parallelIndex": 7,
-                      "status": "failed",
-                      "duration": 6107,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 62,
-                          "line": 149
-                        },
-                        "snippet": "  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 62,
-                            "line": 149
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n\n  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:26.366Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 62,
-                        "line": 149
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-665bf08b8dd3149f3b84",
-              "file": "mobile.spec.ts",
-              "line": 139,
-              "column": 3
-            },
-            {
-              "title": "should have responsive navigation menu",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 22,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 917,
-                      "error": {
-                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n",
-                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 59,
-                          "line": 17
-                        },
-                        "snippet": "  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 59,
-                            "line": 17
-                          },
-                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n\n  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:27.535Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 59,
-                        "line": 17
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-cf4d0ff2e93e5f286a1c",
-              "file": "mobile.spec.ts",
-              "line": 6,
-              "column": 3
-            },
-            {
-              "title": "should display tour cards in mobile layout",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 23,
-                      "parallelIndex": 5,
-                      "status": "passed",
-                      "duration": 1182,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:28.855Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-dc156a4dec387bc9d5da",
-              "file": "mobile.spec.ts",
-              "line": 22,
-              "column": 3
-            },
-            {
-              "title": "should have collapsible filters on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 23,
-                      "parallelIndex": 5,
-                      "status": "timedOut",
-                      "duration": 30120,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 16,
-                            "line": 55
-                          },
-                          "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Adventure\")')\u001b[22m\n\n\n  53 |     \n  54 |     // Apply a filter\n> 55 |     await page.click('button:has-text(\"Adventure\")')\n     |                ^\n  56 |     \n  57 |     // Filters should auto-collapse after applying\n  58 |     await expect(filterPanel).not.toBeVisible()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:30.168Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-77789eb8c9f0f7ca2d8e",
-              "file": "mobile.spec.ts",
-              "line": 39,
-              "column": 3
-            },
-            {
-              "title": "should have touch-friendly booking button",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 24,
-                      "parallelIndex": 7,
-                      "status": "timedOut",
-                      "duration": 30185,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 34,
-                            "line": 65
-                          },
-                          "message": "Error: locator.boundingBox: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Book Now\")')\u001b[22m\n\n\n  63 |     \n  64 |     const bookButton = page.locator('button:has-text(\"Book Now\")')\n> 65 |     const box = await bookButton.boundingBox()\n     |                                  ^\n  66 |     \n  67 |     // Button should be at least 44px tall (iOS touch target)\n  68 |     if (box) {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:32.867Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-89f748a6c4ecb92d215a",
-              "file": "mobile.spec.ts",
-              "line": 61,
-              "column": 3
-            },
-            {
-              "title": "should have optimized image gallery for mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 25,
-                      "parallelIndex": 2,
-                      "status": "failed",
-                      "duration": 5808,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 27,
-                          "line": 84
-                        },
-                        "snippet": "  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 27,
-                            "line": 84
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n\n  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:37.004Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 27,
-                        "line": 84
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-947953c571ed0bf24525",
-              "file": "mobile.spec.ts",
-              "line": 79,
-              "column": 3
-            },
-            {
-              "title": "should have sticky booking bar on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 26,
-                      "parallelIndex": 3,
-                      "status": "failed",
-                      "duration": 5738,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 30,
-                          "line": 106
-                        },
-                        "snippet": "  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 30,
-                            "line": 106
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n\n  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:37.046Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 30,
-                        "line": 106
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-f0b92211ee9fe20ef9ea",
-              "file": "mobile.spec.ts",
-              "line": 98,
-              "column": 3
-            },
-            {
-              "title": "should have optimized font sizes for mobile",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 27,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1020,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:39.284Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-21e48e3f55507b3e7684",
-              "file": "mobile.spec.ts",
-              "line": 117,
-              "column": 3
-            },
-            {
-              "title": "should handle offline gracefully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 27,
-                      "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 5938,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 62,
-                          "line": 149
-                        },
-                        "snippet": "  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 62,
-                            "line": 149
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n\n  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:40.440Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 62,
-                        "line": 149
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-9f4e02d9e671e0646217",
-              "file": "mobile.spec.ts",
-              "line": 139,
-              "column": 3
-            },
-            {
-              "title": "should have responsive navigation menu",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 28,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 1032,
-                      "error": {
-                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n",
-                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 59,
-                          "line": 17
-                        },
-                        "snippet": "  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 59,
-                            "line": 17
-                          },
-                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text(\"Tours\")') resolved to 3 elements:\n    1) <a href=\"/tours\" data-astro-source-loc=\"133:119\" class=\"text-gray-700 hover:text-accent transition-colors relative group flex items-center\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\">…</a> aka locator('#main-header').getByText('Tours', { exact: true })\n    2) <a href=\"/tours\" data-astro-source-loc=\"171:197\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]\">↵View Tours↵</a> aka getByText('View Tours')\n    3) <a href=\"/tours\" data-astro-source-loc=\"240:149\" data-astro-source-file=\"/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro\" class=\"flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation\">…</a> aka getByRole('link', { name: 'Tours', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a:has-text(\"Tours\")')\u001b[22m\n\n\n  15 |     \n  16 |     // Navigation links should be visible\n> 17 |     await expect(page.locator('nav a:has-text(\"Tours\")')).toBeVisible()\n     |                                                           ^\n  18 |     await expect(page.locator('nav a:has-text(\"About\")')).toBeVisible()\n  19 |     await expect(page.locator('nav a:has-text(\"Contact\")')).toBeVisible()\n  20 |   })\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:40.797Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 59,
-                        "line": 17
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-7a17a241415e0352a980",
-              "file": "mobile.spec.ts",
-              "line": 6,
-              "column": 3
-            },
-            {
-              "title": "should display tour cards in mobile layout",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 29,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1091,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:42.228Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-898aa8d434456e8c0188",
-              "file": "mobile.spec.ts",
-              "line": 22,
-              "column": 3
-            },
-            {
-              "title": "should have collapsible filters on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 30,
-                      "parallelIndex": 3,
-                      "status": "timedOut",
-                      "duration": 30113,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 16,
-                            "line": 55
-                          },
-                          "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Adventure\")')\u001b[22m\n\n\n  53 |     \n  54 |     // Apply a filter\n> 55 |     await page.click('button:has-text(\"Adventure\")')\n     |                ^\n  56 |     \n  57 |     // Filters should auto-collapse after applying\n  58 |     await expect(filterPanel).not.toBeVisible()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:43.192Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-ae740c4904172b79c506",
-              "file": "mobile.spec.ts",
-              "line": 39,
-              "column": 3
-            },
-            {
-              "title": "should have touch-friendly booking button",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 31,
-                      "parallelIndex": 2,
-                      "status": "timedOut",
-                      "duration": 30176,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 34,
-                            "line": 65
-                          },
-                          "message": "Error: locator.boundingBox: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Book Now\")')\u001b[22m\n\n\n  63 |     \n  64 |     const bookButton = page.locator('button:has-text(\"Book Now\")')\n> 65 |     const box = await bookButton.boundingBox()\n     |                                  ^\n  66 |     \n  67 |     // Button should be at least 44px tall (iOS touch target)\n  68 |     if (box) {\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:43.229Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-814cba7871644d529555",
-              "file": "mobile.spec.ts",
-              "line": 61,
-              "column": 3
-            },
-            {
-              "title": "should have optimized image gallery for mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 29,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 5732,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 27,
-                          "line": 84
-                        },
-                        "snippet": "  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 27,
-                            "line": 84
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"image-gallery\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"image-gallery\"]')\u001b[22m\n\n\n  82 |     // Gallery should use swipe navigation on mobile\n  83 |     const gallery = page.locator('[data-testid=\"image-gallery\"]')\n> 84 |     await expect(gallery).toBeVisible()\n     |                           ^\n  85 |     \n  86 |     // Check for swipe indicators\n  87 |     const indicators = page.locator('[data-testid=\"gallery-indicators\"]')\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:43.449Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 27,
-                        "line": 84
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-b4210998b28c75d9e2bd",
-              "file": "mobile.spec.ts",
-              "line": 79,
-              "column": 3
-            },
-            {
-              "title": "should have sticky booking bar on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 32,
-                      "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 5790,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 30,
-                          "line": 106
-                        },
-                        "snippet": "  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 30,
-                            "line": 106
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"mobile-booking-bar\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"mobile-booking-bar\"]')\u001b[22m\n\n\n  104 |     // Booking bar should be sticky at bottom\n  105 |     const bookingBar = page.locator('[data-testid=\"mobile-booking-bar\"]')\n> 106 |     await expect(bookingBar).toBeVisible()\n      |                              ^\n  107 |     \n  108 |     const box = await bookingBar.boundingBox()\n  109 |     const viewport = page.viewportSize()\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:46.652Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 30,
-                        "line": 106
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-e5401f885fb86797c5f4",
-              "file": "mobile.spec.ts",
-              "line": 98,
-              "column": 3
-            },
-            {
-              "title": "should have optimized font sizes for mobile",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 33,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 1099,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:47.249Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-c262c00a0fa27ed1731d",
-              "file": "mobile.spec.ts",
-              "line": 117,
-              "column": 3
-            },
-            {
-              "title": "should handle offline gracefully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 34,
-                      "parallelIndex": 6,
-                      "status": "failed",
-                      "duration": 5992,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62",
-                        "location": {
-                          "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                          "column": 62,
-                          "line": 149
-                        },
-                        "snippet": "  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                            "column": 62,
-                            "line": 149
-                          },
-                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('text=/offline|connection/i')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/offline|connection/i')\u001b[22m\n\n\n  147 |     \n  148 |     // Should show offline message\n> 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })\n      |                                                              ^\n  150 |     \n  151 |     // Go back online\n  152 |     await context.setOffline(false)\n    at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-13T05:52:47.781Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts",
-                        "column": 62,
-                        "line": 149
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e79c838550b25e92508e-5d6708bcddf4c0aa7cc6",
-              "file": "mobile.spec.ts",
-              "line": 139,
+              "id": "8946741c555a0c4515d8-a35d1f71fe72a5364588",
+              "file": "basic.spec.ts",
+              "line": 4,
               "column": 3
             }
           ]
@@ -2636,11 +494,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-13T05:52:05.457Z",
-    "duration": 68098.952,
-    "expected": 10,
+    "startTime": "2025-08-13T06:07:08.283Z",
+    "duration": 6735.125999999999,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 30,
+    "unexpected": 5,
     "flaky": 0
   }
 }

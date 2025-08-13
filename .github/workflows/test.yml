@@ -53,7 +53,7 @@ jobs:
   e2e-tests:
     name: E2E Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       matrix:
         browser: [chromium, firefox, webkit]
@@ -98,9 +98,9 @@ jobs:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
-      - name: Start dev server
+      - name: Start preview server
         run: |
-          pnpm dev &
+          pnpm preview &
           echo "Waiting for server to start..."
           npx wait-on http://localhost:4321 --timeout 60000
       
@@ -161,9 +161,9 @@ jobs:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
-      - name: Start dev server
+      - name: Start preview server
         run: |
-          pnpm dev &
+          pnpm preview &
           echo "Waiting for server to start..."
           npx wait-on http://localhost:4321 --timeout 60000
       
@@ -215,9 +215,9 @@ jobs:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
-      - name: Start dev server
+      - name: Start preview server
         run: |
-          pnpm dev &
+          pnpm preview &
           echo "Waiting for server to start..."
           npx wait-on http://localhost:4321 --timeout 60000
       
@@ -276,9 +276,9 @@ jobs:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
-      - name: Start dev server
+      - name: Start preview server
         run: |
-          pnpm dev &
+          pnpm preview &
           echo "Waiting for server to start..."
           npx wait-on http://localhost:4321 --timeout 60000
       
@@ -337,9 +337,9 @@ jobs:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key' }}
       
-      - name: Start dev server
+      - name: Start preview server
         run: |
-          pnpm dev &
+          pnpm preview &
           echo "Waiting for server to start..."
           npx wait-on http://localhost:4321 --timeout 60000
       

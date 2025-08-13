@@ -1,0 +1,278 @@
+# Page snapshot
+
+```yaml
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - navigation:
+    - link "AlbaniaVisit Discover the Unexpected":
+      - /url: /
+      - img
+      - text: AlbaniaVisit Discover the Unexpected
+    - button "Toggle mobile menu":
+      - img
+- main:
+  - img "Shala River crystal clear turquoise waters surrounded by mountains"
+  - img "Valbona to Theth trail - iconic mountain hiking path with dramatic peaks"
+  - img "Valbona Valley dramatic mountain landscape and pristine wilderness"
+  - img "Lake Prespa serene waters with mountain backdrop"
+  - img "Gjeravica Peak - Kosovo highest summit with panoramic mountain views"
+  - img "Accursed Mountains dramatic peaks and rugged terrain"
+  - img "Albanian Riviera stunning coastal views and azure waters"
+  - img "Valbona Accursed Mountains majestic peaks towering above valley"
+  - heading "Discover Europe's Last Wild Frontier" [level=1]
+  - paragraph: Real Albania. Local Guides.
+  - paragraph: 72 handpicked adventures where locals take you off the beaten path
+  - link "Find Your Adventure":
+    - /url: /tours
+    - text: Find Your Adventure
+    - img
+  - link "Top Picks":
+    - /url: "#featured"
+  - img
+  - text: 5.0★ Rated
+  - img
+  - text: Trusted Since 2020
+  - img
+  - text: 2000+ Travelers
+  - heading "Featured Adventures" [level=2]
+  - paragraph: Authentic experiences handpicked by locals who know the real Albania
+  - article:
+    - img "E-biking in Peaks of the Balkans"
+    - text: Featured
+    - heading "E-biking in Peaks of the Balkans" [level=3]:
+      - link "E-biking in Peaks of the Balkans":
+        - /url: /tours/e-biking-peaks-of-balkans
+    - paragraph: Unforgettable e-bike journey through Montenegro, Albania, and Kosovo
+    - text: 7 days moderate Check availability
+    - link "View Details":
+      - /url: /tours/e-biking-peaks-of-balkans
+  - article:
+    - img "6 Days Guided - Peaks of the Balkans 2025"
+    - text: Featured
+    - heading "6 Days Guided - Peaks of the Balkans 2025" [level=3]:
+      - link "6 Days Guided - Peaks of the Balkans 2025":
+        - /url: /tours/6-days-guided-peaks-balkans-2025
+    - paragraph: Breathtaking guided tour through the Accursed Mountains
+    - text: 6 days moderate Check availability
+    - link "View Details":
+      - /url: /tours/6-days-guided-peaks-balkans-2025
+  - article:
+    - img "Guided - High Scardus 2025"
+    - text: Featured
+    - heading "Guided - High Scardus 2025" [level=3]:
+      - link "Guided - High Scardus 2025":
+        - /url: /tours/guided-high-scardus-2025
+    - paragraph: Fascinating adventure through culturally diverse regions
+    - text: 8 days moderate From €900
+    - link "View Details":
+      - /url: /tours/guided-high-scardus-2025
+  - article:
+    - img "10 Days Self-Guided Peaks of the Balkans"
+    - text: Featured
+    - heading "10 Days Self-Guided Peaks of the Balkans" [level=3]:
+      - link "10 Days Self-Guided Peaks of the Balkans":
+        - /url: /tours/10-days-self-guided-peaks-balkans
+    - paragraph: Complete trail experience across three countries
+    - text: 10 days moderate From €850
+    - link "View Details":
+      - /url: /tours/10-days-self-guided-peaks-balkans
+  - article:
+    - img "South Albania Hike - Zagori Valley"
+    - text: Featured
+    - heading "South Albania Hike - Zagori Valley" [level=3]:
+      - link "South Albania Hike - Zagori Valley":
+        - /url: /tours/south-albania-zagori-valley
+    - paragraph: Remarkable adventure through the captivating Zagoria region
+    - text: 8 days easy Check availability
+    - link "View Details":
+      - /url: /tours/south-albania-zagori-valley
+  - article:
+    - img "10 Days Guided - Peaks of the Balkans 2025"
+    - text: Featured
+    - heading "10 Days Guided - Peaks of the Balkans 2025" [level=3]:
+      - link "10 Days Guided - Peaks of the Balkans 2025":
+        - /url: /tours/10-days-guided-peaks-balkans-2025
+    - paragraph: Beautiful trek on the spectacular Peaks of the Balkans trail
+    - text: 10 days moderate Check availability
+    - link "View Details":
+      - /url: /tours/10-days-guided-peaks-balkans-2025
+  - link "View All Tours →":
+    - /url: /tours
+  - heading "Explore by Activity" [level=2]
+  - link "Adventure":
+    - /url: /category/adventure
+    - img
+    - heading "Adventure" [level=3]
+  - link "Hiking":
+    - /url: /category/hiking
+    - img
+    - heading "Hiking" [level=3]
+  - link "Cultural":
+    - /url: /category/cultural
+    - img
+    - heading "Cultural" [level=3]
+  - link "Beach & Coast":
+    - /url: /category/beach
+    - img
+    - heading "Beach & Coast" [level=3]
+  - heading "Popular Mountain Destinations" [level=2]
+  - link "Albania - Accursed Mountains Albania The hidden gem of Europe Explore":
+    - /url: /country/albania
+    - img "Albania - Accursed Mountains"
+    - heading "Albania" [level=3]
+    - paragraph: The hidden gem of Europe
+    - text: Explore
+    - img
+  - link "Kosovo - Gjeravica Peak Kosovo Young nation, ancient peaks Explore":
+    - /url: /country/kosovo
+    - img "Kosovo - Gjeravica Peak"
+    - heading "Kosovo" [level=3]
+    - paragraph: Young nation, ancient peaks
+    - text: Explore
+    - img
+  - link "North Macedonia Macedonia Land of lakes and mountains Explore":
+    - /url: /country/macedonia
+    - img "North Macedonia"
+    - heading "Macedonia" [level=3]
+    - paragraph: Land of lakes and mountains
+    - text: Explore
+    - img
+  - link "Montenegro - Bay of Kotor Montenegro Wild beauty of the Adriatic Explore":
+    - /url: /country/montenegro
+    - img "Montenegro - Bay of Kotor"
+    - heading "Montenegro" [level=3]
+    - paragraph: Wild beauty of the Adriatic
+    - text: Explore
+    - img
+  - heading "Ready for Your Next Adventure?" [level=2]
+  - paragraph: Join over 2,000 travelers who chose authentic local experiences over crowded tourist attractions.
+  - link "Start Exploring Real Albania":
+    - /url: /tours
+- navigation:
+  - link "Home":
+    - /url: /
+    - img
+    - text: Home
+  - link "Tours":
+    - /url: /tours
+    - img
+    - text: Tours
+  - link "Activities":
+    - /url: /category/adventure
+    - img
+    - text: Activities
+  - link "Destinations":
+    - /url: /country/albania
+    - img
+    - text: Destinations
+- contentinfo:
+  - text: Shtëpia shtuh-PEE-ah e eh shqiptarit shchip-TAR-eet është UHSH-tuh e eh mikut MEE-koot dhe dheh e eh Zotit ZOH-teet
+  - paragraph: "\"The house of an Albanian belongs to the guest and to God.\""
+  - paragraph: A centuries-old Albanian proverb rooted in the 15th-century Kanun code. It encapsulates the nation's legendary tradition of hospitality and generosity toward visitors. In Albanian culture, any guest — even a stranger or former enemy — is treated with profound honor, almost as if welcomed by God Himself. For travelers, this proverb offers reassurance that they will be greeted warmly and generously in Albania, reflecting a deeply ingrained cultural tradition of honoring and caring for every guest.
+  - heading "Essential Albanian Phrases" [level=3]
+  - paragraph: Faleminderit
+  - paragraph: Thank you
+  - paragraph: fa-leh-min-DEH-rit
+  - paragraph: Gëzuar
+  - paragraph: Cheers
+  - paragraph: guh-ZOO-ar
+  - paragraph: Sa bukur!
+  - paragraph: How beautiful!
+  - paragraph: sah BOO-koor!
+  - paragraph: Ju lutem
+  - paragraph: Please
+  - paragraph: yoo LOO-tem
+  - paragraph: Më falni
+  - paragraph: Excuse me / sorry
+  - paragraph: muh FAHL-nee
+  - paragraph: Po
+  - paragraph: "Yes"
+  - paragraph: poh
+  - paragraph: Jo
+  - paragraph: "No"
+  - paragraph: yoh
+  - paragraph: Përshëndetje
+  - paragraph: Hello
+  - paragraph: pur-shen-DET-yeh
+  - paragraph: Mirupafshim
+  - paragraph: Goodbye
+  - paragraph: mee-roo-PAHF-sheem
+  - img
+  - text: AlbaniaVisit Discover the Unexpected
+  - paragraph: Authentic adventures in Albania and the Balkans. Expert local guides, unforgettable experiences.
+  - heading "Quick Links" [level=3]
+  - list:
+    - listitem:
+      - link "All Tours":
+        - /url: /tours
+    - listitem:
+      - link "Adventure Tours":
+        - /url: /category/adventure
+    - listitem:
+      - link "Hiking Tours":
+        - /url: /category/hiking
+    - listitem:
+      - link "Sitemap":
+        - /url: /sitemap-index.xml
+  - heading "Destinations" [level=3]
+  - list:
+    - listitem:
+      - link "Albania":
+        - /url: /country/albania
+    - listitem:
+      - link "Kosovo":
+        - /url: /country/kosovo
+    - listitem:
+      - link "Montenegro":
+        - /url: /country/montenegro
+    - listitem:
+      - link "North Macedonia":
+        - /url: /country/macedonia
+  - heading "Contact" [level=3]
+  - img
+  - paragraph: tours@albaniavisit.com
+  - paragraph: Get in touch for inquiries
+  - img
+  - paragraph: Tirana, Albania
+  - paragraph: Our home base
+  - link "Facebook":
+    - /url: https://www.facebook.com/AlbaniaVisitOfficial/
+    - img
+  - link "Instagram":
+    - /url: https://www.instagram.com/albania_visit_/
+    - img
+  - link "YouTube":
+    - /url: https://www.youtube.com/@Albania-Visit
+    - img
+  - link "LinkedIn":
+    - /url: https://www.linkedin.com/company/albania-visit/
+    - img
+  - paragraph:
+    - text: © 2025
+    - link "AlbaniaVisit.com":
+      - /url: https://albaniavisit.com
+    - text: . All rights reserved. | Authentic Tours Since 2020 |
+    - link "Made in Albania":
+      - /url: https://enrizhulati.com
+  - paragraph:
+    - text: Clicking links on our site helps support our work.
+    - link "Learn more":
+      - /url: https://albaniavisit.com/about/how-we-make-money/
+    - text: .
+  - paragraph:
+    - link "Privacy Policy":
+      - /url: /privacy
+    - text: "|"
+    - link "Terms of Service":
+      - /url: /terms
+    - text: "|"
+    - link "Travel Disclaimer":
+      - /url: /travel-disclaimer
+- paragraph:
+  - text: We use cookies to enhance your experience and analyze site traffic.
+  - link "Learn more":
+    - /url: /privacy
+- button "Reject cookies": Reject
+- button "Accept cookies": Accept
+```
