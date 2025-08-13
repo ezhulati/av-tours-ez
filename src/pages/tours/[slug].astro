@@ -92,7 +92,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   </style>
 
   <!-- Hero Section - Clean Mobile View -->
-  <section class="relative h-[70vh] md:h-screen max-h-[600px] md:max-h-[900px] min-h-[400px] md:min-h-[600px]">
+  <section data-testid="image-gallery" class="relative h-[70vh] md:h-screen max-h-[600px] md:max-h-[900px] min-h-[400px] md:min-h-[600px]">
     <!-- Hero Image Container -->
     <div class="absolute inset-0">
       <Image
@@ -132,6 +132,25 @@ const breadcrumbSchema = generateBreadcrumbSchema([
           </svg>
         </button>
       </>
+    )}
+
+    <!-- Gallery Indicators for Mobile -->
+    {tour.images.length > 1 && (
+      <div data-testid="gallery-indicators" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:hidden">
+        {tour.images.slice(0, 5).map((_, index) => (
+          <button
+            data-testid={index === 0 ? "gallery-indicator-active" : "gallery-indicator"}
+            data-index={index}
+            class={`w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-white w-6' : 'bg-white/50'}`}
+            aria-label={`View image ${index + 1}`}
+            onclick={`document.getElementById('hero-image').src = '${tour.images[index]?.url}'; 
+                     document.querySelectorAll('[data-testid*="gallery-indicator"]').forEach((el, i) => {
+                       el.setAttribute('data-testid', i === ${index} ? 'gallery-indicator-active' : 'gallery-indicator');
+                       el.className = i === ${index} ? 'w-2 h-2 rounded-full transition-all bg-white w-6' : 'w-2 h-2 rounded-full transition-all bg-white/50';
+                     });`}
+          />
+        ))}
+      </div>
     )}
 
     <!-- Mobile: Minimal Hero Content -->
@@ -707,7 +726,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   )}
 
   <!-- Mobile Sticky Booking Bar - Smart visibility based on scroll -->
-  <div id="sticky-cta" class="lg:hidden fixed bottom-16 md:bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg transform translate-y-full transition-transform duration-300">
+  <div id="sticky-cta" data-testid="mobile-booking-bar" class="lg:hidden fixed bottom-16 md:bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg transform translate-y-full transition-transform duration-300">
     <div class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-4">
         <div>

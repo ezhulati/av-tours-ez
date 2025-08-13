@@ -1,0 +1,171 @@
+# Page snapshot
+
+```yaml
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - navigation:
+    - link "AlbaniaVisit Discover the Unexpected":
+      - /url: /
+      - img
+      - text: AlbaniaVisit Discover the Unexpected
+    - button "Toggle mobile menu":
+      - img
+- main:
+  - img "Accursed Mountains"
+  - img "Albanian Riviera"
+  - img "Shala River"
+  - img "Gjeravica Peak Kosovo"
+  - img "Bay of Kotor"
+  - img "Lake Koman"
+  - text: "404"
+  - heading "Page Not Found" [level=1]
+  - paragraph: Sorry, we couldn't find the page you're looking for. But look at these beautiful destinations waiting to be explored!
+  - link "Go to Homepage":
+    - /url: /
+    - text: Go to Homepage
+    - img
+  - link "Browse All Tours":
+    - /url: /tours
+    - text: Browse All Tours
+    - img
+  - heading "Popular Destinations" [level=2]
+  - link "Albania":
+    - /url: /country/albania
+    - heading "Albania" [level=3]
+  - link "Kosovo":
+    - /url: /country/kosovo
+    - heading "Kosovo" [level=3]
+  - link "Montenegro":
+    - /url: /country/montenegro
+    - heading "Montenegro" [level=3]
+  - link "North Macedonia":
+    - /url: /country/macedonia
+    - heading "North Macedonia" [level=3]
+- navigation:
+  - link "Home":
+    - /url: /
+    - img
+    - text: Home
+  - link "Tours":
+    - /url: /tours
+    - img
+    - text: Tours
+  - link "Activities":
+    - /url: /category/adventure
+    - img
+    - text: Activities
+  - link "Destinations":
+    - /url: /country/albania
+    - img
+    - text: Destinations
+- contentinfo:
+  - text: Shtëpia shtuh-PEE-ah e eh shqiptarit shchip-TAR-eet është UHSH-tuh e eh mikut MEE-koot dhe dheh e eh Zotit ZOH-teet
+  - paragraph: "\"The house of an Albanian belongs to the guest and to God.\""
+  - paragraph: A centuries-old Albanian proverb rooted in the 15th-century Kanun code. It encapsulates the nation's legendary tradition of hospitality and generosity toward visitors. In Albanian culture, any guest — even a stranger or former enemy — is treated with profound honor, almost as if welcomed by God Himself. For travelers, this proverb offers reassurance that they will be greeted warmly and generously in Albania, reflecting a deeply ingrained cultural tradition of honoring and caring for every guest.
+  - heading "Essential Albanian Phrases" [level=3]
+  - paragraph: Faleminderit
+  - paragraph: Thank you
+  - paragraph: fa-leh-min-DEH-rit
+  - paragraph: Gëzuar
+  - paragraph: Cheers
+  - paragraph: guh-ZOO-ar
+  - paragraph: Sa bukur!
+  - paragraph: How beautiful!
+  - paragraph: sah BOO-koor!
+  - paragraph: Ju lutem
+  - paragraph: Please
+  - paragraph: yoo LOO-tem
+  - paragraph: Më falni
+  - paragraph: Excuse me / sorry
+  - paragraph: muh FAHL-nee
+  - paragraph: Po
+  - paragraph: "Yes"
+  - paragraph: poh
+  - paragraph: Jo
+  - paragraph: "No"
+  - paragraph: yoh
+  - paragraph: Përshëndetje
+  - paragraph: Hello
+  - paragraph: pur-shen-DET-yeh
+  - paragraph: Mirupafshim
+  - paragraph: Goodbye
+  - paragraph: mee-roo-PAHF-sheem
+  - img
+  - text: AlbaniaVisit Discover the Unexpected
+  - paragraph: Authentic adventures in Albania and the Balkans. Expert local guides, unforgettable experiences.
+  - heading "Quick Links" [level=3]
+  - list:
+    - listitem:
+      - link "All Tours":
+        - /url: /tours
+    - listitem:
+      - link "Adventure Tours":
+        - /url: /category/adventure
+    - listitem:
+      - link "Hiking Tours":
+        - /url: /category/hiking
+    - listitem:
+      - link "Sitemap":
+        - /url: /sitemap-index.xml
+  - heading "Destinations" [level=3]
+  - list:
+    - listitem:
+      - link "Albania":
+        - /url: /country/albania
+    - listitem:
+      - link "Kosovo":
+        - /url: /country/kosovo
+    - listitem:
+      - link "Montenegro":
+        - /url: /country/montenegro
+    - listitem:
+      - link "North Macedonia":
+        - /url: /country/macedonia
+  - heading "Contact" [level=3]
+  - img
+  - paragraph: tours@albaniavisit.com
+  - paragraph: Get in touch for inquiries
+  - img
+  - paragraph: Tirana, Albania
+  - paragraph: Our home base
+  - link "Facebook":
+    - /url: https://www.facebook.com/AlbaniaVisitOfficial/
+    - img
+  - link "Instagram":
+    - /url: https://www.instagram.com/albania_visit_/
+    - img
+  - link "YouTube":
+    - /url: https://www.youtube.com/@Albania-Visit
+    - img
+  - link "LinkedIn":
+    - /url: https://www.linkedin.com/company/albania-visit/
+    - img
+  - paragraph:
+    - text: © 2025
+    - link "AlbaniaVisit.com":
+      - /url: https://albaniavisit.com
+    - text: . All rights reserved. | Authentic Tours Since 2020 |
+    - link "Made in Albania":
+      - /url: https://enrizhulati.com
+  - paragraph:
+    - text: Clicking links on our site helps support our work.
+    - link "Learn more":
+      - /url: https://albaniavisit.com/about/how-we-make-money/
+    - text: .
+  - paragraph:
+    - link "Privacy Policy":
+      - /url: /privacy
+    - text: "|"
+    - link "Terms of Service":
+      - /url: /terms
+    - text: "|"
+    - link "Travel Disclaimer":
+      - /url: /travel-disclaimer
+- paragraph:
+  - text: We use cookies to enhance your experience and analyze site traffic.
+  - link "Learn more":
+    - /url: /privacy
+- button "Reject cookies": Reject
+- button "Accept cookies": Accept
+```

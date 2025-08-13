@@ -462,6 +462,7 @@ function FilterBarOptimized({
         
         {/* Mobile Toggle - Enhanced with ARIA */}
         <button
+          data-testid="filter-toggle"
           className="md:hidden w-full flex items-center justify-between min-h-[56px] pl-4 pr-6 py-3 text-left rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors touch-manipulation focus:outline-none focus:ring-2 focus:ring-accent/20"
           onClick={toggleFilters}
           aria-expanded={isOpen}
@@ -500,6 +501,7 @@ function FilterBarOptimized({
         <div 
           ref={filterContainerRef}
           id="filter-content"
+          data-testid="filter-panel"
           className={`${isOpen ? 'block animate-slide-down mt-6' : 'hidden'} md:block md:mt-0 space-y-4 md:space-y-0 md:flex md:items-center md:gap-4 md:flex-wrap`}
           role="group"
           aria-label="Filter options"

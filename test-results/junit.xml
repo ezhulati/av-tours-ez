@@ -1,2 +1,1322 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="0.768628">
+<testsuites id="" name="" tests="40" failures="30" skipped="0" errors="0" time="68.09895200000001">
+<testsuite name="mobile.spec.ts" timestamp="2025-08-13T05:52:06.122Z" hostname="chromium" tests="8" failures="6" skipped="0" time="85.949" errors="0">
+<testcase name="Mobile Experience › should have responsive navigation menu" classname="mobile.spec.ts" time="1.765">
+<failure message="mobile.spec.ts:6:3 should have responsive navigation menu" type="FAILURE">
+<![CDATA[  [chromium] › mobile.spec.ts:6:3 › Mobile Experience › should have responsive navigation menu ─────
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text("Tours")') resolved to 3 elements:
+        1) <a href="/tours" data-astro-source-loc="133:119" class="text-gray-700 hover:text-accent transition-colors relative group flex items-center" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro">…</a> aka locator('#main-header').getByText('Tours', { exact: true })
+        2) <a href="/tours" data-astro-source-loc="171:197" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]">↵View Tours↵</a> aka getByText('View Tours')
+        3) <a href="/tours" data-astro-source-loc="240:149" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation">…</a> aka getByRole('link', { name: 'Tours', exact: true })
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('nav a:has-text("Tours")')
+
+
+      15 |     
+      16 |     // Navigation links should be visible
+    > 17 |     await expect(page.locator('nav a:has-text("Tours")')).toBeVisible()
+         |                                                           ^
+      18 |     await expect(page.locator('nav a:has-text("About")')).toBeVisible()
+      19 |     await expect(page.locator('nav a:has-text("Contact")')).toBeVisible()
+      20 |   })
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should display tour cards in mobile layout" classname="mobile.spec.ts" time="1.864">
+</testcase>
+<testcase name="Mobile Experience › should have collapsible filters on mobile" classname="mobile.spec.ts" time="30.123">
+<failure message="mobile.spec.ts:39:3 should have collapsible filters on mobile" type="FAILURE">
+<![CDATA[  [chromium] › mobile.spec.ts:39:3 › Mobile Experience › should have collapsible filters on mobile ─
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Adventure")')
+
+
+      53 |     
+      54 |     // Apply a filter
+    > 55 |     await page.click('button:has-text("Adventure")')
+         |                ^
+      56 |     
+      57 |     // Filters should auto-collapse after applying
+      58 |     await expect(filterPanel).not.toBeVisible()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have touch-friendly booking button" classname="mobile.spec.ts" time="30.181">
+<failure message="mobile.spec.ts:61:3 should have touch-friendly booking button" type="FAILURE">
+<![CDATA[  [chromium] › mobile.spec.ts:61:3 › Mobile Experience › should have touch-friendly booking button ─
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.boundingBox: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Book Now")')
+
+
+      63 |     
+      64 |     const bookButton = page.locator('button:has-text("Book Now")')
+    > 65 |     const box = await bookButton.boundingBox()
+         |                                  ^
+      66 |     
+      67 |     // Button should be at least 44px tall (iOS touch target)
+      68 |     if (box) {
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized image gallery for mobile" classname="mobile.spec.ts" time="6.743">
+<failure message="mobile.spec.ts:79:3 should have optimized image gallery for mobile" type="FAILURE">
+<![CDATA[  [chromium] › mobile.spec.ts:79:3 › Mobile Experience › should have optimized image gallery for mobile 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="image-gallery"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="image-gallery"]')
+
+
+      82 |     // Gallery should use swipe navigation on mobile
+      83 |     const gallery = page.locator('[data-testid="image-gallery"]')
+    > 84 |     await expect(gallery).toBeVisible()
+         |                           ^
+      85 |     
+      86 |     // Check for swipe indicators
+      87 |     const indicators = page.locator('[data-testid="gallery-indicators"]')
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have sticky booking bar on mobile" classname="mobile.spec.ts" time="6.699">
+<failure message="mobile.spec.ts:98:3 should have sticky booking bar on mobile" type="FAILURE">
+<![CDATA[  [chromium] › mobile.spec.ts:98:3 › Mobile Experience › should have sticky booking bar on mobile ──
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="mobile-booking-bar"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="mobile-booking-bar"]')
+
+
+      104 |     // Booking bar should be sticky at bottom
+      105 |     const bookingBar = page.locator('[data-testid="mobile-booking-bar"]')
+    > 106 |     await expect(bookingBar).toBeVisible()
+          |                              ^
+      107 |     
+      108 |     const box = await bookingBar.boundingBox()
+      109 |     const viewport = page.viewportSize()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized font sizes for mobile" classname="mobile.spec.ts" time="1.798">
+</testcase>
+<testcase name="Mobile Experience › should handle offline gracefully" classname="mobile.spec.ts" time="6.776">
+<failure message="mobile.spec.ts:139:3 should handle offline gracefully" type="FAILURE">
+<![CDATA[  [chromium] › mobile.spec.ts:139:3 › Mobile Experience › should handle offline gracefully ─────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('text=/offline|connection/i')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('text=/offline|connection/i')
+
+
+      147 |     
+      148 |     // Should show offline message
+    > 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })
+          |                                                              ^
+      150 |     
+      151 |     // Go back online
+      152 |     await context.setOffline(false)
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="mobile.spec.ts" timestamp="2025-08-13T05:52:06.122Z" hostname="firefox" tests="8" failures="6" skipped="0" time="81.432" errors="0">
+<testcase name="Mobile Experience › should have responsive navigation menu" classname="mobile.spec.ts" time="1.055">
+<failure message="mobile.spec.ts:6:3 should have responsive navigation menu" type="FAILURE">
+<![CDATA[  [firefox] › mobile.spec.ts:6:3 › Mobile Experience › should have responsive navigation menu ──────
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text("Tours")') resolved to 3 elements:
+        1) <a href="/tours" data-astro-source-loc="133:119" class="text-gray-700 hover:text-accent transition-colors relative group flex items-center" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro">…</a> aka locator('#main-header').getByText('Tours', { exact: true })
+        2) <a href="/tours" data-astro-source-loc="171:197" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]">↵View Tours↵</a> aka getByText('View Tours')
+        3) <a href="/tours" data-astro-source-loc="240:149" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation">…</a> aka getByRole('link', { name: 'Tours', exact: true })
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('nav a:has-text("Tours")')
+
+
+      15 |     
+      16 |     // Navigation links should be visible
+    > 17 |     await expect(page.locator('nav a:has-text("Tours")')).toBeVisible()
+         |                                                           ^
+      18 |     await expect(page.locator('nav a:has-text("About")')).toBeVisible()
+      19 |     await expect(page.locator('nav a:has-text("Contact")')).toBeVisible()
+      20 |   })
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should display tour cards in mobile layout" classname="mobile.spec.ts" time="1.12">
+</testcase>
+<testcase name="Mobile Experience › should have collapsible filters on mobile" classname="mobile.spec.ts" time="30.117">
+<failure message="mobile.spec.ts:39:3 should have collapsible filters on mobile" type="FAILURE">
+<![CDATA[  [firefox] › mobile.spec.ts:39:3 › Mobile Experience › should have collapsible filters on mobile ──
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Adventure")')
+
+
+      53 |     
+      54 |     // Apply a filter
+    > 55 |     await page.click('button:has-text("Adventure")')
+         |                ^
+      56 |     
+      57 |     // Filters should auto-collapse after applying
+      58 |     await expect(filterPanel).not.toBeVisible()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have touch-friendly booking button" classname="mobile.spec.ts" time="30.185">
+<failure message="mobile.spec.ts:61:3 should have touch-friendly booking button" type="FAILURE">
+<![CDATA[  [firefox] › mobile.spec.ts:61:3 › Mobile Experience › should have touch-friendly booking button ──
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.boundingBox: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Book Now")')
+
+
+      63 |     
+      64 |     const bookButton = page.locator('button:has-text("Book Now")')
+    > 65 |     const box = await bookButton.boundingBox()
+         |                                  ^
+      66 |     
+      67 |     // Button should be at least 44px tall (iOS touch target)
+      68 |     if (box) {
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized image gallery for mobile" classname="mobile.spec.ts" time="5.696">
+<failure message="mobile.spec.ts:79:3 should have optimized image gallery for mobile" type="FAILURE">
+<![CDATA[  [firefox] › mobile.spec.ts:79:3 › Mobile Experience › should have optimized image gallery for mobile 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="image-gallery"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="image-gallery"]')
+
+
+      82 |     // Gallery should use swipe navigation on mobile
+      83 |     const gallery = page.locator('[data-testid="image-gallery"]')
+    > 84 |     await expect(gallery).toBeVisible()
+         |                           ^
+      85 |     
+      86 |     // Check for swipe indicators
+      87 |     const indicators = page.locator('[data-testid="gallery-indicators"]')
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have sticky booking bar on mobile" classname="mobile.spec.ts" time="5.873">
+<failure message="mobile.spec.ts:98:3 should have sticky booking bar on mobile" type="FAILURE">
+<![CDATA[  [firefox] › mobile.spec.ts:98:3 › Mobile Experience › should have sticky booking bar on mobile ───
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="mobile-booking-bar"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="mobile-booking-bar"]')
+
+
+      104 |     // Booking bar should be sticky at bottom
+      105 |     const bookingBar = page.locator('[data-testid="mobile-booking-bar"]')
+    > 106 |     await expect(bookingBar).toBeVisible()
+          |                              ^
+      107 |     
+      108 |     const box = await bookingBar.boundingBox()
+      109 |     const viewport = page.viewportSize()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized font sizes for mobile" classname="mobile.spec.ts" time="1.22">
+</testcase>
+<testcase name="Mobile Experience › should handle offline gracefully" classname="mobile.spec.ts" time="6.166">
+<failure message="mobile.spec.ts:139:3 should handle offline gracefully" type="FAILURE">
+<![CDATA[  [firefox] › mobile.spec.ts:139:3 › Mobile Experience › should handle offline gracefully ──────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('text=/offline|connection/i')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('text=/offline|connection/i')
+
+
+      147 |     
+      148 |     // Should show offline message
+    > 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })
+          |                                                              ^
+      150 |     
+      151 |     // Go back online
+      152 |     await context.setOffline(false)
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="mobile.spec.ts" timestamp="2025-08-13T05:52:06.122Z" hostname="webkit" tests="8" failures="6" skipped="0" time="81.189" errors="0">
+<testcase name="Mobile Experience › should have responsive navigation menu" classname="mobile.spec.ts" time="1.031">
+<failure message="mobile.spec.ts:6:3 should have responsive navigation menu" type="FAILURE">
+<![CDATA[  [webkit] › mobile.spec.ts:6:3 › Mobile Experience › should have responsive navigation menu ───────
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text("Tours")') resolved to 3 elements:
+        1) <a href="/tours" data-astro-source-loc="133:119" class="text-gray-700 hover:text-accent transition-colors relative group flex items-center" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro">…</a> aka locator('#main-header').getByText('Tours', { exact: true })
+        2) <a href="/tours" data-astro-source-loc="171:197" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]">↵View Tours↵</a> aka getByText('View Tours')
+        3) <a href="/tours" data-astro-source-loc="240:149" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation">…</a> aka getByRole('link', { name: 'Tours', exact: true })
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('nav a:has-text("Tours")')
+
+
+      15 |     
+      16 |     // Navigation links should be visible
+    > 17 |     await expect(page.locator('nav a:has-text("Tours")')).toBeVisible()
+         |                                                           ^
+      18 |     await expect(page.locator('nav a:has-text("About")')).toBeVisible()
+      19 |     await expect(page.locator('nav a:has-text("Contact")')).toBeVisible()
+      20 |   })
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should display tour cards in mobile layout" classname="mobile.spec.ts" time="1.19">
+</testcase>
+<testcase name="Mobile Experience › should have collapsible filters on mobile" classname="mobile.spec.ts" time="30.126">
+<failure message="mobile.spec.ts:39:3 should have collapsible filters on mobile" type="FAILURE">
+<![CDATA[  [webkit] › mobile.spec.ts:39:3 › Mobile Experience › should have collapsible filters on mobile ───
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Adventure")')
+
+
+      53 |     
+      54 |     // Apply a filter
+    > 55 |     await page.click('button:has-text("Adventure")')
+         |                ^
+      56 |     
+      57 |     // Filters should auto-collapse after applying
+      58 |     await expect(filterPanel).not.toBeVisible()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have touch-friendly booking button" classname="mobile.spec.ts" time="30.188">
+<failure message="mobile.spec.ts:61:3 should have touch-friendly booking button" type="FAILURE">
+<![CDATA[  [webkit] › mobile.spec.ts:61:3 › Mobile Experience › should have touch-friendly booking button ───
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.boundingBox: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Book Now")')
+
+
+      63 |     
+      64 |     const bookButton = page.locator('button:has-text("Book Now")')
+    > 65 |     const box = await bookButton.boundingBox()
+         |                                  ^
+      66 |     
+      67 |     // Button should be at least 44px tall (iOS touch target)
+      68 |     if (box) {
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized image gallery for mobile" classname="mobile.spec.ts" time="5.785">
+<failure message="mobile.spec.ts:79:3 should have optimized image gallery for mobile" type="FAILURE">
+<![CDATA[  [webkit] › mobile.spec.ts:79:3 › Mobile Experience › should have optimized image gallery for mobile 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="image-gallery"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="image-gallery"]')
+
+
+      82 |     // Gallery should use swipe navigation on mobile
+      83 |     const gallery = page.locator('[data-testid="image-gallery"]')
+    > 84 |     await expect(gallery).toBeVisible()
+         |                           ^
+      85 |     
+      86 |     // Check for swipe indicators
+      87 |     const indicators = page.locator('[data-testid="gallery-indicators"]')
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have sticky booking bar on mobile" classname="mobile.spec.ts" time="5.717">
+<failure message="mobile.spec.ts:98:3 should have sticky booking bar on mobile" type="FAILURE">
+<![CDATA[  [webkit] › mobile.spec.ts:98:3 › Mobile Experience › should have sticky booking bar on mobile ────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="mobile-booking-bar"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="mobile-booking-bar"]')
+
+
+      104 |     // Booking bar should be sticky at bottom
+      105 |     const bookingBar = page.locator('[data-testid="mobile-booking-bar"]')
+    > 106 |     await expect(bookingBar).toBeVisible()
+          |                              ^
+      107 |     
+      108 |     const box = await bookingBar.boundingBox()
+      109 |     const viewport = page.viewportSize()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized font sizes for mobile" classname="mobile.spec.ts" time="1.045">
+</testcase>
+<testcase name="Mobile Experience › should handle offline gracefully" classname="mobile.spec.ts" time="6.107">
+<failure message="mobile.spec.ts:139:3 should handle offline gracefully" type="FAILURE">
+<![CDATA[  [webkit] › mobile.spec.ts:139:3 › Mobile Experience › should handle offline gracefully ───────────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('text=/offline|connection/i')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('text=/offline|connection/i')
+
+
+      147 |     
+      148 |     // Should show offline message
+    > 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })
+          |                                                              ^
+      150 |     
+      151 |     // Go back online
+      152 |     await context.setOffline(false)
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="mobile.spec.ts" timestamp="2025-08-13T05:52:06.122Z" hostname="Mobile Chrome" tests="8" failures="6" skipped="0" time="80.908" errors="0">
+<testcase name="Mobile Experience › should have responsive navigation menu" classname="mobile.spec.ts" time="0.917">
+<failure message="mobile.spec.ts:6:3 should have responsive navigation menu" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › mobile.spec.ts:6:3 › Mobile Experience › should have responsive navigation menu 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text("Tours")') resolved to 3 elements:
+        1) <a href="/tours" data-astro-source-loc="133:119" class="text-gray-700 hover:text-accent transition-colors relative group flex items-center" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro">…</a> aka locator('#main-header').getByText('Tours', { exact: true })
+        2) <a href="/tours" data-astro-source-loc="171:197" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]">↵View Tours↵</a> aka getByText('View Tours')
+        3) <a href="/tours" data-astro-source-loc="240:149" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation">…</a> aka getByRole('link', { name: 'Tours', exact: true })
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('nav a:has-text("Tours")')
+
+
+      15 |     
+      16 |     // Navigation links should be visible
+    > 17 |     await expect(page.locator('nav a:has-text("Tours")')).toBeVisible()
+         |                                                           ^
+      18 |     await expect(page.locator('nav a:has-text("About")')).toBeVisible()
+      19 |     await expect(page.locator('nav a:has-text("Contact")')).toBeVisible()
+      20 |   })
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should display tour cards in mobile layout" classname="mobile.spec.ts" time="1.182">
+</testcase>
+<testcase name="Mobile Experience › should have collapsible filters on mobile" classname="mobile.spec.ts" time="30.12">
+<failure message="mobile.spec.ts:39:3 should have collapsible filters on mobile" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › mobile.spec.ts:39:3 › Mobile Experience › should have collapsible filters on mobile 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Adventure")')
+
+
+      53 |     
+      54 |     // Apply a filter
+    > 55 |     await page.click('button:has-text("Adventure")')
+         |                ^
+      56 |     
+      57 |     // Filters should auto-collapse after applying
+      58 |     await expect(filterPanel).not.toBeVisible()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have touch-friendly booking button" classname="mobile.spec.ts" time="30.185">
+<failure message="mobile.spec.ts:61:3 should have touch-friendly booking button" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › mobile.spec.ts:61:3 › Mobile Experience › should have touch-friendly booking button 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.boundingBox: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Book Now")')
+
+
+      63 |     
+      64 |     const bookButton = page.locator('button:has-text("Book Now")')
+    > 65 |     const box = await bookButton.boundingBox()
+         |                                  ^
+      66 |     
+      67 |     // Button should be at least 44px tall (iOS touch target)
+      68 |     if (box) {
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized image gallery for mobile" classname="mobile.spec.ts" time="5.808">
+<failure message="mobile.spec.ts:79:3 should have optimized image gallery for mobile" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › mobile.spec.ts:79:3 › Mobile Experience › should have optimized image gallery for mobile 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="image-gallery"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="image-gallery"]')
+
+
+      82 |     // Gallery should use swipe navigation on mobile
+      83 |     const gallery = page.locator('[data-testid="image-gallery"]')
+    > 84 |     await expect(gallery).toBeVisible()
+         |                           ^
+      85 |     
+      86 |     // Check for swipe indicators
+      87 |     const indicators = page.locator('[data-testid="gallery-indicators"]')
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have sticky booking bar on mobile" classname="mobile.spec.ts" time="5.738">
+<failure message="mobile.spec.ts:98:3 should have sticky booking bar on mobile" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › mobile.spec.ts:98:3 › Mobile Experience › should have sticky booking bar on mobile 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="mobile-booking-bar"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="mobile-booking-bar"]')
+
+
+      104 |     // Booking bar should be sticky at bottom
+      105 |     const bookingBar = page.locator('[data-testid="mobile-booking-bar"]')
+    > 106 |     await expect(bookingBar).toBeVisible()
+          |                              ^
+      107 |     
+      108 |     const box = await bookingBar.boundingBox()
+      109 |     const viewport = page.viewportSize()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized font sizes for mobile" classname="mobile.spec.ts" time="1.02">
+</testcase>
+<testcase name="Mobile Experience › should handle offline gracefully" classname="mobile.spec.ts" time="5.938">
+<failure message="mobile.spec.ts:139:3 should handle offline gracefully" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › mobile.spec.ts:139:3 › Mobile Experience › should handle offline gracefully ────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('text=/offline|connection/i')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('text=/offline|connection/i')
+
+
+      147 |     
+      148 |     // Should show offline message
+    > 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })
+          |                                                              ^
+      150 |     
+      151 |     // Go back online
+      152 |     await context.setOffline(false)
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="mobile.spec.ts" timestamp="2025-08-13T05:52:06.122Z" hostname="Mobile Safari" tests="8" failures="6" skipped="0" time="81.025" errors="0">
+<testcase name="Mobile Experience › should have responsive navigation menu" classname="mobile.spec.ts" time="1.032">
+<failure message="mobile.spec.ts:6:3 should have responsive navigation menu" type="FAILURE">
+<![CDATA[  [Mobile Safari] › mobile.spec.ts:6:3 › Mobile Experience › should have responsive navigation menu 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('nav a:has-text("Tours")') resolved to 3 elements:
+        1) <a href="/tours" data-astro-source-loc="133:119" class="text-gray-700 hover:text-accent transition-colors relative group flex items-center" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro">…</a> aka locator('#main-header').getByText('Tours', { exact: true })
+        2) <a href="/tours" data-astro-source-loc="171:197" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="inline-flex items-center justify-center bg-accent text-white p-3 rounded-full hover:bg-accent-600 transition-colors font-semibold whitespace-nowrap min-h-[40px]">↵View Tours↵</a> aka getByText('View Tours')
+        3) <a href="/tours" data-astro-source-loc="240:149" data-astro-source-file="/Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/src/layouts/BaseLayout.astro" class="flex flex-col items-center justify-center gap-1 text-gray-600 hover:text-accent transition-colors touch-manipulation">…</a> aka getByRole('link', { name: 'Tours', exact: true })
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('nav a:has-text("Tours")')
+
+
+      15 |     
+      16 |     // Navigation links should be visible
+    > 17 |     await expect(page.locator('nav a:has-text("Tours")')).toBeVisible()
+         |                                                           ^
+      18 |     await expect(page.locator('nav a:has-text("About")')).toBeVisible()
+      19 |     await expect(page.locator('nav a:has-text("Contact")')).toBeVisible()
+      20 |   })
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:17:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-f6c69--responsive-navigation-menu-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should display tour cards in mobile layout" classname="mobile.spec.ts" time="1.091">
+</testcase>
+<testcase name="Mobile Experience › should have collapsible filters on mobile" classname="mobile.spec.ts" time="30.113">
+<failure message="mobile.spec.ts:39:3 should have collapsible filters on mobile" type="FAILURE">
+<![CDATA[  [Mobile Safari] › mobile.spec.ts:39:3 › Mobile Experience › should have collapsible filters on mobile 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Adventure")')
+
+
+      53 |     
+      54 |     // Apply a filter
+    > 55 |     await page.click('button:has-text("Adventure")')
+         |                ^
+      56 |     
+      57 |     // Filters should auto-collapse after applying
+      58 |     await expect(filterPanel).not.toBeVisible()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:55:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-b430a-llapsible-filters-on-mobile-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have touch-friendly booking button" classname="mobile.spec.ts" time="30.176">
+<failure message="mobile.spec.ts:61:3 should have touch-friendly booking button" type="FAILURE">
+<![CDATA[  [Mobile Safari] › mobile.spec.ts:61:3 › Mobile Experience › should have touch-friendly booking button 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.boundingBox: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Book Now")')
+
+
+      63 |     
+      64 |     const bookButton = page.locator('button:has-text("Book Now")')
+    > 65 |     const box = await bookButton.boundingBox()
+         |                                  ^
+      66 |     
+      67 |     // Button should be at least 44px tall (iOS touch target)
+      68 |     if (box) {
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:65:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-addb1-uch-friendly-booking-button-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized image gallery for mobile" classname="mobile.spec.ts" time="5.732">
+<failure message="mobile.spec.ts:79:3 should have optimized image gallery for mobile" type="FAILURE">
+<![CDATA[  [Mobile Safari] › mobile.spec.ts:79:3 › Mobile Experience › should have optimized image gallery for mobile 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="image-gallery"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="image-gallery"]')
+
+
+      82 |     // Gallery should use swipe navigation on mobile
+      83 |     const gallery = page.locator('[data-testid="image-gallery"]')
+    > 84 |     await expect(gallery).toBeVisible()
+         |                           ^
+      85 |     
+      86 |     // Check for swipe indicators
+      87 |     const indicators = page.locator('[data-testid="gallery-indicators"]')
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:84:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-ae904-ed-image-gallery-for-mobile-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have sticky booking bar on mobile" classname="mobile.spec.ts" time="5.79">
+<failure message="mobile.spec.ts:98:3 should have sticky booking bar on mobile" type="FAILURE">
+<![CDATA[  [Mobile Safari] › mobile.spec.ts:98:3 › Mobile Experience › should have sticky booking bar on mobile 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('[data-testid="mobile-booking-bar"]')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="mobile-booking-bar"]')
+
+
+      104 |     // Booking bar should be sticky at bottom
+      105 |     const bookingBar = page.locator('[data-testid="mobile-booking-bar"]')
+    > 106 |     await expect(bookingBar).toBeVisible()
+          |                              ^
+      107 |     
+      108 |     const box = await bookingBar.boundingBox()
+      109 |     const viewport = page.viewportSize()
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:106:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-s-16e44-ticky-booking-bar-on-mobile-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mobile Experience › should have optimized font sizes for mobile" classname="mobile.spec.ts" time="1.099">
+</testcase>
+<testcase name="Mobile Experience › should handle offline gracefully" classname="mobile.spec.ts" time="5.992">
+<failure message="mobile.spec.ts:139:3 should handle offline gracefully" type="FAILURE">
+<![CDATA[  [Mobile Safari] › mobile.spec.ts:139:3 › Mobile Experience › should handle offline gracefully ────
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('text=/offline|connection/i')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('text=/offline|connection/i')
+
+
+      147 |     
+      148 |     // Should show offline message
+    > 149 |     await expect(page.locator('text=/offline|connection/i')).toBeVisible({ timeout: 5000 })
+          |                                                              ^
+      150 |     
+      151 |     // Go back online
+      152 |     await context.setOffline(false)
+        at /Users/mbp-ez/Desktop/AI Library/Apps/AV Tours EZ/tests/e2e/mobile.spec.ts:149:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|mobile-Mobile-Experience-should-handle-offline-gracefully-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
 </testsuites>
