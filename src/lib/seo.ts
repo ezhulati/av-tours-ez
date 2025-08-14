@@ -22,6 +22,7 @@ export function generateTouristTripSchema(tour: TourDetailDTO, url: string, incl
       lowPrice: tour.priceMin,
       highPrice: tour.priceMax || tour.priceMin,
       priceCurrency: tour.currency || 'EUR',
+      offerCount: 1,
       availability: 'https://schema.org/InStock',
       url: tour.affiliateUrl || url,
       validFrom: new Date().toISOString(),

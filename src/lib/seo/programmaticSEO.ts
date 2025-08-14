@@ -393,7 +393,8 @@ export function generateSEOCollectionSchema(route: SEORoute, tours: any[], total
             '@type': 'AggregateOffer',
             'priceCurrency': 'EUR',
             'lowPrice': tour.priceMin,
-            'highPrice': tour.priceMax || tour.priceMin
+            'highPrice': tour.priceMax || tour.priceMin,
+            'offerCount': 1
           } : undefined
         }
       }))
