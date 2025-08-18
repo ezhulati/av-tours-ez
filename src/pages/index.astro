@@ -8,6 +8,7 @@ import { getHomepageHeroImages } from '@/data/heroImages'
 import HeroSlideshowOptimized from '@/components/HeroSlideshowOptimized.astro'
 import TourCardOptimized from '@/components/tours/TourCardOptimized'
 import { Image } from 'astro:assets'
+import CloudinaryImage from '@/components/CloudinaryAstroImage.astro'
 
 const featuredTours = await getFeaturedTours(6)
 const totalTourCount = await getTotalTourCount()
@@ -198,14 +199,14 @@ const breadcrumbSchema = generateBreadcrumbSchema([
         <a href="/country/albania" class="group">
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
-            <Image 
+            <CloudinaryImage 
               src="/Assets/Albania/Accursed_Mountains.jpeg" 
               alt="Albania - Accursed Mountains"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
               width={400}
               height={320}
-              format="webp"
+              quality="auto:best"
             />
             <div class="absolute bottom-6 left-6 z-20 text-white">
               <h3 class="text-3xl font-bold mb-1">Albania</h3>
@@ -222,14 +223,14 @@ const breadcrumbSchema = generateBreadcrumbSchema([
         <a href="/country/kosovo" class="group">
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
-            <Image 
+            <CloudinaryImage 
               src="/Assets/Kosovo/Gjeravica_Kosovo_336042834.jpeg" 
               alt="Kosovo - Gjeravica Peak"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
               width={400}
               height={320}
-              format="webp"
+              quality="auto:best"
             />
             <div class="absolute bottom-6 left-6 z-20 text-white">
               <h3 class="text-3xl font-bold mb-1">Kosovo</h3>
@@ -246,14 +247,14 @@ const breadcrumbSchema = generateBreadcrumbSchema([
         <a href="/country/macedonia" class="group">
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
-            <Image 
+            <CloudinaryImage 
               src="/Assets/North Macedonia/North Macedonia_456949808.jpeg" 
               alt="North Macedonia"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
               width={400}
               height={320}
-              format="webp"
+              quality="auto:best"
             />
             <div class="absolute bottom-6 left-6 z-20 text-white">
               <h3 class="text-3xl font-bold mb-1">Macedonia</h3>
@@ -270,14 +271,14 @@ const breadcrumbSchema = generateBreadcrumbSchema([
         <a href="/country/montenegro" class="group">
           <div class="relative h-80 rounded-2xl overflow-hidden shadow-xl">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
-            <Image 
+            <CloudinaryImage 
               src="/Assets/Montenegro/Kotor Montenegro_123711552.jpeg" 
               alt="Montenegro - Bay of Kotor"
               class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
               loading="lazy"
               width={400}
               height={320}
-              format="webp"
+              quality="auto:best"
             />
             <div class="absolute bottom-6 left-6 z-20 text-white">
               <h3 class="text-3xl font-bold mb-1">Montenegro</h3>

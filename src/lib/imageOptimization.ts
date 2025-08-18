@@ -30,6 +30,14 @@ export function getOptimizedImageUrl(
   originalUrl: string,
   options: ImageOptimizationOptions = {}
 ): string {
+  // If it's a local image path, return it as-is in development
+  // Weserv.nl cannot access localhost URLs
+  if (originalUrl.startsWith('/')) {
+    // In production, this would work with the actual domain
+    // For now, just return the original URL
+    return originalUrl
+  }
+  
   // Default optimization settings for travel website
   const defaultOptions = {
     quality: 'auto:best',
@@ -41,8 +49,8 @@ export function getOptimizedImageUrl(
   
   const opts = { ...defaultOptions, ...options }
   
-  // Build Weserv.nl URL with parameters
-  const baseUrl = 'https://images.weserv.nl/'
+  // Build Weserv.nl URL with parameters for external images
+  const weservUrl = 'https://images.weserv.nl/'
   const params = new URLSearchParams()
   
   // Set the source URL
@@ -89,7 +97,7 @@ export function getOptimizedImageUrl(
   // Cache control (-1 = no expiry)
   params.set('n', '-1')
   
-  return `${baseUrl}?${params.toString()}`
+  return `${weservUrl}?${params.toString()}`
 }
 
 /**
