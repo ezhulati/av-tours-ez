@@ -19,25 +19,17 @@ interface ImageOptimizationOptions {
   enhance?: boolean
 }
 
-// Using Weserv.nl - FREE image optimization service (no signup required!)
-// Documentation: https://images.weserv.nl/docs/
+// Using Cloudinary for superior image optimization
+// Fetch feature enabled for external URL transformation
 
 /**
- * Generate optimized image URL using Weserv.nl
- * FREE service with unlimited usage, no API key needed
+ * Generate optimized image URL using Cloudinary
+ * Automatic format selection, quality optimization, and CDN delivery
  */
 export function getOptimizedImageUrl(
   originalUrl: string,
   options: ImageOptimizationOptions = {}
 ): string {
-  // If it's a local image path, return it as-is in development
-  // Weserv.nl cannot access localhost URLs
-  if (originalUrl.startsWith('/')) {
-    // In production, this would work with the actual domain
-    // For now, just return the original URL
-    return originalUrl
-  }
-  
   // Default optimization settings for travel website
   const defaultOptions = {
     quality: 'auto:best',
@@ -49,55 +41,51 @@ export function getOptimizedImageUrl(
   
   const opts = { ...defaultOptions, ...options }
   
-  // Build Weserv.nl URL with parameters for external images
-  const weservUrl = 'https://images.weserv.nl/'
-  const params = new URLSearchParams()
+  // Handle local images - construct full URL for production
+  let imageUrl = originalUrl
+  if (originalUrl.startsWith('/')) {
+    // Use production URL for Cloudinary to fetch
+    imageUrl = `https://tours.albaniavisit.com${originalUrl}`
+  }
   
-  // Set the source URL
-  params.set('url', originalUrl)
+  // Build Cloudinary URL with transformations
+  const cloudName = 'dwnmuolg8'
+  const transformations = []
   
   // Size parameters
-  if (opts.width) {
-    params.set('w', opts.width.toString())
-  }
-  if (opts.height) {
-    params.set('h', opts.height.toString())
-  }
-  
-  // Quality (0-100, or use default 85 for 'auto:best')
-  const quality = opts.quality === 'auto:best' ? '90' :
-                  opts.quality === 'auto:good' ? '80' :
-                  opts.quality === 'auto:eco' ? '60' :
-                  typeof opts.quality === 'number' ? opts.quality.toString() : '85'
-  params.set('q', quality)
-  
-  // Format conversion
-  if (opts.format === 'auto') {
-    params.set('output', 'webp') // WebP for best compression
-  } else if (opts.format) {
-    params.set('output', opts.format)
+  if (opts.width && opts.height) {
+    transformations.push(`c_fill,w_${opts.width},h_${opts.height},g_auto`)
+  } else if (opts.width) {
+    transformations.push(`w_${opts.width},c_limit`)
+  } else if (opts.height) {
+    transformations.push(`h_${opts.height},c_limit`)
   }
   
-  // Enhancement filters
+  // Quality
+  const quality = opts.quality === 'auto:best' ? 'auto:best' :
+                  opts.quality === 'auto:good' ? 'auto:good' :
+                  opts.quality === 'auto:eco' ? 'auto:eco' :
+                  typeof opts.quality === 'number' ? opts.quality : 'auto'
+  transformations.push(`q_${quality}`)
+  
+  // Format
+  transformations.push(`f_${opts.format || 'auto'}`)
+  
+  // Enhancement
   if (opts.enhance) {
-    params.set('af', '') // Auto filter (enhances colors/contrast)
-    params.set('sharp', '1') // Sharpen image
+    transformations.push('e_auto_brightness')
+    transformations.push('e_auto_color')
   }
-  
-  // Progressive/interlaced loading
-  params.set('il', '') // Interlace for progressive loading
   
   // Blur for placeholder
   if (opts.blur) {
-    params.set('blur', '20')
-    params.set('w', '50') // Small size for placeholder
-    params.set('q', '30') // Low quality for placeholder
+    transformations.push('e_blur:1000')
+    transformations.push('w_50')
+    transformations.push('q_30')
   }
   
-  // Cache control (-1 = no expiry)
-  params.set('n', '-1')
-  
-  return `${weservUrl}?${params.toString()}`
+  const transformation = transformations.join(',')
+  return `https://res.cloudinary.com/${cloudName}/image/fetch/${transformation}/${encodeURIComponent(imageUrl)}`
 }
 
 /**
