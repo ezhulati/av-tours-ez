@@ -1,0 +1,367 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch Cultural & UNESCO tours (tours mentioning cultural sites, UNESCO, heritage, history)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .or('title.ilike.%unesco%,title.ilike.%cultural%,title.ilike.%heritage%,title.ilike.%berat%,title.ilike.%gjirokaster%,title.ilike.%butrint%,title.ilike.%castle%,title.ilike.%museum%,title.ilike.%historical%,title.ilike.%monastery%,title.ilike.%ancient%,title.ilike.%ottoman%')
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Cultural & UNESCO tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Cultural UNESCO tours Albania" search query
+const title = 'Cultural & UNESCO Tours Albania 2025 | Heritage Adventures'
+const description = 'Explore Albania\'s rich cultural heritage with UNESCO World Heritage tours. Visit Berat, Gjirokaster, Butrint ancient ruins, Ottoman castles, and historic sites with expert local guides.'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/cultural-unesco'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Albanian Cultural & UNESCO Tour Packages',
+  description: 'Guided cultural tours exploring Albania\'s UNESCO World Heritage sites and historical treasures',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.slice(0, 10).map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      },
+      touristType: 'Cultural, Historical, Educational',
+      itinerary: {
+        '@type': 'ItemList',
+        numberOfItems: 1,
+        itemListElement: {
+          '@type': 'TouristAttraction',
+          name: 'Albanian UNESCO Sites',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'AL'
+          }
+        }
+      }
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/24_lekuresi_castle_saranda_albaniavisit.com_-1024x683-cce863b9.webp', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Berat UNESCO World Heritage Site - City of a Thousand Windows"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Cultural & UNESCO Tours Albania | 2,500 Years of History
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Discover Albania's extraordinary cultural heritage through UNESCO World Heritage sites, 
+          medieval castles, Ottoman architecture, and ancient ruins. From Berat's thousand windows 
+          to Butrint's Roman theaters - explore 2,500 years of layered civilizations with expert guides.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Albanian Cultural & UNESCO Tours?</h2>
+      
+      <div class="bg-amber-50 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-semibold mb-3">🏛️ Three UNESCO World Heritage Sites</h3>
+        <p class="text-gray-700 mb-4">
+          Albania boasts 4 UNESCO World Heritage sites within easy reach: Berat (Ottoman town), 
+          Gjirokaster (stone city), Butrint (ancient ruins), and the Natural Heritage Ohrid Lake region. 
+          Few countries offer such concentrated historical richness in such a compact area.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Layers of Civilizations</h3>
+          <p class="text-gray-600">
+            Experience 2,500 years of continuous history - from Illyrian tribes to Greek colonies, 
+            Roman cities, Byzantine churches, Ottoman mosques, and communist monuments. 
+            Each era left its architectural and cultural mark.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Perfectly Preserved Medieval Towns</h3>
+          <p class="text-gray-600">
+            Walk cobblestone streets untouched by time. Berat's "City of a Thousand Windows" 
+            and Gjirokaster's stone houses offer authentic medieval experiences 
+            without the crowds of Western European destinations.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Living Cultural Heritage</h3>
+          <p class="text-gray-600">
+            These aren't museum pieces - they're living cities where families have resided 
+            for generations. Experience authentic Albanian culture, traditional crafts, 
+            and time-honored hospitality in working historical neighborhoods.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Expert Local Interpretation</h3>
+          <p class="text-gray-600">
+            Our passionate local guides bring history to life with stories, legends, 
+            and insights you won't find in guidebooks. Understand the complex layers 
+            of Albanian identity shaped by diverse cultural influences.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Albania's Cultural Treasures</h2>
+      
+      <div class="space-y-6 mb-8">
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏛️</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Berat - "City of a Thousand Windows" (UNESCO)</h4>
+              <p class="text-gray-600 mb-2">
+                Over 2,400 years old, Berat showcases the most beautiful Ottoman architecture in the Balkans. 
+                White houses with distinctive windows cascade down hillsides, while the hilltop castle 
+                contains a living neighborhood with Byzantine churches.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• 13th-century Berat Castle with panoramic valley views</li>
+                <li>• Onufri National Iconographic Museum with medieval frescoes</li>
+                <li>• Traditional neighborhoods: Mangalem and Gorica quarters</li>
+                <li>• Wine tasting at historic Alpeta Winery</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏰</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Gjirokaster - "Stone City" (UNESCO)</h4>
+              <p class="text-gray-600 mb-2">
+                The most spectacular fortress city in the Balkans, with imposing stone houses 
+                and a massive castle overlooking the Drinos Valley. Birthplace of Nobel Prize winner 
+                Ismail Kadare and Communist dictator Enver Hoxha.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• 12th-century Gjirokaster Castle and military museum</li>
+                <li>• Ottoman-era bazaar with traditional crafts workshops</li>
+                <li>• Ethnographic Museum in a typical stone house</li>
+                <li>• Cold War tunnel system beneath the castle</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏺</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Butrint National Park - Ancient Ruins (UNESCO)</h4>
+              <p class="text-gray-600 mb-2">
+                One of Europe's most important archaeological sites, inhabited continuously 
+                from prehistoric times through the Ottoman period. Greek theater, Roman baths, 
+                Byzantine churches, and Venetian fortifications in a pristine natural setting.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• 4th-century BC Greek theater still used for performances</li>
+                <li>• Roman villa with intricate floor mosaics</li>
+                <li>• 6th-century Byzantine basilica and baptistery</li>
+                <li>• Venetian fortifications overlooking Lake Butrint</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏛️</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Additional Cultural Highlights</h4>
+              <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
+                <ul class="space-y-1">
+                  <li>• <strong>Kruja Castle:</strong> Skanderbeg's medieval fortress</li>
+                  <li>• <strong>Apollonia:</strong> Ancient Greek city ruins</li>
+                  <li>• <strong>Durres Amphitheater:</strong> Roman arena by the sea</li>
+                  <li>• <strong>Et'hem Bey Mosque:</strong> Tirana's Ottoman masterpiece</li>
+                </ul>
+                <ul class="space-y-1">
+                  <li>• <strong>Ardenica Monastery:</strong> 13th-century Orthodox complex</li>
+                  <li>• <strong>Blue Eye Spring:</strong> Natural wonder with legends</li>
+                  <li>• <strong>Traditional Villages:</strong> Authentic mountain life</li>
+                  <li>• <strong>Communist Heritage:</strong> Bunkers and Bunk'Art museums</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Cultural & UNESCO Tour Packages Available
+        </h2>
+        <p class="text-gray-600">
+          Heritage sites, ancient history, and living cultural traditions
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Recommended</option>
+          <option>Historical Importance</option>
+          <option>Price: Low to High</option>
+          <option>Duration: Short to Long</option>
+          <option>Most Popular</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">Planning Your Cultural Journey</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div>
+          <h3 class="font-semibold mb-2">📅 Best Time for Cultural Tours</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Ideal:</strong> April-June, September-October<br/>
+            <strong>Advantages:</strong> Perfect weather, fewer crowds<br/>
+            <strong>Cultural Events:</strong> Summer festivals<br/>
+            <strong>Winter:</strong> Indoor museums, authentic experience
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🎒 What to Bring</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Walking:</strong> Comfortable shoes for cobblestones<br/>
+            <strong>Camera:</strong> Photography allowed most sites<br/>
+            <strong>Layers:</strong> Stone buildings can be cool<br/>
+            <strong>Respect:</strong> Modest dress for religious sites
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">💰 Cultural Tour Value</h3>
+          <p class="text-sm text-gray-600">
+            <strong>UNESCO Access:</strong> €5-10 entrance fees<br/>
+            <strong>Guided Tours:</strong> €20-40 per person<br/>
+            <strong>Museums:</strong> €2-5 entrance fees<br/>
+            <strong>Total Daily:</strong> €25-50 including meals
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🏨 Cultural Base Cities</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Tirana:</strong> Museums & easy day trips<br/>
+            <strong>Berat:</strong> Stay in UNESCO center<br/>
+            <strong>Gjirokaster:</strong> Historic guesthouses<br/>
+            <strong>Saranda:</strong> Access to Butrint ruins
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Why are Albania's UNESCO sites special?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Albania's sites represent unique examples of cultural crossroads - where Eastern and Western 
+                Christianity met, where Ottoman and European traditions blended, creating architectural styles 
+                found nowhere else in the world.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">How physically demanding are cultural tours?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Most cultural tours involve moderate walking on cobblestone streets and some stairs. 
+                Castle visits require climbing, but most sites are accessible. We offer different 
+                intensity levels to match your mobility.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">Can I photograph inside historical sites?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Photography is generally allowed in most sites, with some restrictions in museums. 
+                Our guides will inform you of specific rules, and many locations are perfect for 
+                Instagram-worthy shots.
+              </p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Are cultural tours suitable for children?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Absolutely! Our guides are skilled at making history engaging for younger travelers 
+                with stories, legends, and interactive elements. Many families find these tours 
+                educational and memorable.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What makes Albanian culture unique?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Albania is the crossroads of civilizations - you'll see Roman ruins next to Ottoman mosques, 
+                Orthodox churches near Catholic cathedrals, all influenced by unique Albanian traditions 
+                like the ancient code of Besa (word of honor).
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">How do cultural tours support local communities?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Our tours directly support local guides, traditional artisans, family-run restaurants, 
+                and heritage preservation projects. Tourism revenue helps maintain these UNESCO sites 
+                for future generations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

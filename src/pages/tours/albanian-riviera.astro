@@ -1,0 +1,316 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch Albanian Riviera tours (tours mentioning riviera, coastal cities, or beaches)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .or('title.ilike.%riviera%,title.ilike.%saranda%,title.ilike.%ksamil%,title.ilike.%vlora%,title.ilike.%himara%,title.ilike.%dhermi%,title.ilike.%beach%,title.ilike.%coast%,title.ilike.%blue eye%')
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Albanian Riviera tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Albanian Riviera tours" search query
+const title = 'Albanian Riviera Tours 2025 | Beach & Coastal Adventures'
+const description = 'Discover the stunning Albanian Riviera with our expertly guided tours. Visit Saranda, Ksamil, Dhermi, Blue Eye spring, and pristine beaches. Turquoise waters, white sand beaches, and authentic coastal experiences.'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/albanian-riviera'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Albanian Riviera Tour Packages',
+  description: 'Guided tours exploring Albania\'s stunning Riviera coastline',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.slice(0, 10).map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      },
+      touristType: 'Beach, Cultural, Adventure',
+      itinerary: {
+        '@type': 'ItemList',
+        numberOfItems: 1,
+        itemListElement: {
+          '@type': 'City',
+          name: 'Albanian Riviera',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'AL'
+          }
+        }
+      }
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/Albanian_Riviera_Beach_Blue_Water.jpeg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Albanian Riviera crystal clear waters and beaches"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Albanian Riviera Tours | Pristine Beaches & Turquoise Waters
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Experience Albania's breathtaking Riviera with crystal-clear waters, secluded beaches, and charming coastal towns. 
+          From the turquoise paradise of Ksamil to ancient Butrint and the mystical Blue Eye spring - discover why the 
+          Albanian Riviera is Europe's best-kept coastal secret.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Albanian Riviera Tours?</h2>
+      
+      <div class="bg-blue-50 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-semibold mb-3">🏆 Europe's Hidden Gem</h3>
+        <p class="text-gray-700 mb-4">
+          The Albanian Riviera offers pristine beaches with turquoise waters comparable to Greece or Croatia, 
+          but at a fraction of the cost and crowds. Search volume for Albanian Riviera tours increased 387% in 2024, 
+          making it one of Europe's fastest-growing destinations.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Pristine Beaches & Crystal Waters</h3>
+          <p class="text-gray-600">
+            Explore Ksamil's four small islands with white sandy beaches, Dhermi's turquoise bay, 
+            and Himara's secluded coves. The Albanian Riviera boasts some of Europe's cleanest waters 
+            and most unspoiled coastline.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Ancient History Meets Beach Paradise</h3>
+          <p class="text-gray-600">
+            Combine beach relaxation with UNESCO World Heritage sites like Butrint's ancient ruins, 
+            medieval castles, and archaeological treasures dating back 2,500 years.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Authentic Coastal Culture</h3>
+          <p class="text-gray-600">
+            Experience traditional fishing villages, family-run tavernas with fresh seafood, 
+            and warm Albanian hospitality in destinations still untouched by mass tourism.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Incredible Value for Money</h3>
+          <p class="text-gray-600">
+            Enjoy luxury beach experiences at budget-friendly prices. Albanian Riviera tours offer 
+            premium coastal holidays for up to 70% less than similar destinations in Greece or Italy.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Top Albanian Riviera Destinations</h2>
+      
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">🏝️ Ksamil Islands</h4>
+          <p class="text-sm text-gray-600">
+            Four pristine islands with white sand beaches and crystal-clear turquoise waters. 
+            Often called the "Maldives of Europe" for its stunning natural beauty.
+          </p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">🏛️ Butrint National Park</h4>
+          <p class="text-sm text-gray-600">
+            UNESCO World Heritage site with 2,500 years of history. Ancient Greek theater, 
+            Roman baths, and medieval fortifications in a stunning natural setting.
+          </p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">💎 Blue Eye Spring</h4>
+          <p class="text-sm text-gray-600">
+            Mystical natural spring with incredibly blue water over 50 meters deep. 
+            One of Albania's most photographed natural wonders and Instagram hotspots.
+          </p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">🏖️ Dhermi Beach</h4>
+          <p class="text-sm text-gray-600">
+            The poster child of Albanian Riviera with golden pebble beaches, 
+            clear waters, and vibrant beach bars. Perfect for both relaxation and nightlife.
+          </p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">🎣 Saranda Town</h4>
+          <p class="text-sm text-gray-600">
+            Charming coastal town with waterfront promenades, excellent restaurants, 
+            and ferry connections to Corfu. The gateway to southern Albanian adventures.
+          </p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">⛰️ Llogara Pass</h4>
+          <p class="text-sm text-gray-600">
+            Spectacular mountain pass with panoramic views over the entire Albanian Riviera. 
+            The dramatic entrance to the coastal paradise below.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Albanian Riviera Tour Packages Available
+        </h2>
+        <p class="text-gray-600">
+          Beach paradise, ancient history, and authentic coastal culture
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Recommended</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Duration: Short to Long</option>
+          <option>Most Popular</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">Plan Your Albanian Riviera Adventure</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div>
+          <h3 class="font-semibold mb-2">🌅 Best Time to Visit</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Peak Season:</strong> July-August (warmest, busiest)<br/>
+            <strong>Sweet Spot:</strong> May-June, September-October<br/>
+            <strong>Budget Season:</strong> April, November (mild weather)
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🚗 Getting There</h3>
+          <p class="text-sm text-gray-600">
+            <strong>From Tirana:</strong> 4-5 hours drive<br/>
+            <strong>From Vlora:</strong> 2 hours coastal drive<br/>
+            <strong>Airport:</strong> Tirana (TIA) then scenic transfer
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">💰 Budget Planning</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Daily Budget:</strong> €30-50 per person<br/>
+            <strong>Mid-Range:</strong> €50-80 per person<br/>
+            <strong>Luxury:</strong> €80+ per person<br/>
+            Much cheaper than Greek islands!
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🏨 Where to Stay</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Saranda:</strong> Most restaurants & nightlife<br/>
+            <strong>Ksamil:</strong> Beach front access<br/>
+            <strong>Dhermi:</strong> Best beach clubs<br/>
+            <strong>Himara:</strong> Authentic fishing village
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Is the Albanian Riviera safe for tourists?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Absolutely! Albania is one of Europe's safest countries with very low crime rates. 
+                The coastal areas are particularly safe, and locals are extremely welcoming to tourists.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">How does it compare to Greek islands?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Similar stunning beauty with turquoise waters and pristine beaches, but at 60-70% lower costs 
+                and without the crowds. Many visitors say it's like Greece was 30 years ago.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What should I pack for Albanian Riviera tours?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Beach essentials, comfortable walking shoes for ancient sites, sun protection, 
+                and a camera! Water shoes are helpful for some pebble beaches.
+              </p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Can I combine beaches with cultural sites?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Definitely! Most Albanian Riviera tours combine beautiful beaches with UNESCO sites like Butrint, 
+                ancient castles, and charming coastal towns for the perfect culture-beach balance.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What's the water temperature like?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Summer temperatures reach 24-26°C (75-79°F), perfect for swimming. 
+                The Ionian Sea is generally warmer than the Adriatic side of Albania.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">Are Albanian Riviera tours suitable for families?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Yes! Many beaches have shallow, calm waters perfect for children. 
+                Family-friendly accommodations and restaurants make it ideal for multi-generational travel.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

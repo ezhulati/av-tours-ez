@@ -1,0 +1,238 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch Albania-only tour packages (exclude day tours)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .eq('locations', '["Albania"]')
+  .not('duration', 'ilike', '%day%')
+  .or('duration.ilike.%days%,duration.ilike.%week%,duration.ilike.%night%')
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Albania packages:', error)
+}
+
+// Also get some day tours to show variety
+const { data: dayTours } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .eq('locations', '["Albania"]')
+  .or('duration.ilike.%half%,duration.ilike.%full day%,duration.eq.1 day')
+  .limit(6)
+
+const packageTours = tours ? tours.map(mapToTourCard) : []
+const dayTourCards = dayTours ? dayTours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Albania tours packages" search query
+const title = 'Albania Tour Packages 2025 | All-Inclusive Adventures & Guided Tours'
+const description = 'Discover the best Albania tour packages with expert guides. From weekend escapes to 2-week adventures. Beach holidays, mountain treks, cultural tours & more. Book your Albania package today!'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/albania-packages'
+
+// Generate schema markup
+const packageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'Albania Tour Packages',
+  description: 'Complete Albania vacation packages with accommodation, transport and guided tours',
+  brand: {
+    '@type': 'Brand',
+    name: 'Albania Visit'
+  },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'EUR',
+    lowPrice: packageTours[0]?.priceMin || 45,
+    highPrice: Math.max(...packageTours.map(t => t.priceMax || t.priceMin || 0)),
+    offerCount: packageTours.length
+  }
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/albania-riviera-panorama.jpg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(packageSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Albania Riviera coastline"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Albania Tour Packages & Vacation Deals
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          All-inclusive Albania packages from weekend getaways to 2-week adventures. 
+          Expert guides, comfortable transport, and unforgettable experiences guaranteed.
+        </p>
+      </div>
+    </div>
+
+    <!-- Package Types Grid -->
+    <div class="mb-12">
+      <h2 class="text-3xl font-bold mb-8 text-center">Choose Your Perfect Albania Package</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="text-4xl mb-4">🏖️</div>
+          <h3 class="text-xl font-bold mb-2">Beach & Riviera Packages</h3>
+          <p class="text-gray-600 mb-4">
+            7-10 days exploring Albania's stunning coastline. Saranda, Ksamil, Himara, 
+            and hidden beaches. Perfect for summer holidays.
+          </p>
+          <div class="text-sm text-gray-500">From €299 per person</div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="text-4xl mb-4">🏔️</div>
+          <h3 class="text-xl font-bold mb-2">Mountain Adventure Packages</h3>
+          <p class="text-gray-600 mb-4">
+            Trek through Albanian Alps, explore Valbona and Theth valleys. 
+            Includes accommodation in mountain guesthouses.
+          </p>
+          <div class="text-sm text-gray-500">From €249 per person</div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="text-4xl mb-4">🏛️</div>
+          <h3 class="text-xl font-bold mb-2">Cultural Heritage Packages</h3>
+          <p class="text-gray-600 mb-4">
+            UNESCO sites, ancient cities, Ottoman architecture. 
+            Berat, Gjirokaster, Butrint, and Apollonia with expert guides.
+          </p>
+          <div class="text-sm text-gray-500">From €199 per person</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-Day Packages Section -->
+    <div class="mb-12">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-2xl font-bold">Multi-Day Albania Packages</h2>
+          <p class="text-gray-600">Complete vacation packages with everything included</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {packageTours.map((tour) => (
+          <OptimizedTourCard tour={tour} client:visible />
+        ))}
+      </div>
+    </div>
+
+    <!-- Day Tours Section -->
+    {dayTourCards.length > 0 && (
+      <div class="mb-12">
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold">Popular Day Tours from Tirana</h2>
+          <p class="text-gray-600">Perfect additions to your Albania package</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dayTourCards.slice(0, 6).map((tour) => (
+            <OptimizedTourCard tour={tour} client:visible />
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Why Choose Section -->
+    <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-8 mb-12">
+      <h2 class="text-2xl font-bold mb-6">Why Book Albania Packages with Us?</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div class="text-3xl mb-3">✅</div>
+          <h3 class="font-semibold mb-2">All-Inclusive</h3>
+          <p class="text-sm text-gray-600">
+            Transport, guides, entrance fees, and activities included. 
+            No hidden costs or surprises.
+          </p>
+        </div>
+        <div>
+          <div class="text-3xl mb-3">👥</div>
+          <h3 class="font-semibold mb-2">Small Groups</h3>
+          <p class="text-sm text-gray-600">
+            Maximum 15 people per tour. Personal attention and 
+            authentic experiences guaranteed.
+          </p>
+        </div>
+        <div>
+          <div class="text-3xl mb-3">🏆</div>
+          <h3 class="font-semibold mb-2">Expert Guides</h3>
+          <p class="text-sm text-gray-600">
+            Local English-speaking guides who know Albania's 
+            hidden gems and best spots.
+          </p>
+        </div>
+        <div>
+          <div class="text-3xl mb-3">💰</div>
+          <h3 class="font-semibold mb-2">Best Price</h3>
+          <p class="text-sm text-gray-600">
+            Direct partnerships mean better prices. 
+            Price match guarantee on all packages.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <div class="prose prose-lg max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Albania Tour Packages: Your Complete Guide</h2>
+      
+      <h3 class="text-xl font-semibold mt-6 mb-3">What's Included in Albania Packages?</h3>
+      <p class="text-gray-600 mb-4">
+        Our Albania tour packages include professional English-speaking guides, comfortable air-conditioned 
+        transport, entrance fees to all attractions, and carefully selected experiences. Multi-day packages 
+        also include accommodation in quality hotels or guesthouses with breakfast. Some packages include 
+        lunch and dinner, especially in remote areas.
+      </p>
+      
+      <h3 class="text-xl font-semibold mt-6 mb-3">Best Time to Book Albania Packages</h3>
+      <p class="text-gray-600 mb-4">
+        Summer (June-September) is perfect for beach and riviera packages with warm weather and vibrant 
+        atmosphere. Spring (April-May) and autumn (September-October) offer ideal conditions for cultural 
+        tours and mountain trekking with mild temperatures and fewer tourists. Winter packages focus on 
+        city tours, thermal spas, and ski resorts.
+      </p>
+      
+      <h3 class="text-xl font-semibold mt-6 mb-3">Package Duration Options</h3>
+      <ul class="text-gray-600 space-y-2 mb-4">
+        <li><strong>Weekend Packages (2-3 days):</strong> Perfect for quick escapes from neighboring countries</li>
+        <li><strong>Week Packages (7-8 days):</strong> Comprehensive Albania experience covering major highlights</li>
+        <li><strong>Extended Packages (10-14 days):</strong> Complete Albania immersion with off-the-beaten-path destinations</li>
+        <li><strong>Day Tours:</strong> Ideal add-ons to customize your package</li>
+      </ul>
+      
+      <h3 class="text-xl font-semibold mt-6 mb-3">How to Choose Your Albania Package</h3>
+      <p class="text-gray-600 mb-4">
+        Consider your interests: beach lovers should choose riviera packages, adventure seekers will love 
+        Albanian Alps packages, history buffs should opt for cultural heritage tours. Factor in your fitness 
+        level for hiking packages and travel dates for seasonal activities. All packages can be customized 
+        to match your preferences.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

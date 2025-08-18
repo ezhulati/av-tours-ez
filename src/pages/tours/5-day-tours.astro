@@ -1,0 +1,225 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch 5-day tours
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .eq('duration_days', 5)
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching 5-day tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "5 day tours Albania" search query
+const title = '5 Day Tours Albania 2025 | Perfect Week Adventures'
+const description = 'Experience the best of Albania in 5 days. Complete tours including Albanian Riviera, UNESCO sites, mountains, and culture. Perfect balance of adventure and relaxation with expert guides.'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/5-day-tours'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '5-Day Albania Tour Packages',
+  description: 'Complete 5-day guided tours covering Albania\'s highlights',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      duration: 'P5D',
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      }
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/albania-5-day-tour-hero.jpg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Albania 5-day tour highlights"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          5 Day Albania Tours | Complete Adventures
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Discover Albania's complete story in 5 perfect days. From the Albanian Riviera's stunning coastline 
+          to UNESCO mountain towns, ancient castles, and vibrant cities. The ideal duration for experiencing 
+          Albania's diverse landscapes and rich culture without rushing.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Our 5-Day Albania Tours?</h2>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Perfect Duration Balance</h3>
+          <p class="text-gray-600">
+            Five days is the sweet spot for Albania exploration - enough time to see major highlights 
+            without feeling rushed, yet compact enough for busy travelers seeking maximum impact.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Complete Albania Experience</h3>
+          <p class="text-gray-600">
+            Experience coast and mountains, cities and villages, history and nature. 
+            Our 5-day tours showcase Albania's incredible diversity in a perfectly paced itinerary.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">All-Inclusive Comfort</h3>
+          <p class="text-gray-600">
+            Includes comfortable accommodation, all meals, transportation, expert guides, 
+            and entrance fees. Focus on enjoying Albania while we handle all the details.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Small Group Adventures</h3>
+          <p class="text-gray-600">
+            Travel with intimate groups of 8-15 adventurers, ensuring personalized experiences 
+            and the flexibility to explore hidden gems off the beaten path.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">What to Expect on 5-Day Albania Tours</h2>
+      <div class="bg-blue-50 p-6 rounded-lg mb-6">
+        <h3 class="text-lg font-semibold mb-3">Typical 5-Day Itinerary Highlights:</h3>
+        <ul class="space-y-2 text-gray-700">
+          <li><strong>Day 1:</strong> Tirana exploration & Kruja Castle with traditional lunch</li>
+          <li><strong>Day 2:</strong> Berat UNESCO World Heritage site & wine tasting</li>
+          <li><strong>Day 3:</strong> Albanian Riviera - Saranda, Butrint & Blue Eye spring</li>
+          <li><strong>Day 4:</strong> Gjirokaster stone city & traditional mountain villages</li>
+          <li><strong>Day 5:</strong> Durres ancient amphitheater & Adriatic coast relaxation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Five-Day Tour Packages Available
+        </h2>
+        <p class="text-gray-600">
+          Complete Albania adventures in the perfect timeframe
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Recommended</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Most Popular</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">5-Day Albania Tour Experiences</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="font-semibold mb-2">Coast & Mountains</h3>
+          <p class="text-sm text-gray-600">
+            Experience Albania's dramatic contrasts - pristine Riviera beaches, 
+            towering Albanian Alps, and everything in between in one comprehensive journey.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">UNESCO Heritage Sites</h3>
+          <p class="text-sm text-gray-600">
+            Visit all of Albania's UNESCO World Heritage sites: Berat's Ottoman architecture, 
+            Gjirokaster's stone houses, and Butrint's ancient ruins.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Cultural Immersion</h3>
+          <p class="text-sm text-gray-600">
+            Stay in traditional guesthouses, enjoy home-cooked meals with local families, 
+            and participate in authentic cultural experiences throughout your journey.
+          </p>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="space-y-4">
+          <div>
+            <h4 class="font-medium">What's the best time for 5-day Albania tours?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              April to October offers the best weather. May-June and September-October provide 
+              perfect temperatures with fewer crowds, while July-August is ideal for beach activities.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">What accommodation is included?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Comfortable 3-4 star hotels and traditional guesthouses, all with private bathrooms 
+              and breakfast included. Some tours feature unique stays in castle hotels or seaside resorts.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">How much walking is involved?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Moderate activity level with 2-4 hours of walking daily on varied terrain. 
+              Most sites are accessible by vehicle with short walks to viewpoints and attractions.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">Are 5-day tours suitable for first-time visitors?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Perfect for first-time visitors! Five days provides comprehensive coverage of Albania's 
+              highlights while allowing time to truly experience each destination without rushing.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

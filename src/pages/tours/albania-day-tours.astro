@@ -1,0 +1,214 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch Albania day tours (1-day tours within Albania)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .eq('locations', '["Albania"]')
+  .eq('duration_days', 1)
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Albania day tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Albania day tours" search query
+const title = 'Albania Day Tours 2025 | One Day Adventures from Tirana'
+const description = 'Discover Albania in a day with our expertly guided day tours. Blue Eye, Kruja Castle, Berat UNESCO site, and Albanian Riviera. Small groups, local guides, convenient pickup from Tirana.'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/albania-day-tours'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Albania Day Tour Packages',
+  description: 'One-day guided tours exploring Albania\'s highlights from Tirana',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      duration: 'P1D',
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      }
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/blue-eye-spring-day-tour.jpg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Blue Eye spring Albania day tour"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Albania Day Tours & One-Day Adventures
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Experience Albania's highlights in perfect day trips from Tirana. 
+          Visit UNESCO World Heritage sites, natural wonders, and coastal gems with expert local guides. 
+          Perfect for travelers with limited time who want maximum impact.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Our Albania Day Tours?</h2>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Maximum Impact in One Day</h3>
+          <p class="text-gray-600">
+            Our carefully crafted day tours pack the best of Albania into unforgettable single-day adventures. 
+            Perfect for cruise passengers, business travelers, or those with tight schedules.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Convenient Tirana Pickup</h3>
+          <p class="text-gray-600">
+            All day tours include comfortable transportation with pickup from central Tirana, 
+            major hotels, or Tirana International Airport. No hassle, no planning required.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">UNESCO Sites & Natural Wonders</h3>
+          <p class="text-gray-600">
+            Explore Berat's Ottoman architecture, Kruja's medieval castle, the mystical Blue Eye spring, 
+            and Albanian Riviera beaches - all with expert commentary.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Small Groups & Local Expertise</h3>
+          <p class="text-gray-600">
+            Travel with small groups (8-15 people) led by passionate local guides who share 
+            insider stories, hidden spots, and authentic Albanian culture.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Albania Day Tours Available
+        </h2>
+        <p class="text-gray-600">
+          Perfect one-day adventures from Tirana
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Recommended</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Most Popular</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">Popular Albania Day Tour Destinations</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="font-semibold mb-2">Blue Eye & Butrint</h3>
+          <p class="text-sm text-gray-600">
+            Combine the mystical Blue Eye spring with ancient Butrint archaeological site. 
+            Nature and history in one perfect day trip to southern Albania.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Berat UNESCO City</h3>
+          <p class="text-sm text-gray-600">
+            Explore the "City of a Thousand Windows" - a perfectly preserved Ottoman town 
+            with castle, churches, and traditional architecture.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Kruja & Durres</h3>
+          <p class="text-sm text-gray-600">
+            Visit Skanderbeg's medieval castle in Kruja, then relax at Durres beach. 
+            Perfect combination of history and coastal beauty.
+          </p>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="space-y-4">
+          <div>
+            <h4 class="font-medium">How long are Albania day tours?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Most day tours are 8-10 hours including transportation from Tirana. 
+              Departure is usually 8-9 AM with return by 5-7 PM to the city center.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">What's included in day tour prices?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Transportation, English-speaking guide, entrance fees, and small group experience. 
+              Meals are usually included or available for purchase at recommended local restaurants.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">Can day tours accommodate dietary restrictions?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Yes! Please inform us of any dietary requirements when booking. 
+              Albanian cuisine offers vegetarian, gluten-free, and halal options at most destinations.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">Are day tours suitable for families with children?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Most day tours are family-friendly with moderate walking required. 
+              We recommend checking specific tour descriptions for age recommendations and activity levels.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

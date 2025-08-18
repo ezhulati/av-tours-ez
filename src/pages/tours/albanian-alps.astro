@@ -1,0 +1,402 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch Albanian Alps & Hiking tours (tours mentioning alps, hiking, theth, valbona, mountains, trekking)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .or('title.ilike.%alps%,title.ilike.%hiking%,title.ilike.%theth%,title.ilike.%valbona%,title.ilike.%mountain%,title.ilike.%trek%,title.ilike.%komani%,title.ilike.%accursed%,title.ilike.%peaks%,title.ilike.%walking%,difficulty_level.in.(challenging,difficult)')
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Albanian Alps & Hiking tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Albanian Alps hiking tours" search query
+const title = 'Albanian Alps & Hiking Tours 2025 | Theth to Valbona Adventures'
+const description = 'Discover the pristine Albanian Alps with expert hiking guides. Trek from Theth to Valbona, explore Accursed Mountains, Komani Lake, and experience authentic mountain village life in Europe\'s last wilderness.'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/albanian-alps'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Albanian Alps & Hiking Tour Packages',
+  description: 'Guided hiking and trekking tours in Albania\'s pristine mountain wilderness',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.slice(0, 10).map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      },
+      touristType: 'Adventure, Hiking, Nature',
+      itinerary: {
+        '@type': 'ItemList',
+        numberOfItems: 1,
+        itemListElement: {
+          '@type': 'Mountain',
+          name: 'Albanian Alps',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'AL'
+          }
+        }
+      }
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/Albanian_Alps.jpg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Albanian Alps - Theth Valley with dramatic mountain peaks"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Albanian Alps & Hiking Tours | Europe's Last Wilderness
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Trek through pristine valleys, crystal-clear rivers, and dramatic peaks in the "Accursed Mountains." 
+          From the famous Theth to Valbona hike to remote village stays, discover Albania's spectacular alpine 
+          wilderness with experienced mountain guides who know every secret trail.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Albanian Alps Hiking Tours?</h2>
+      
+      <div class="bg-green-50 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-semibold mb-3">⛰️ Europe's Last Untouched Mountain Wilderness</h3>
+        <p class="text-gray-700 mb-4">
+          The Albanian Alps (Bjeshkët e Nemuna or "Accursed Mountains") represent one of Europe's last pristine 
+          mountain ranges. With peaks over 2,600m, crystal-clear rivers, and traditional stone villages, 
+          this is hiking as it was meant to be - remote, authentic, and breathtaking.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Legendary Theth to Valbona Trek</h3>
+          <p class="text-gray-600">
+            The most famous hike in the Balkans connects two pristine valleys through Valbona Pass (1,795m). 
+            This day-long trek offers dramatic mountain vistas, alpine meadows, and traditional guesthouses 
+            in villages that time forgot.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Authentic Mountain Villages</h3>
+          <p class="text-gray-600">
+            Stay in traditional stone houses where families have lived for centuries. Experience genuine 
+            Albanian mountain hospitality with home-cooked meals, local raki, and stories passed down 
+            through generations.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Pristine Nature & Wildlife</h3>
+          <p class="text-gray-600">
+            Hike through national parks with brown bears, wild boar, golden eagles, and endemic species. 
+            Crystal-clear springs, waterfalls, and ancient forests create a naturalist's paradise 
+            largely untouched by mass tourism.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Expert Local Mountain Guides</h3>
+          <p class="text-gray-600">
+            Our experienced guides grew up in these mountains and know every trail, legend, and safe passage. 
+            They ensure your safety while sharing intimate knowledge of alpine flora, fauna, 
+            and local customs you won't find elsewhere.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Albanian Alps Hiking Destinations</h2>
+      
+      <div class="space-y-6 mb-8">
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏔️</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Theth National Park</h4>
+              <p class="text-gray-600 mb-2">
+                Albania's most famous hiking destination features dramatic limestone peaks, 
+                the iconic Theth Waterfall, and traditional kullas (stone tower houses). 
+                The valley serves as the starting point for the legendary trek to Valbona.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• Famous Blue Eye waterfall (30-minute easy hike)</li>
+                <li>• Traditional kullas and mountain village architecture</li>
+                <li>• Starting point for Valbona Pass trek (6-7 hours)</li>
+                <li>• Grunas Waterfall - hidden gem for experienced hikers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🥾</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Valbona Valley National Park</h4>
+              <p class="text-gray-600 mb-2">
+                Often called the "Gem of the Albanian Alps," Valbona offers some of Europe's most spectacular 
+                mountain scenery. The valley provides access to multiple peaks over 2,400m and 
+                serves as base camp for serious alpine adventures.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• Jezercan Peak (2,694m) - highest accessible summit</li>
+                <li>• Valbona River crystal-clear mountain streams</li>
+                <li>• Traditional guesthouses with organic mountain cuisine</li>
+                <li>• Multi-day trekking routes to Montenegro border</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">⛵</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Komani Lake Ferry Adventure</h4>
+              <p class="text-gray-600 mb-2">
+                The scenic ferry journey across artificial Komani Lake is considered one of the world's 
+                most beautiful boat rides. Towering limestone cliffs rise directly from emerald waters, 
+                creating a fjord-like landscape unique in Europe.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• 2.5-hour ferry through spectacular mountain scenery</li>
+                <li>• Dramatic limestone cliffs rising 1000m from water</li>
+                <li>• Gateway access to Valbona Valley</li>
+                <li>• Photography opportunities comparable to Norwegian fjords</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏕️</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Multi-Day Alpine Adventures</h4>
+              <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
+                <ul class="space-y-1">
+                  <li>• <strong>Peaks of the Balkans Trail:</strong> Cross-border trek</li>
+                  <li>• <strong>Prokletije Mountains:</strong> Montenegro extension</li>
+                  <li>• <strong>Maja Jezercë:</strong> Albania's highest peak (2,694m)</li>
+                  <li>• <strong>Razma Peak:</strong> Technical climbing routes</li>
+                </ul>
+                <ul class="space-y-1">
+                  <li>• <strong>Tropojë Region:</strong> Remote village trekking</li>
+                  <li>• <strong>Kukës Highlands:</strong> Off-the-beaten-path routes</li>
+                  <li>• <strong>Via Dinarica:</strong> Green trail connections</li>
+                  <li>• <strong>Wild Camping:</strong> Wilderness expedition style</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Hiking Difficulty Levels & Preparation</h2>
+      
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-green-50 p-4 rounded-lg">
+          <div class="text-2xl mb-2">🌱</div>
+          <h4 class="font-semibold mb-2">Beginner Friendly</h4>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Theth Waterfall (1-2 hours)</li>
+            <li>• Village walks and cultural tours</li>
+            <li>• Komani Lake ferry experience</li>
+            <li>• Valley floor nature walks</li>
+          </ul>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded-lg">
+          <div class="text-2xl mb-2">🥾</div>
+          <h4 class="font-semibold mb-2">Moderate Adventure</h4>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Theth to Valbona day trek (6-7 hours)</li>
+            <li>• Grunas Waterfall hike (4-5 hours)</li>
+            <li>• Valley rim viewpoint hikes</li>
+            <li>• Multi-day village-to-village walks</li>
+          </ul>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg">
+          <div class="text-2xl mb-2">⛰️</div>
+          <h4 class="font-semibold mb-2">Advanced Trekking</h4>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Maja Jezercë summit attempts</li>
+            <li>• Peaks of the Balkans trail</li>
+            <li>• Technical via ferrata routes</li>
+            <li>• Multi-day wilderness camping</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Albanian Alps & Hiking Tour Packages Available
+        </h2>
+        <p class="text-gray-600">
+          Mountain adventures, village stays, and pristine wilderness experiences
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Difficulty Level</option>
+          <option>Duration: Short to Long</option>
+          <option>Price: Low to High</option>
+          <option>Most Popular</option>
+          <option>Newest Adventures</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">Planning Your Albanian Alps Adventure</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div>
+          <h3 class="font-semibold mb-2">🗓️ Best Hiking Season</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Prime Season:</strong> May-October<br/>
+            <strong>Peak Conditions:</strong> June-September<br/>
+            <strong>Shoulder Season:</strong> April, November<br/>
+            <strong>Snow Season:</strong> December-March (limited access)
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🎒 Essential Gear</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Footwear:</strong> Sturdy hiking boots<br/>
+            <strong>Clothing:</strong> Layers for altitude changes<br/>
+            <strong>Weather:</strong> Rain gear (afternoon storms)<br/>
+            <strong>Safety:</strong> First aid, map, whistle
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">💰 Mountain Adventure Costs</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Guesthouse:</strong> €15-25 per person/night<br/>
+            <strong>Meals:</strong> €8-15 per day (traditional food)<br/>
+            <strong>Guide:</strong> €40-60 per day (recommended)<br/>
+            <strong>Total:</strong> €35-60 per person/day
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🚗 Getting to Trailheads</h3>
+          <p class="text-sm text-gray-600">
+            <strong>To Theth:</strong> 3.5 hours from Tirana<br/>
+            <strong>To Valbona:</strong> Via Komani Lake ferry<br/>
+            <strong>Road Conditions:</strong> 4WD recommended<br/>
+            <strong>Transfer Service:</strong> Available with tours
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Is the Theth to Valbona hike suitable for beginners?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                The classic trek requires good fitness and hiking experience due to 6-7 hours walking time 
+                and 1,000m elevation gain. However, we offer shorter, easier alternatives in both valleys 
+                for beginners to experience the Alps safely.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What's the weather like in the Albanian Alps?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Summer temperatures range 15-25°C (59-77°F) in valleys, but can drop to 5-10°C at altitude. 
+                Afternoon thunderstorms are common. Snow is possible above 2,000m even in summer. 
+                Always pack layers and rain gear.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">Are there dangerous animals in the Albanian Alps?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Brown bears and wild boar live in the region, but encounters are extremely rare. 
+                Our experienced guides know animal patterns and safety protocols. Following guide 
+                instructions and making noise while hiking prevents wildlife conflicts.
+              </p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Can I hike independently without a guide?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                While possible, we strongly recommend guides for safety and cultural insights. 
+                Trails aren't always well-marked, weather changes rapidly, and local knowledge 
+                greatly enhances the experience. Solo hikers should inform guesthouses of their plans.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What accommodation options exist in the Alps?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Traditional guesthouses (shtëpi të huaja) offer authentic village experiences with 
+                family meals and local hospitality. Basic but comfortable, with shared facilities. 
+                Wild camping is possible but requires permission and environmental respect.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">How do Albanian Alps tours support local communities?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Tourism provides vital income for remote mountain villages. Your visit directly supports 
+                family-run guesthouses, local guides, traditional food producers, and helps preserve 
+                ancient customs and architecture in these isolated communities.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

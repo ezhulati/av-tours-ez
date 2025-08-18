@@ -1,0 +1,409 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch Week tours (7 day tours)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .eq('duration_days', 7)
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Week tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Albania week tours" search query
+const title = 'Albania Week Tours 2025 | Complete 7-Day Adventures'
+const description = 'Experience all of Albania in 7 perfect days! Comprehensive week-long tours covering Albanian Riviera, UNESCO sites, mountain villages, and cultural immersion. The ideal Albania discovery journey.'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/week-tours'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Albania Week Tour Packages',
+  description: 'Comprehensive 7-day tours covering all of Albania\'s highlights',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      duration: 'P7D',
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      },
+      touristType: 'Comprehensive, Cultural, Adventure, Beach'
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/Albania_Lake_Koman.jpeg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Albania week tour showcasing diverse landscapes and experiences"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Albania Week Tours | Complete 7-Day Discovery
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Experience everything Albania offers in one perfect week! From pristine Riviera beaches to UNESCO 
+          heritage sites, dramatic mountain ranges to vibrant cities. Seven days of carefully crafted 
+          experiences showcasing Europe's most exciting emerging destination.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Albania Week Tours?</h2>
+      
+      <div class="bg-emerald-50 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-semibold mb-3">🎯 The Perfect Albania Deep Dive</h3>
+        <p class="text-gray-700 mb-4">
+          Seven days is the ideal duration to truly understand Albania's incredible diversity. 
+          You'll experience coast and mountains, ancient history and modern culture, bustling cities and 
+          remote villages - all while maintaining a comfortable, unrushed pace that allows for 
+          spontaneous discoveries and authentic local connections.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Complete Albanian Experience</h3>
+          <p class="text-gray-600">
+            Visit all three UNESCO World Heritage sites, relax on pristine Riviera beaches, 
+            trek in pristine Albanian Alps, and immerse in vibrant Tirana. Seven days allows 
+            deep exploration without missing any highlights.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Perfect Travel Rhythm</h3>
+          <p class="text-gray-600">
+            Unlike rushed tours, our week-long adventures balance activity with relaxation, 
+            exploration with downtime. Spend quality time in each destination, 
+            forming genuine connections with places and people.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Seasonal Flexibility</h3>
+          <p class="text-gray-600">
+            Week tours work perfectly year-round with seasonal adaptations. 
+            Summer focuses on beaches and mountains, while spring/autumn emphasizes 
+            cultural sites and comfortable hiking weather.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Maximum Value Investment</h3>
+          <p class="text-gray-600">
+            Seven days provide the best value per day with economies of scale. 
+            Comprehensive experiences, quality accommodations, and expert guiding 
+            cost less per day than shorter tours while delivering exponentially more.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Classic 7-Day Albania Grand Tour Itinerary</h2>
+      
+      <div class="space-y-4 mb-8">
+        <div class="bg-white border-l-4 border-blue-500 p-4 shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="bg-blue-500 text-white font-bold py-1 px-3 rounded-full text-sm">Day 1</span>
+            <h4 class="font-semibold text-lg">Arrival in Tirana - Capital Introduction</h4>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-1 ml-4">
+            <li>• Airport transfer to boutique hotel in Blloku district</li>
+            <li>• Walking tour of colorful Tirana - Communist history meets modern energy</li>
+            <li>• Welcome dinner at traditional restaurant with live folk music</li>
+            <li>• Evening stroll through Rinia Park and Grand Park</li>
+          </ul>
+        </div>
+
+        <div class="bg-white border-l-4 border-green-500 p-4 shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="bg-green-500 text-white font-bold py-1 px-3 rounded-full text-sm">Day 2</span>
+            <h4 class="font-semibold text-lg">Kruja & Cultural Heritage</h4>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-1 ml-4">
+            <li>• Kruja Castle - Skanderbeg's medieval fortress and national symbol</li>
+            <li>• Traditional bazaar shopping for authentic Albanian crafts</li>
+            <li>• Ethnographic Museum showcasing mountain life traditions</li>
+            <li>• Scenic mountain lunch with panoramic Adriatic views</li>
+          </ul>
+        </div>
+
+        <div class="bg-white border-l-4 border-yellow-500 p-4 shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="bg-yellow-500 text-white font-bold py-1 px-3 rounded-full text-sm">Day 3</span>
+            <h4 class="font-semibold text-lg">Berat - "City of 1000 Windows" (UNESCO)</h4>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-1 ml-4">
+            <li>• Explore Ottoman architecture in Mangalem and Gorica quarters</li>
+            <li>• Berat Castle with working neighborhood and Byzantine churches</li>
+            <li>• Onufri National Iconographic Museum medieval art treasures</li>
+            <li>• Wine tasting at historic Alpeta Winery overlooking city</li>
+          </ul>
+        </div>
+
+        <div class="bg-white border-l-4 border-red-500 p-4 shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="bg-red-500 text-white font-bold py-1 px-3 rounded-full text-sm">Day 4</span>
+            <h4 class="font-semibold text-lg">Gjirokaster - Stone City (UNESCO)</h4>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-1 ml-4">
+            <li>• Gjirokaster Castle - most impressive fortress in the Balkans</li>
+            <li>• Ottoman bazaar with traditional craft workshops</li>
+            <li>• Zekate House - perfectly preserved Ottoman mansion</li>
+            <li>• Cold War tunnel system beneath the castle</li>
+          </ul>
+        </div>
+
+        <div class="bg-white border-l-4 border-purple-500 p-4 shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="bg-purple-500 text-white font-bold py-1 px-3 rounded-full text-sm">Day 5</span>
+            <h4 class="font-semibold text-lg">Albanian Riviera - Butrint & Blue Eye</h4>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-1 ml-4">
+            <li>• Butrint National Park - 2,500 years of continuous civilization</li>
+            <li>• Greek theater, Roman baths, Byzantine churches in pristine setting</li>
+            <li>• Blue Eye spring - mystical natural wonder perfect for photos</li>
+            <li>• Saranda waterfront dinner with fresh Ionian seafood</li>
+          </ul>
+        </div>
+
+        <div class="bg-white border-l-4 border-cyan-500 p-4 shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="bg-cyan-500 text-white font-bold py-1 px-3 rounded-full text-sm">Day 6</span>
+            <h4 class="font-semibold text-lg">Pristine Beaches - Ksamil & Riviera Drive</h4>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-1 ml-4">
+            <li>• Ksamil islands - Albania's "Maldives" with turquoise waters</li>
+            <li>• Beach relaxation and swimming in crystal-clear Ionian Sea</li>
+            <li>• Scenic coastal drive through Dhermi and Himara villages</li>
+            <li>• Llogara Pass - spectacular mountain-to-sea panoramas</li>
+          </ul>
+        </div>
+
+        <div class="bg-white border-l-4 border-indigo-500 p-4 shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="bg-indigo-500 text-white font-bold py-1 px-3 rounded-full text-sm">Day 7</span>
+            <h4 class="font-semibold text-lg">Return to Tirana - Departure</h4>
+          </div>
+          <ul class="text-sm text-gray-600 space-y-1 ml-4">
+            <li>• Final Albanian breakfast at traditional family restaurant</li>
+            <li>• Last-minute souvenir shopping at Pazari i Ri market</li>
+            <li>• Airport transfer with photo stops at scenic viewpoints</li>
+            <li>• Departure with unforgettable memories and new perspectives</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Alternative Week Tour Themes</h2>
+      
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-blue-50 p-6 rounded-lg">
+          <h4 class="text-lg font-semibold mb-3">🏔️ Adventure Week (Active Travelers)</h4>
+          <ul class="text-sm text-gray-600 space-y-2">
+            <li>• <strong>Days 1-3:</strong> Albanian Alps hiking and mountain villages</li>
+            <li>• <strong>Day 4:</strong> Komani Lake ferry and scenic transfers</li>
+            <li>• <strong>Days 5-6:</strong> Riviera activities: swimming, kayaking, coastal walks</li>
+            <li>• <strong>Day 7:</strong> Tirana adventure sports and urban exploration</li>
+          </ul>
+        </div>
+        
+        <div class="bg-amber-50 p-6 rounded-lg">
+          <h4 class="text-lg font-semibold mb-3">🏛️ Cultural Immersion Week</h4>
+          <ul class="text-sm text-gray-600 space-y-2">
+            <li>• <strong>Days 1-2:</strong> Tirana museums, galleries, and modern Albanian culture</li>
+            <li>• <strong>Days 3-4:</strong> All three UNESCO sites with extended exploration</li>
+            <li>• <strong>Days 5-6:</strong> Traditional craft workshops and village homestays</li>
+            <li>• <strong>Day 7:</strong> Cooking classes and cultural exchange experiences</li>
+          </ul>
+        </div>
+        
+        <div class="bg-green-50 p-6 rounded-lg">
+          <h4 class="text-lg font-semibold mb-3">🌴 Relaxation & Wellness Week</h4>
+          <ul class="text-sm text-gray-600 space-y-2">
+            <li>• <strong>Days 1-2:</strong> Gentle Tirana exploration and spa treatments</li>
+            <li>• <strong>Days 3-4:</strong> Berat wine tours and leisurely cultural walks</li>
+            <li>• <strong>Days 5-7:</strong> Extended beach time with optional wellness activities</li>
+          </ul>
+        </div>
+        
+        <div class="bg-purple-50 p-6 rounded-lg">
+          <h4 class="text-lg font-semibold mb-3">📸 Photography Week (Instagram Perfect)</h4>
+          <ul class="text-sm text-gray-600 space-y-2">
+            <li>• <strong>Golden Hour Shoots:</strong> Berat at sunrise, Blue Eye reflections</li>
+            <li>• <strong>Portrait Sessions:</strong> Traditional villages and local people</li>
+            <li>• <strong>Landscape Focus:</strong> Albanian Alps dramatic mountain vistas</li>
+            <li>• <strong>Urban Photography:</strong> Tirana's colorful street art and architecture</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Week Tour Packages Available
+        </h2>
+        <p class="text-gray-600">
+          Comprehensive 7-day adventures covering all of Albania's highlights
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Most Comprehensive</option>
+          <option>Price: Low to High</option>
+          <option>Theme: Adventure Focus</option>
+          <option>Theme: Culture Focus</option>
+          <option>Theme: Beach Focus</option>
+          <option>Most Popular</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">Planning Your Perfect Albania Week</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div>
+          <h3 class="font-semibold mb-2">📅 Best Time for Week Tours</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Optimal:</strong> May-June, September-October<br/>
+            <strong>Beach Season:</strong> July-August (warm but crowded)<br/>
+            <strong>Cultural Focus:</strong> April-May, October-November<br/>
+            <strong>Adventure Season:</strong> June-September (best hiking)
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🎒 Week Tour Packing</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Versatile Clothing:</strong> Layers for varied climates<br/>
+            <strong>Footwear:</strong> Walking shoes + sandals<br/>
+            <strong>Beach Gear:</strong> Swimwear and sun protection<br/>
+            <strong>Tech:</strong> Camera, portable charger, adapters
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">💰 Week Tour Investment</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Budget Week:</strong> €400-600 per person<br/>
+            <strong>Mid-Range:</strong> €600-900 per person<br/>
+            <strong>Luxury Week:</strong> €900-1,400 per person<br/>
+            <strong>Includes:</strong> Accommodation, meals, transport, guides
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🏨 Accommodation Standards</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Boutique Hotels:</strong> Unique character properties<br/>
+            <strong>Traditional Stays:</strong> Converted historic buildings<br/>
+            <strong>Beach Resorts:</strong> Riviera coastal properties<br/>
+            <strong>Mountain Lodges:</strong> Authentic alpine guesthouses
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Is one week enough to see all of Albania?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                A week provides comprehensive coverage of Albania's major highlights with comfortable pacing. 
+                You'll experience the main regions, UNESCO sites, and diverse landscapes while having time 
+                for spontaneous discoveries and relaxation. Many consider it the perfect introduction duration.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">How much driving is involved in week tours?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Daily transfers are typically 1.5-3 hours with scenic stops and photo opportunities. 
+                Albania's compact size means distances are manageable, and the scenery makes travel time enjoyable. 
+                Professional drivers ensure comfort and safety on all routes.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">Can week tours be customized for specific interests?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Absolutely! We offer themed variations focusing on adventure, culture, photography, or relaxation. 
+                Private groups can fully customize itineraries, while small group tours offer some flexibility 
+                for optional activities and extended stays.
+              </p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">What's included in week tour packages?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Comprehensive packages include accommodation, daily breakfast, most lunches/dinners, 
+                transportation, professional guides, entrance fees, and activities. Only personal expenses, 
+                some beverages, and optional extras are additional.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">How do week tours support local communities?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Week tours maximize local economic impact through family-run accommodations, traditional restaurants, 
+                local guides, artisan workshops, and cultural experiences. Extended stays create meaningful 
+                connections and sustainable tourism revenue for Albanian communities.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What if I want to extend beyond a week?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Many travelers extend with additional independent time or specialized add-ons like Albanian Alps 
+                trekking, beach relaxation, or neighboring country visits (Montenegro, Kosovo, Macedonia). 
+                We can arrange seamless extensions to maximize your Balkan adventure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,382 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch Weekend tours (2-3 day tours)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .in('duration_days', [2, 3])
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Weekend tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Albania weekend tours" search query
+const title = 'Albania Weekend Tours 2025 | Perfect 2-3 Day Getaways'
+const description = 'Discover Albania in weekend getaways! Experience highlights in 2-3 days: Albanian Riviera beaches, UNESCO cities, mountain adventures. Perfect for short breaks from busy European cities.'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/weekend-tours'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Albania Weekend Tour Packages',
+  description: 'Short 2-3 day weekend tours perfect for quick Albanian adventures',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      duration: `P${tour.durationDays || 2}D`,
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      },
+      touristType: 'Weekend, Short Break, City Break'
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/Albania_Coast.jpeg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Albania weekend getaway combining mountains and coast"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Albania Weekend Tours | Maximum Impact in 2-3 Days
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Perfect for busy travelers seeking authentic European adventures! Experience Albania's stunning diversity 
+          in weekend getaways - from Riviera beaches to UNESCO cities, mountain villages to vibrant Tirana. 
+          Incredible value, easy access from major European cities, unforgettable experiences.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Albania Weekend Tours?</h2>
+      
+      <div class="bg-blue-50 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-semibold mb-3">🚀 Europe's Best Weekend Destination</h3>
+        <p class="text-gray-700 mb-4">
+          Albania offers incredible diversity within easy weekend reach. Direct flights from 40+ European cities, 
+          affordable prices (50-70% less than Western Europe), and spectacular experiences packed into 2-3 days. 
+          Perfect for spontaneous getaways or planned mini-adventures!
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Perfect Weekend Duration</h3>
+          <p class="text-gray-600">
+            Albania's compact size means you can experience beaches, mountains, and cities in one weekend. 
+            No time wasted on long transfers - just pure adventure packed into every hour. 
+            Ideal for European city dwellers seeking quick escapes.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Unbeatable Value for Money</h3>
+          <p class="text-gray-600">
+            Luxury weekend experiences for budget prices! Enjoy premium accommodations, 
+            excellent dining, and guided experiences for what you'd spend on a single night 
+            in Paris, London, or Rome. Your weekend budget goes 3x further.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Easy European Access</h3>
+          <p class="text-gray-600">
+            Tirana International Airport has direct flights from 40+ European cities. 
+            Flight times: London (2.5h), Rome (1.5h), Vienna (1.5h), Munich (2h). 
+            Perfect for Friday evening departures, Sunday night returns.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Unique & Authentic Experiences</h3>
+          <p class="text-gray-600">
+            Discover Europe's best-kept secret before the crowds arrive! Experience authentic culture, 
+            pristine nature, and genuine hospitality in a destination still off most tourists' radar. 
+            Instagram-worthy locations without the tourist masses.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Weekend Tour Themes & Itineraries</h2>
+      
+      <div class="space-y-6 mb-8">
+        <div class="bg-white border border-blue-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏖️</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Riviera Weekend Escape (2-3 Days)</h4>
+              <p class="text-gray-600 mb-3">
+                Perfect for beach lovers seeking Mediterranean vibes without Mediterranean prices. 
+                Combine pristine beaches with ancient history for the ultimate coastal weekend.
+              </p>
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h5 class="font-medium mb-2">Sample 3-Day Itinerary:</h5>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li><strong>Day 1:</strong> Fly into Tirana → Transfer to Saranda → Afternoon at Ksamil beaches</li>
+                  <li><strong>Day 2:</strong> Butrint UNESCO ruins → Blue Eye spring → Dhermi beach relaxation</li>
+                  <li><strong>Day 3:</strong> Himara coastal drive → Llogara Pass views → Return to Tirana</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-amber-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🏛️</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Cultural Heritage Weekend (2-3 Days)</h4>
+              <p class="text-gray-600 mb-3">
+                Immerse yourself in 2,500 years of history across three UNESCO World Heritage sites. 
+                Perfect for culture enthusiasts seeking authentic European heritage experiences.
+              </p>
+              <div class="bg-amber-50 p-4 rounded-lg">
+                <h5 class="font-medium mb-2">Sample 3-Day Itinerary:</h5>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li><strong>Day 1:</strong> Tirana city tour → Kruja Castle → Traditional dinner with locals</li>
+                  <li><strong>Day 2:</strong> Berat UNESCO "City of 1000 Windows" → Wine tasting at local vineyard</li>
+                  <li><strong>Day 3:</strong> Gjirokaster stone city → Traditional crafts workshop → Return</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-green-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">⛰️</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Mountain Adventure Weekend (2-3 Days)</h4>
+              <p class="text-gray-600 mb-3">
+                Experience Europe's last wilderness in Albanian Alps. Perfect for active travelers 
+                seeking authentic mountain culture and breathtaking alpine scenery.
+              </p>
+              <div class="bg-green-50 p-4 rounded-lg">
+                <h5 class="font-medium mb-2">Sample 3-Day Itinerary:</h5>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li><strong>Day 1:</strong> Transfer to Theth → Village exploration → Traditional guesthouse</li>
+                  <li><strong>Day 2:</strong> Theth waterfall hike → Komani Lake ferry experience → Valbona</li>
+                  <li><strong>Day 3:</strong> Valbona Valley nature walk → Return via scenic mountain routes</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-purple-200 rounded-lg p-6">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">🎨</div>
+            <div>
+              <h4 class="text-lg font-semibold mb-2">Capital & Highlights Weekend (2 Days)</h4>
+              <p class="text-gray-600 mb-3">
+                Perfect introduction to Albania combining vibrant Tirana with must-see highlights. 
+                Ideal for first-time visitors or those with limited time but maximum curiosity.
+              </p>
+              <div class="bg-purple-50 p-4 rounded-lg">
+                <h5 class="font-medium mb-2">Sample 2-Day Itinerary:</h5>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li><strong>Day 1:</strong> Tirana walking tour → Bunk'Art museum → Traditional bazaar → Nightlife</li>
+                  <li><strong>Day 2:</strong> Day trip to Berat UNESCO site → Wine tasting → Return to Tirana</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Weekend Tour Benefits</h2>
+      
+      <div class="grid md:grid-cols-4 gap-4 mb-8">
+        <div class="text-center p-4">
+          <div class="text-3xl mb-2">✈️</div>
+          <h5 class="font-medium mb-1">Direct Flights</h5>
+          <p class="text-xs text-gray-600">40+ European cities<br/>2.5 hours maximum</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="text-3xl mb-2">💰</div>
+          <h5 class="font-medium mb-1">Budget Friendly</h5>
+          <p class="text-xs text-gray-600">€150-300 total cost<br/>50-70% savings vs EU</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="text-3xl mb-2">🌟</div>
+          <h5 class="font-medium mb-1">Unique Experiences</h5>
+          <p class="text-xs text-gray-600">Authentic culture<br/>Untouched destinations</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="text-3xl mb-2">📸</div>
+          <h5 class="font-medium mb-1">Instagram Ready</h5>
+          <p class="text-xs text-gray-600">Stunning backdrops<br/>No tourist crowds</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Weekend Tour Packages Available
+        </h2>
+        <p class="text-gray-600">
+          Perfect 2-3 day adventures for busy European travelers
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Best Value</option>
+          <option>Price: Low to High</option>
+          <option>Most Popular</option>
+          <option>Newest Weekends</option>
+          <option>Theme: Beach First</option>
+          <option>Theme: Culture First</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">Planning Your Albania Weekend</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div>
+          <h3 class="font-semibold mb-2">✈️ Flight Planning</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Budget Airlines:</strong> Wizz Air, Ryanair<br/>
+            <strong>Major Carriers:</strong> Lufthansa, Austrian<br/>
+            <strong>Fri Evening:</strong> Depart after work<br/>
+            <strong>Sun Evening:</strong> Return for Monday work
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">🎒 Weekend Packing</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Hand Luggage:</strong> Perfect for weekends<br/>
+            <strong>Layers:</strong> Variable mountain/coast weather<br/>
+            <strong>Comfortable Shoes:</strong> Cobblestones & trails<br/>
+            <strong>Camera:</strong> Incredible photo opportunities
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">💸 Weekend Budget</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Budget Weekend:</strong> €150-200 total<br/>
+            <strong>Mid-Range:</strong> €200-300 total<br/>
+            <strong>Luxury:</strong> €300-450 total<br/>
+            <strong>Includes:</strong> Flights, accommodation, meals
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">📱 Essential Apps</h3>
+          <p class="text-sm text-gray-600">
+            <strong>Currency:</strong> Albanian Lek (ALL)<br/>
+            <strong>Translation:</strong> Google Translate<br/>
+            <strong>Navigation:</strong> Maps.me offline maps<br/>
+            <strong>Weather:</strong> Check mountain conditions
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">Is 2-3 days enough time to see Albania?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Yes! Albania's compact size means you can experience incredible diversity in a weekend. 
+                Our weekend tours are carefully crafted to showcase highlights without feeling rushed. 
+                Perfect introduction that often leads to longer return visits.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">Can I extend my weekend tour?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Absolutely! Many travelers add extra days after experiencing Albania's charm. 
+                We can extend most weekend tours or help you plan additional independent time. 
+                Flexible booking options accommodate spontaneous extensions.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What's the best weekend tour for first-time visitors?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                The "Capital & Highlights" or "Cultural Heritage" weekends provide excellent overviews 
+                of Albanian culture and history. Beach lovers should choose "Riviera Weekend Escape" 
+                for stunning coastal experiences.
+              </p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-medium">How do weekend tours compare to longer trips?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Weekend tours focus on specific regions or themes for deeper experiences rather than 
+                rushing through everything. They're perfect appetizers that showcase Albania's diversity 
+                while leaving you wanting more authentic adventures.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">Are weekend tours suitable for solo travelers?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Perfect for solo adventurers! Weekend tours provide safety, local knowledge, and instant 
+                social connections with fellow travelers. Many solo travelers choose weekends as 
+                low-commitment ways to explore new destinations confidently.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-medium">What if weather disrupts weekend plans?</h4>
+              <p class="text-sm text-gray-600 mt-1">
+                Our experienced guides have alternative plans for all weather conditions. Indoor cultural 
+                sites, covered markets, museums, and traditional restaurants ensure great experiences 
+                regardless of weather. Flexible itineraries adapt to conditions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,205 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { supabaseServer } from '@/lib/supabase.server'
+import { mapToTourCard } from '@/lib/adapters/dbMapper'
+import OptimizedTourCard from '@/components/tours/OptimizedTourCard'
+import { getOptimizedImageUrl } from '@/lib/imageOptimization'
+
+const supabase = supabaseServer
+
+// Fetch all Balkan tours (tours that include multiple countries)
+const { data: tours, error } = await supabase
+  .from('affiliate_tours')
+  .select('*')
+  .or('locations.cs.{Montenegro},locations.cs.{Macedonia},locations.cs.{Kosovo},locations.cs.{Serbia},locations.cs.{Bosnia},locations.cs.{Croatia},locations.cs.{Greece},locations.cs.{Bulgaria}')
+  .order('is_featured', { ascending: false })
+  .order('price_from', { ascending: true })
+
+if (error) {
+  console.error('Error fetching Balkan tours:', error)
+}
+
+const tourCards = tours ? tours.map(mapToTourCard) : []
+
+// SEO optimized meta tags for "Balkan tours" search query
+const title = 'Balkan Tours 2025 | Multi-Country Adventures from Albania'
+const description = 'Explore the best Balkan tours departing from Albania. Visit Montenegro, Macedonia, Kosovo, Greece and more. Small group tours with expert guides. Book your Balkan adventure today!'
+const canonicalUrl = 'https://tours.albaniavisit.com/tours/balkans'
+
+// Generate schema markup for the tour collection
+const toursSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Balkan Tour Packages',
+  description: 'Multi-country Balkan tours departing from Albania',
+  numberOfItems: tourCards.length,
+  itemListElement: tourCards.slice(0, 10).map((tour, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'TouristTrip',
+      name: tour.title,
+      description: tour.shortDescription,
+      offers: {
+        '@type': 'Offer',
+        price: tour.priceMin,
+        priceCurrency: 'EUR'
+      }
+    }
+  }))
+}
+
+const heroImage = getOptimizedImageUrl('/Assets/Albania/balkan-mountains-hero.jpg', {
+  width: 1920,
+  height: 600,
+  quality: 'auto:best'
+})
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="website"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(toursSchema)} />
+  
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12">
+      <img 
+        src={heroImage}
+        alt="Balkan Mountains landscape"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
+      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Balkan Tours & Multi-Country Adventures
+        </h1>
+        <p class="text-lg md:text-xl max-w-3xl">
+          Discover the magic of the Balkans with our carefully curated multi-country tours. 
+          From Albania's Riviera to Montenegro's fjords, explore ancient cities, pristine beaches, 
+          and mountain landscapes across Southeast Europe.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-6">Why Choose Our Balkan Tours?</h2>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Multi-Country Experiences</h3>
+          <p class="text-gray-600">
+            Our Balkan tours combine the best of Albania, Montenegro, Macedonia, Kosovo, and beyond. 
+            Experience diverse cultures, cuisines, and landscapes in a single unforgettable journey.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Small Group Adventures</h3>
+          <p class="text-gray-600">
+            Travel with intimate groups of 8-15 people, ensuring personalized attention from expert 
+            local guides while making new friends from around the world.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Authentic Local Experiences</h3>
+          <p class="text-gray-600">
+            Go beyond tourist hotspots to discover hidden gems, local traditions, and authentic 
+            cuisine that only locals know about.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Flexible Itineraries</h3>
+          <p class="text-gray-600">
+            Choose from 3-day weekend escapes to comprehensive 15-day adventures. 
+            All tours include convenient pickup from Tirana or other major cities.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour count and filters -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">
+          {tourCards.length} Balkan Tour Packages Available
+        </h2>
+        <p class="text-gray-600">
+          Explore multiple countries in one amazing journey
+        </p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <select class="px-4 py-2 border rounded-lg">
+          <option>Sort by: Recommended</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Duration: Short to Long</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+      {tourCards.map((tour) => (
+        <OptimizedTourCard tour={tour} client:visible />
+      ))}
+    </div>
+
+    <!-- SEO Footer Content -->
+    <div class="bg-gray-50 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold mb-6">Popular Balkan Tour Routes</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="font-semibold mb-2">Albania & Montenegro</h3>
+          <p class="text-sm text-gray-600">
+            Combine Albanian Riviera beaches with Montenegro's dramatic Bay of Kotor. 
+            Perfect for a 5-7 day adventure.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Three Countries Tour</h3>
+          <p class="text-sm text-gray-600">
+            Albania, Macedonia & Kosovo in one trip. Explore three cultures, 
+            UNESCO sites, and mountain landscapes.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Grand Balkan Circuit</h3>
+          <p class="text-sm text-gray-600">
+            The ultimate 10-15 day journey through Albania, Montenegro, Bosnia, 
+            Croatia and beyond.
+          </p>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-8 border-t">
+        <h3 class="font-semibold mb-4">Frequently Asked Questions</h3>
+        <div class="space-y-4">
+          <div>
+            <h4 class="font-medium">Do I need visas for Balkan countries?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Most visitors can travel visa-free throughout the Balkans for up to 90 days. 
+              EU, US, UK, and Canadian citizens don't need visas for tourist visits.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">What's the best time for Balkan tours?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              April to October offers the best weather. July-August is peak season with warm 
+              beaches, while May-June and September-October provide pleasant temperatures and fewer crowds.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-medium">Are Balkan tours suitable for solo travelers?</h4>
+            <p class="text-sm text-gray-600 mt-1">
+              Absolutely! Our small group tours are perfect for solo travelers looking to explore 
+              safely while meeting like-minded adventurers from around the world.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
